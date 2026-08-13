@@ -5,63 +5,153 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Edward Reinke</title>
+    <title>Edward Reinke | Mathematics</title>
+
+    <meta name="description"
+          content="Edward Reinke - Professor of Mathematics. Course materials, teaching resources, mathematics, statistics, data science, and LaTeX resources.">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-    <h1>Edward Reinke</h1>
-    <p>Professor of Mathematics</p>
+<header class="site-header">
+    <div class="container">
+        <h1>Edward Reinke</h1>
+        <p class="subtitle">Professor of Mathematics</p>
+    </div>
 </header>
 
-<nav>
-    <a href="index.html">Home</a>
-    <a href="courses/index.html">Courses</a>
-    <a href="teaching/index.html">Teaching</a>
-    <a href="resources/index.html">Resources</a>
-    <a href="about/index.html">About</a>
+<nav class="site-nav">
+    <div class="container">
+        <a href="index.html">Home</a>
+        <a href="courses/index.html">Courses</a>
+        <a href="teaching/index.html">Teaching</a>
+        <a href="resources/index.html">Resources</a>
+        <a href="about/index.html">About</a>
+    </div>
 </nav>
 
-<main>
+<main class="container">
 
-    <section>
+    <section class="intro">
         <h2>Welcome</h2>
 
         <p>
-            Welcome to my website. This site contains information about
-            my courses, teaching materials, and other mathematical and
-            data science resources.
+            Welcome to my website. This site provides course materials,
+            teaching resources, mathematical notes, and links to projects
+            related to mathematics, statistics, data science, and computing.
         </p>
     </section>
 
     <section>
         <h2>Courses</h2>
 
-        <ul>
-            <li>Introductory Statistics</li>
-            <li>Foundations of Data Analytics</li>
-            <li>Calculus</li>
-            <li>Real Analysis</li>
-            <li>Number Theory</li>
-        </ul>
+        <p>
+            Course pages include schedules, assignments, handouts,
+            computational resources, and other materials for students.
+        </p>
+
+        <div class="card-grid">
+
+            <article class="card">
+                <h3>Statistics</h3>
+                <p>
+                    Introductory statistics, probability, data analysis,
+                    statistical inference, and computational examples.
+                </p>
+                <a href="courses/index.html">View courses &rarr;</a>
+            </article>
+
+            <article class="card">
+                <h3>Data Analytics</h3>
+                <p>
+                    Python, Google Colab, data visualization, data wrangling,
+                    exploratory data analysis, and introductory data science.
+                </p>
+                <a href="courses/index.html">View courses &rarr;</a>
+            </article>
+
+            <article class="card">
+                <h3>Mathematics</h3>
+                <p>
+                    Calculus, linear algebra, number theory, real analysis,
+                    and other undergraduate mathematics courses.
+                </p>
+                <a href="courses/index.html">View courses &rarr;</a>
+            </article>
+
+        </div>
     </section>
 
     <section>
-        <h2>Resources</h2>
+        <h2>Teaching Resources</h2>
 
         <p>
-            Course materials, LaTeX resources, Python notebooks,
-            datasets, and other teaching resources will be available here.
+            Materials and resources related to mathematics instruction,
+            course design, active learning, assessment, and the use of
+            technology in the classroom.
+        </p>
+
+        <p>
+            <a class="button-link" href="teaching/index.html">
+                Teaching Resources
+            </a>
+        </p>
+    </section>
+
+    <section>
+        <h2>Technical Resources</h2>
+
+        <div class="card-grid">
+
+            <article class="card">
+                <h3>LaTeX</h3>
+                <p>
+                    Examples and resources for LaTeX, Beamer, TikZ,
+                    PGFPlots, and mathematical document preparation.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Python</h3>
+                <p>
+                    Python notebooks and examples for statistics,
+                    data analysis, visualization, and mathematics.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>GitHub</h3>
+                <p>
+                    Course repositories, datasets, notebooks,
+                    and other projects hosted on GitHub.
+                </p>
+            </article>
+
+        </div>
+    </section>
+
+    <section>
+        <h2>About</h2>
+
+        <p>
+            I am a professor of mathematics with interests in mathematics
+            education, statistics, data science, mathematical computing,
+            and the effective use of technology in teaching.
+        </p>
+
+        <p>
+            <a href="about/index.html">More about me &rarr;</a>
         </p>
     </section>
 
 </main>
 
-<footer>
-    <p>&copy; 2026 Edward Reinke</p>
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; 2026 Edward Reinke</p>
+    </div>
 </footer>
 
 </body>
