@@ -1,0 +1,300 @@
+/* =========================================================
+   Edward Reinke - Personal Academic Website
+   Main Stylesheet
+   ========================================================= */
+
+
+/* ---------- Basic page setup ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: #2b2b2b;
+    background-color: #f7f8fa;
+}
+
+
+/* ---------- Main content width ---------- */
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* ---------- Header ---------- */
+
+.site-header {
+    background-color: #17365d;
+    color: white;
+    padding: 3rem 0 2.5rem;
+}
+
+.site-header h1 {
+    margin: 0;
+    font-size: 2.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.subtitle {
+    margin: 0.3rem 0 0;
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: #e2e8f0;
+}
+
+
+/* ---------- Navigation ---------- */
+
+.site-nav {
+    background-color: #102a43;
+    border-bottom: 4px solid #3d6d9e;
+}
+
+.site-nav .container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.site-nav a {
+    display: block;
+    padding: 0.9rem 1.4rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.site-nav a:hover,
+.site-nav a:focus {
+    background-color: #274c77;
+}
+
+
+/* ---------- Main content ---------- */
+
+main {
+    background-color: white;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+section {
+    margin-bottom: 3.5rem;
+}
+
+.intro {
+    padding-bottom: 1rem;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #17365d;
+    border-bottom: 2px solid #d8e1ea;
+}
+
+h3 {
+    margin-top: 0;
+    color: #234e70;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1.2rem;
+}
+
+
+/* ---------- Standard links ---------- */
+
+a {
+    color: #175a9c;
+}
+
+a:hover {
+    color: #0d3d6b;
+}
+
+a:focus {
+    outline: 3px solid #e0a800;
+    outline-offset: 3px;
+}
+
+
+/* ---------- Cards ---------- */
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.card {
+    padding: 1.5rem;
+    background-color: #f7f9fc;
+    border: 1px solid #d9e2ec;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+}
+
+.card h3 {
+    margin-bottom: 0.7rem;
+    font-size: 1.3rem;
+}
+
+.card p {
+    font-size: 0.96rem;
+}
+
+.card a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+
+/* ---------- Button-style links ---------- */
+
+.button-link {
+    display: inline-block;
+    padding: 0.65rem 1.2rem;
+    background-color: #17365d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.button-link:hover {
+    background-color: #274c77;
+    color: white;
+}
+
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+    background-color: #102a43;
+    color: #d9e2ec;
+    padding: 1.5rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.site-footer p {
+    margin: 0;
+}
+
+
+/* ---------- Lists ---------- */
+
+ul,
+ol {
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.4rem;
+}
+
+
+/* ---------- Images ---------- */
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* ---------- Tables ---------- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+}
+
+th,
+td {
+    padding: 0.7rem;
+    border: 1px solid #ccd6e0;
+    text-align: left;
+}
+
+th {
+    background-color: #eaf0f6;
+    color: #17365d;
+}
+
+
+/* ---------- Mobile/tablet layout ---------- */
+
+@media (max-width: 800px) {
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .site-header {
+        padding: 2rem 0;
+    }
+
+    .site-header h1 {
+        font-size: 2.2rem;
+    }
+
+    .site-nav .container {
+        flex-direction: column;
+    }
+
+    .site-nav a {
+        padding: 0.7rem 0;
+        border-bottom: 1px solid #274c77;
+    }
+
+}
+
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 500px) {
+
+    body {
+        font-size: 16px;
+    }
+
+    .container {
+        width: 92%;
+    }
+
+    .site-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .subtitle {
+        font-size: 1.05rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+}
