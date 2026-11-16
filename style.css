@@ -139,17 +139,13 @@ a:focus {
 
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
 }
 
 .card {
-    padding: 1.5rem;
-    background-color: #f7f9fc;
-    border: 1px solid #d9e2ec;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    padding: 24px;
+    min-height: 140px;
 }
 
 .card h3 {
