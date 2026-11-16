@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Math 122 · LT2 Types of Data Practice</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#17243b;background:#f5f7fb}
+*{box-sizing:border-box}body{margin:0;line-height:1.55}
+header{background:linear-gradient(120deg,#17365d,#286391);color:#fff;padding:20px max(22px,calc((100vw - 950px)/2))}
+header a{color:#fff;text-decoration:none;font-weight:650}
+main{max-width:950px;margin:auto;padding:32px 20px 70px}
+h1{font-size:clamp(2rem,5vw,2.8rem);line-height:1.15;margin:8px 0}
+h2{font-size:1.35rem}.muted{color:#5d6c7e}.eyebrow{color:#245f94;text-transform:uppercase;font-size:.82rem;letter-spacing:.12em;font-weight:800}
+.panel{background:#fff;border:1px solid #dce3ed;border-radius:16px;padding:24px;margin:22px 0;box-shadow:0 5px 20px #18375d0a}
+.types{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:15px}
+.type{background:#eef4fb;padding:16px;border-radius:11px}.type strong{display:block;color:#17365d}
+button{font:inherit;cursor:pointer;border-radius:9px;padding:11px 15px;border:1px solid #c7d5e6;background:#fff;color:#17365d;font-weight:650}
+button:hover:not(:disabled){border-color:#286391;background:#edf5fc}
+button:disabled{opacity:.55;cursor:default}
+button.primary{background:#17365d;color:#fff;border-color:#17365d}
+button.primary:hover:not(:disabled){background:#286391;color:#fff}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.options{display:grid;gap:10px;margin:20px 0}
+.option{text-align:left;min-height:50px}
+.option.selected{background:#e5f0fd;border-color:#286391;box-shadow:inset 0 0 0 1px #286391}
+.option.correct{background:#e9f8ee;border-color:#269454}
+.option.wrong{background:#fff0ef;border-color:#cc4848}
+.feedback{padding:15px;border-radius:10px;margin:14px 0;background:#edf5fc}
+.feedback.good{background:#e9f8ee}.feedback.bad{background:#fff0ef}
+.progress{height:9px;background:#e3eaf2;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;background:#286391;width:0;transition:width .2s}
+.row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hidden{display:none!important}
+textarea{font:inherit;width:100%;min-height:88px;border:1px solid #bdcadb;border-radius:9px;padding:12px;resize:vertical}
+.reflect{padding:17px 0;border-bottom:1px solid #e2e8ef}
+footer{text-align:center;padding:20px;color:#5d6c7e}
+</style></head>
+<body><header><a href="./">← Math 122 Practice Hub</a></header>
+<main>
+<div class="eyebrow">Math 122 · Learning Target 2</div>
+<h1>Types of Data</h1>
+<p class="muted">I can classify variables as categorical or quantitative and distinguish discrete from continuous quantitative variables.</p>
+<section class="panel"><h2>Quick review</h2>
+<div class="types">
+<div class="type"><strong>Categorical</strong>Groups, labels, or identifiers. Numbers used only as codes still count as categorical.</div>
+<div class="type"><strong>Quantitative discrete</strong>Counts with separate possible values, usually whole numbers.</div>
+<div class="type"><strong>Quantitative continuous</strong>Measurements that can take fractional values, even when rounded for recording.</div>
+</div></section>
+<section class="panel" id="quiz">
+<div class="row"><h2 style="margin-top:0">Classification practice</h2><span id="counter" class="muted"></span></div>
+<div class="progress"><div id="bar"></div></div>
+<p class="muted">Select the best classification for each variable. You'll get immediate feedback and an explanation.</p>
+<h2 id="prompt"></h2><div class="options" id="options"></div>
+<div id="feedback" class="feedback hidden" aria-live="polite"></div>
+<div class="actions"><button id="check" class="primary" disabled>Check answer</button><button id="next" class="primary hidden">Next question →</button><button id="restart">Start new practice set</button></div>
+</section>
+<section class="panel hidden" id="results"><h2>Your results</h2><p id="score"></p><button id="again" class="primary">Practice again</button></section>
+<section class="panel"><h2>Explain your reasoning</h2><p class="muted">These prompts match the explanation and survey-design skills in LT2. Write your response, then reveal a model answer to compare.</p>
+<div id="reflections"></div></section>
+</main><footer>Math 122 · LT2 Types of Data</footer>
+<script>
+const bank=[{"prompt": "A student's preferred music genre", "answer": "Categorical", "explanation": "Genres are labels, not numerical measurements."}, {"prompt": "Number of classes missed in a semester", "answer": "Quantitative discrete", "explanation": "Missed classes are counted in whole numbers."}, {"prompt": "Time required to walk to class", "answer": "Quantitative continuous", "explanation": "Time is measured and can include fractions of a unit."}, {"prompt": "A student's major", "answer": "Categorical", "explanation": "Majors identify groups."}, {"prompt": "Amount of water in a bottle", "answer": "Quantitative continuous", "explanation": "Volume is measured and can take fractional values."}, {"prompt": "Number of people in a checkout line", "answer": "Quantitative discrete", "explanation": "People are counted."}, {"prompt": "Distance from home to campus", "answer": "Quantitative continuous", "explanation": "Distance is measured."}, {"prompt": "A student's five-digit ZIP code", "answer": "Categorical", "explanation": "The digits identify a location; arithmetic with ZIP codes is not meaningful."}, {"prompt": "Preferred study location", "answer": "Categorical", "explanation": "A location choice is a category."}, {"prompt": "Number of courses this semester", "answer": "Quantitative discrete", "explanation": "Courses are counted."}, {"prompt": "A student's height", "answer": "Quantitative continuous", "explanation": "Height is measured."}, {"prompt": "Transportation coded 1=walk, 2=bicycle, 3=car, 4=bus", "answer": "Categorical", "explanation": "Numeric codes are labels for transportation categories."}, {"prompt": "Dining hall rating: poor, fair, good, excellent", "answer": "Categorical", "explanation": "These are ordered categories, not numerical measurements."}, {"prompt": "A basketball player's jersey number", "answer": "Categorical", "explanation": "The number identifies the player."}, {"prompt": "Points scored in a basketball game", "answer": "Quantitative discrete", "explanation": "Points are counted in whole-number increments."}, {"prompt": "Exact time spent on the basketball court", "answer": "Quantitative continuous", "explanation": "Elapsed time is a measurement."}, {"prompt": "Did your team win? yes or no", "answer": "Categorical", "explanation": "Yes and no are categories."}, {"prompt": "Runner's finishing time recorded to nearest second", "answer": "Quantitative continuous", "explanation": "Rounding the recorded value does not change the underlying measured variable."}, {"prompt": "Number of pets in a family", "answer": "Quantitative discrete", "explanation": "Pets are counted; 2.5 pets is not a valid count."}, {"prompt": "Exact commute time in minutes", "answer": "Quantitative continuous", "explanation": "Exact time is a measurement."}, {"prompt": "Commute category: under 10, 10–20, or over 20 minutes", "answer": "Categorical", "explanation": "The survey records an interval label, not the exact time."}, {"prompt": "Student ID number", "answer": "Categorical", "explanation": "The number functions as an identifier."}, {"prompt": "Number of books checked out", "answer": "Quantitative discrete", "explanation": "Books are counted."}, {"prompt": "Temperature of a classroom", "answer": "Quantitative continuous", "explanation": "Temperature is measured and can have fractional values."}];
+const categories=["Categorical","Quantitative discrete","Quantitative continuous"];
+let deck=[],index=0,correct=0,selected=null,checked=false;
+const $=id=>document.getElementById(id);
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function start(){deck=shuffle(bank).slice(0,12);index=0;correct=0;selected=null;checked=false;$("quiz").classList.remove("hidden");$("results").classList.add("hidden");render()}
+function render(){selected=null;checked=false;const q=deck[index];$("counter").textContent=`Question ${index+1} of ${deck.length} · ${correct} correct`;$("bar").style.width=`${index/deck.length*100}%`;$("prompt").textContent=q.prompt;$("feedback").classList.add("hidden");$("check").classList.remove("hidden");$("check").disabled=true;$("next").classList.add("hidden");$("options").innerHTML="";
+categories.forEach(c=>{const b=document.createElement("button");b.className="option";b.textContent=c;b.onclick=()=>{if(checked)return;selected=c;document.querySelectorAll(".option").forEach(x=>x.classList.toggle("selected",x===b));$("check").disabled=false};$("options").appendChild(b)})}
+$("check").onclick=()=>{if(!selected||checked)return;checked=true;const q=deck[index],ok=selected===q.answer;if(ok)correct++;document.querySelectorAll(".option").forEach(b=>{b.disabled=true;b.classList.remove("selected");if(b.textContent===q.answer)b.classList.add("correct");else if(b.textContent===selected)b.classList.add("wrong")});$("feedback").className="feedback "+(ok?"good":"bad");$("feedback").textContent=(ok?"Correct! ":"Not quite. Correct answer: "+q.answer+". ")+q.explanation;$("check").classList.add("hidden");$("next").classList.remove("hidden");$("next").textContent=index===deck.length-1?"See results →":"Next question →";$("counter").textContent=`Question ${index+1} of ${deck.length} · ${correct} correct`};
+$("next").onclick=()=>{index++;if(index===deck.length){$("quiz").classList.add("hidden");$("results").classList.remove("hidden");$("score").textContent=`You answered ${correct} of ${deck.length} correctly (${Math.round(100*correct/deck.length)}%).`;$("bar").style.width="100%";$("results").scrollIntoView({behavior:"smooth",block:"start"})}else render()};
+$("restart").onclick=start;$("again").onclick=()=>{start();$("quiz").scrollIntoView({behavior:"smooth"})};
+const reflections=[
+["Why is a ZIP code categorical even though it contains digits?","ZIP codes identify geographic areas. The digits act as labels; calculating their average would not be meaningful."],
+["Why is a runner's finishing time continuous even if rounded to the nearest second?","Finishing time is measured and can include fractions of a second. Rounding limits precision, not the nature of the variable."],
+["Why are poor, fair, good, and excellent categorical?","They are ordered response categories, but they are not numerical measurements with meaningful arithmetic differences."],
+["Give a categorical, a discrete, and a continuous survey question about college life.","Categorical: What is your major? (biology). Discrete: How many courses are you taking? (4). Continuous: How tall are you in centimeters? (172.5 cm)."],
+["Compare exact commute time with choosing a commute-time range.","Exact commute time in minutes is quantitative continuous. Choosing 'under 10,' '10–20,' or 'over 20' records a categorical interval label."],
+["Why can't every variable written with numbers be meaningfully averaged?","Jersey numbers, ZIP codes, and coded transportation methods use digits as labels. Their averages have no meaningful interpretation."]
+];
+reflections.forEach(([q,a],i)=>{const wrap=document.createElement("div");wrap.className="reflect";const h=document.createElement("strong");h.textContent=`${i+1}. ${q}`;const t=document.createElement("textarea");t.setAttribute("aria-label","Your answer for reflection "+(i+1));t.placeholder="Write your explanation here…";const btn=document.createElement("button");btn.textContent="Show model answer";btn.style.marginTop="9px";const ans=document.createElement("p");ans.className="feedback hidden";ans.textContent=a;btn.onclick=()=>{ans.classList.toggle("hidden");btn.textContent=ans.classList.contains("hidden")?"Show model answer":"Hide model answer"};wrap.append(h,t,btn,ans);$("reflections").append(wrap)});
+start();
+</script></body></html>
