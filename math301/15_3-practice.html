@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH 301 | Section 15.3: Center and Spread of Data</title>
+
+    <style>
+        :root {
+            --navy: #17324f;
+            --blue: #2465a1;
+            --pale: #eaf2fa;
+            --ink: #233344;
+            --muted: #627184;
+            --line: #dbe4ed;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f5f8fb;
+            color: var(--ink);
+            font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        header {
+            background: linear-gradient(115deg, #17324f, #276ba3);
+            color: white;
+            padding: 42px 20px;
+        }
+
+        header .wrap, main { max-width: 980px; margin: auto; }
+        header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+        header p { margin: 0; color: #e0edf8; }
+        .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+        main { padding: 28px 18px 65px; }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 22px 0;
+            box-shadow: 0 5px 18px #1838580b;
+        }
+
+        h2 { color: var(--navy); margin: 0 0 12px; }
+        h3 { color: var(--navy); margin: 14px 0 6px; }
+        .muted { color: var(--muted); }
+        .formula {
+            background: #f2f7fc;
+            border-left: 4px solid #4382ba;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+        }
+
+        .question { border-top: 1px solid var(--line); padding: 20px 0; }
+        .question:first-child { border-top: 0; }
+        .qhead { font-weight: 650; margin-bottom: 10px; }
+        .choices {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .choices label {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 9px 12px;
+            cursor: pointer;
+        }
+
+        .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+        button, .button {
+            background: var(--blue);
+            color: white;
+            border: 0;
+            border-radius: 9px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 650;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button:hover, .button:hover { background: #194e7e; }
+        button.secondary { background: #eaf2fa; color: var(--navy); }
+        button:disabled { opacity: .55; cursor: default; }
+        .feedback, .solution {
+            display: none;
+            margin-top: 10px;
+            padding: 11px 14px;
+            border-radius: 8px;
+            background: #f3f7fc;
+        }
+
+        .feedback.ok { display: block; background: #e6f6eb; color: #19572d; }
+        .feedback.no { display: block; background: #fff0eb; color: #873d26; }
+        .solution { background: #eef6fd; }
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .score { font-weight: 700; color: var(--navy); }
+        textarea {
+            width: 100%;
+            min-height: 85px;
+            border: 1px solid #bdcbd8;
+            border-radius: 8px;
+            padding: 12px;
+            font: inherit;
+            resize: vertical;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+        th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: center; }
+        th { background: #f2f7fc; color: var(--navy); }
+        .histogram {
+            display: flex;
+            align-items: end;
+            gap: 7px;
+            height: 190px;
+            padding: 12px 12px 28px;
+            border-left: 1px solid #8293a5;
+            border-bottom: 1px solid #8293a5;
+            margin: 18px 8px 28px;
+        }
+
+        .bar {
+            flex: 1;
+            min-width: 18px;
+            background: #7ba6ce;
+            position: relative;
+            border: 1px solid #2465a1;
+        }
+
+        .bar span {
+            position: absolute;
+            bottom: -27px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: .85rem;
+        }
+
+        footer { text-align: center; color: var(--muted); padding: 20px; }
+
+        @media (max-width: 550px) {
+            .panel { padding: 17px; }
+            .choices { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <div class="eyebrow">MATH 301 · Statistics</div>
+            <h1>Section 15.3: Center and Spread of Data</h1>
+            <p>Interactive practice based on the Section 15.3 notes and homework.</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>Quick Reference</h2>
+            <div class="grid">
+                <div class="formula">
+                    <strong>Mean</strong>
+                    <p>\(\displaystyle \overline{x}=\frac{x_1+x_2+\cdots+x_N}{N}\)</p>
+                    Add all values and divide by the number of values.
+                </div>
+                <div class="formula">
+                    <strong>Median</strong>
+                    <p>The middle value after arranging the data in order. For an even number of values, average the two middle values.</p>
+                </div>
+                <div class="formula">
+                    <strong>Mode</strong>
+                    <p>The value that occurs most often.</p>
+                </div>
+                <div class="formula">
+                    <strong>Range</strong>
+                    <p>\(\text{maximum}-\text{minimum}\)</p>
+                </div>
+                <div class="formula">
+                    <strong>Interquartile range</strong>
+                    <p>\(\mathrm{IQR}=Q_3-Q_1\)</p>
+                </div>
+                <div class="formula">
+                    <strong>Standard deviation</strong>
+                    <p>Measures typical distance from the mean; in these notes, \(s=\sqrt{\text{mean of squared deviations}}\).</p>
+                </div>
+            </div>
+            <h3>Percentiles and quartiles</h3>
+            <p>A score in the \(p^{\text{th}}\) percentile is greater than or equal to \(p\) percent of the scores. The median is the 50th percentile, \(Q_1\) is the 25th percentile, and \(Q_3\) is the 75th percentile.</p>
+            <h3>Empirical rule for a normal distribution</h3>
+            <p>For an approximately bell-shaped normal distribution, about 68% of values lie within 1 standard deviation of the mean, 95% within 2 standard deviations, and 99.7% within 3 standard deviations.</p>
+            <h3>Stanine scale</h3>
+            <table>
+                <thead><tr><th>Stanine</th><th>Percentile rank</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>1–4</td><td>Very Low</td></tr>
+                    <tr><td>2</td><td>5–10</td><td>Low</td></tr>
+                    <tr><td>3</td><td>11–22</td><td>Below Average</td></tr>
+                    <tr><td>4</td><td>23–39</td><td>Slightly Below Average</td></tr>
+                    <tr><td>5</td><td>40–59</td><td>Average</td></tr>
+                    <tr><td>6</td><td>60–76</td><td>Slightly Above Average</td></tr>
+                    <tr><td>7</td><td>77–88</td><td>Above Average</td></tr>
+                    <tr><td>8</td><td>89–95</td><td>High</td></tr>
+                    <tr><td>9</td><td>96–99</td><td>Very High</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel">
+            <h2>Part A · Automatically Graded Practice</h2>
+            <p>Choose an answer and select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+            <div class="controls">
+                <span class="score" id="score">Score: 0 / 0 checked</span>
+                <button class="secondary" onclick="newSet()">New questions</button>
+            </div>
+            <div id="quiz"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Part B · Written-Response Practice</h2>
+            <p class="muted">Show your work before revealing the model solution. The exercises include the data and situations from the Section 15.3 homework.</p>
+            <div id="written"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Homework Histogram · Daily Caloric Intake</h2>
+            <p>The histogram below reproduces the frequency pattern supplied with the homework. Each bar represents a 500-calorie interval, beginning at the value shown on the horizontal axis.</p>
+            <div class="histogram" role="img" aria-label="Histogram frequencies 2, 7, 14, 17, 6, 4, and 3 for successive 500 calorie intervals">
+                <div class="bar" style="height: 12%;"><span>0</span></div>
+                <div class="bar" style="height: 41%;"><span>500</span></div>
+                <div class="bar" style="height: 82%;"><span>1000</span></div>
+                <div class="bar" style="height: 100%;"><span>1500</span></div>
+                <div class="bar" style="height: 35%;"><span>2000</span></div>
+                <div class="bar" style="height: 24%;"><span>2500</span></div>
+                <div class="bar" style="height: 18%;"><span>3000</span></div>
+                <div class="bar" style="height: 18%;"><span>3500</span></div>
+            </div>
+            <p class="muted">Frequencies from left to right: 2, 7, 14, 17, 6, 4, 3. The final interval, beginning at 3500 calories/day, has frequency 3.</p>
+        </section>
+
+        <div class="controls">
+            <a class="button" href="index.html">MATH 301 Hub</a>
+        </div>
+    </main>
+
+    <footer>MATH 301 · Section 15.3 · Practice independently and check your reasoning.</footer>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+        let questions = [];
+        let results = {};
+
+        function mean(values) {
+            return values.reduce((sum, value) => sum + value, 0) / values.length;
+        }
+
+        function median(values) {
+            const sorted = [...values].sort((a, b) => a - b);
+            const middle = Math.floor(sorted.length / 2);
+            return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+        }
+
+        function makeQuestion(prompt, choices, correct, explanation) {
+            return { prompt, choices, correct, explanation };
+        }
+
+        function newSet() {
+            results = {};
+            const values = Array.from({ length: 5 }, () => rand(2, 20));
+            const sorted = [...values].sort((a, b) => a - b);
+            const meanValue = mean(values);
+            const medianValue = median(values);
+            const rangeValue = Math.max(...values) - Math.min(...values);
+            const a = rand(4, 12);
+            const b = rand(4, 12);
+            const sd = [2, 3, 4, 5, 6][rand(0, 4)];
+
+            questions = [
+                makeQuestion(
+                    `Find the mean of \\(${values.join(', ')}\\).`,
+                    [String(meanValue), String(meanValue + 1), String(meanValue - 1), String(meanValue + 2)],
+                    0,
+                    `The sum is ${values.reduce((s, v) => s + v, 0)}. Dividing by 5 gives a mean of ${meanValue}.`
+                ),
+                makeQuestion(
+                    `Find the median of \\(${values.join(', ')}\\).`,
+                    [String(medianValue), String(sorted[0]), String(sorted[4]), String(meanValue)],
+                    0,
+                    `In order, the values are ${sorted.join(', ')}. The middle value is ${medianValue}.`
+                ),
+                makeQuestion(
+                    `The data set is \\(${values.join(', ')}\\). What is its range?`,
+                    [String(rangeValue), String(Math.max(...values)), String(Math.min(...values)), String(rangeValue + 2)],
+                    0,
+                    `The range is maximum minus minimum: ${Math.max(...values)} − ${Math.min(...values)} = ${rangeValue}.`
+                ),
+                makeQuestion(
+                    `A data set has a mean of ${a}. What must the total of 6 values be?`,
+                    [String(6 * a), String(a), String(6 + a), String(6 * (a + 1))],
+                    0,
+                    `Mean = total divided by count, so total = ${a} × 6 = ${6 * a}.`
+                ),
+                makeQuestion(
+                    `A score is in the 73rd percentile. Approximately what percentage of scores are at or below this score?`,
+                    ['73%', '27%', '50%', '100%'],
+                    0,
+                    `The 73rd percentile indicates that the score is at least as high as approximately 73% of the scores.`
+                ),
+                makeQuestion(
+                    `If \\(Q_1= ${a}\\) and \\(Q_3=${a + b}\\), find the IQR.`,
+                    [String(b), String(a + b), String(a), String(2 * b)],
+                    0,
+                    `The interquartile range is Q₃ − Q₁ = ${a + b} − ${a} = ${b}.`
+                ),
+                makeQuestion(
+                    `A normal distribution has mean 50 and standard deviation 5. About what percentage of values lie between 45 and 55?`,
+                    ['68%', '95%', '99.7%', '34%'],
+                    0,
+                    `The interval 45 to 55 is one standard deviation below and above the mean, so approximately 68% of values lie there.`
+                ),
+                makeQuestion(
+                    `A normal distribution has mean 50 and standard deviation 5. About what percentage of values are at or below 40?`,
+                    ['2.5%', '16%', '5%', '95%'],
+                    0,
+                    `40 is two standard deviations below the mean. About 95% lie within two standard deviations, leaving 5% in both tails, or 2.5% in the lower tail.`
+                ),
+                makeQuestion(
+                    `Which measure of center is the value that occurs most often?`,
+                    ['Mode', 'Median', 'Mean', 'Range'],
+                    0,
+                    `The mode is the value that appears most frequently in a data set.`
+                ),
+                makeQuestion(
+                    `Which measure of spread is especially useful for describing the middle 50% of a data set?`,
+                    ['Interquartile range', 'Mean', 'Mode', 'Percentile rank'],
+                    0,
+                    `The IQR is Q₃ − Q₁ and measures the spread of the middle half of the data.`
+                ),
+                makeQuestion(
+                    `A stanine score of 7 corresponds to which description in the Section 15.3 table?`,
+                    ['Above Average', 'Average', 'High', 'Slightly Above Average'],
+                    0,
+                    `The supplied stanine table identifies stanine 7 as Above Average, with percentile ranks 77–88.`
+                ),
+                makeQuestion(
+                    `Which set has the larger standard deviation: \\(${[4, 5, 6, 7, 8].join(', ')}\\) or \\(${[0, 3, 6, 9, 12].join(', ')}\\)?`,
+                    ['The second set', 'The first set', 'They have equal standard deviations', 'It cannot be determined'],
+                    0,
+                    `Both sets have mean 6, but the second set's values are farther from 6, so its standard deviation is larger.`
+                )
+            ];
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const root = $('quiz');
+            root.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                const options = question.choices.map((choice, choiceIndex) =>
+                    `<label><input type="radio" name="q${index}" value="${choiceIndex}"> ${choice}</label>`
+                ).join('');
+
+                div.innerHTML = `
+                    <div class="qhead">${index + 1}. ${question.prompt}</div>
+                    <div class="choices">${options}</div>
+                    <button type="button" id="check${index}" onclick="checkAnswer(${index})">Check answer</button>
+                    <div class="feedback" id="feedback${index}" aria-live="polite"></div>
+                `;
+                root.appendChild(div);
+            });
+
+            updateScore();
+            typeset();
+        }
+
+        function checkAnswer(index) {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (!selected) return;
+
+            const question = questions[index];
+            const correct = Number(selected.value) === question.correct;
+            results[index] = correct;
+
+            const feedback = $('feedback' + index);
+            feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+            feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${question.explanation}`;
+
+            document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+            $('check' + index).disabled = true;
+            updateScore();
+            typeset();
+        }
+
+        function updateScore() {
+            const correct = Object.values(results).filter(Boolean).length;
+            $('score').textContent = `Score: ${correct} / ${Object.keys(results).length} checked`;
+        }
+
+        const written = [
+            [
+                'A child says the median of \\(\\{3,14,18,20,5\\}\\) is 18. Find the correct median and explain the error.',
+                'Arrange the values in order: 3, 5, 14, 18, 20. The middle value is 14. The child did not arrange the values before identifying the middle value.'
+            ],
+            [
+                'The mean of four test scores is 70. Is it possible that none of the scores is 70? Give an example.',
+                'Yes. For example, 60, 65, 75, and 80 have sum 280 and mean 280/4 = 70.'
+            ],
+            [
+                'The mean of four test scores is 70. Is it possible that all four scores are the same? Give an example.',
+                'Yes. The scores 70, 70, 70, and 70 have mean 70.'
+            ],
+            [
+                'The mean of four test scores is 70. Is it possible that all four scores are below 70? Explain.',
+                'No. If every score is below 70, their average must also be below 70.'
+            ],
+            [
+                'The mean of four test scores is 70. Is it possible that three scores are above 70? Give an example.',
+                'Yes. For example, 60, 70, 75, and 75 have mean 70. Three scores are not above 70 in this example, so use 60, 65, 75, and 80 instead: only two are above 70. A valid example is 40, 80, 80, and 80; the sum is 280 and three scores are above 70.'
+            ],
+            [
+                'A family of five people has a median age of 9 years and a mean age of 17 years. Give one possible set of ages.',
+                'One possible set is 1, 5, 9, 25, and 45. The median is 9 and the sum is 85, giving a mean of 85/5 = 17.'
+            ],
+            [
+                'Monica has an average of 77 after 3 tests. What score does she need on the fourth test to raise her average to 80?',
+                'Her current total is 3(77) = 231. A total of 4(80) = 320 is needed, so she needs 320 − 231 = 89.'
+            ],
+            [
+                'John averaged $25,000 per year over 4 years. What average income is needed over the next 3 years for his 7-year average to be $50,000?',
+                'The first four years total $100,000. A seven-year total of $350,000 is needed. The next three years must total $250,000, so their average must be $250,000/3 = $83,333.33 (approximately).'
+            ],
+            [
+                'Mary scored in the 73rd percentile on a math test. Explain what this means.',
+                'Her score is greater than or equal to approximately 73% of the scores in the comparison group.'
+            ],
+            [
+                'Without calculating standard deviations, compare the spread of \\(\\{4,5,6,7,8\\}\\) and \\(\\{0,3,6,9,12\\}\\).',
+                'The second set has the larger standard deviation. Both have mean 6, but the second set is more spread out from that mean.'
+            ],
+            [
+                'A test score distribution is normal with mean 50 and standard deviation 5. Estimate the percentage between 45 and 55, at or below 40, and at or above 55.',
+                '45 to 55 is within one standard deviation, so about 68%. A score of 40 is two standard deviations below the mean, so about 2.5% are at or below 40. A score of 55 is one standard deviation above the mean, so about 16% are at or above 55.'
+            ],
+            [
+                'The reading times (in minutes) for 11 students are 12, 18, 15, 25, 20, 10, 30, 15, 22, 35, 18. Find the five-number summary and IQR.',
+                'Ordered data: 10, 12, 15, 15, 18, 18, 20, 22, 25, 30, 35. The five-number summary is minimum 10, Q₁ 15, median 18, Q₃ 25, maximum 35. The IQR is 25 − 15 = 10 minutes.'
+            ],
+            [
+                'For the reading-time data in the previous exercise, describe what the IQR tells you and explain how a boxplot represents the five-number summary.',
+                'The IQR of 10 minutes describes the spread of the middle 50% of reading times. A boxplot marks the minimum, Q₁, median, Q₃, and maximum; the box extends from Q₁ to Q₃ and the median is shown inside it.'
+            ],
+            [
+                'The homework histogram has frequencies 2, 7, 14, 17, 6, 4, 3, and 3 across successive intervals. How many observations are represented, and which interval contains the median observations?',
+                'There are 56 observations. The median positions are the 28th and 29th. Cumulative frequencies are 2, 9, 23, 40, so both median observations fall in the fourth interval (the interval beginning at 1500 calories/day).'
+            ]
+        ];
+
+        function renderWritten() {
+            const root = $('written');
+            written.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `
+                    <div class="qhead">${index + 1}. ${item[0]}</div>
+                    <textarea aria-label="Your response to written question ${index + 1}" placeholder="Write your reasoning here..."></textarea>
+                    <div><button class="secondary" id="toggle${index}" onclick="toggleSolution(${index})">Show model solution</button></div>
+                    <div class="solution" id="solution${index}">${item[1]}</div>
+                `;
+                root.appendChild(div);
+            });
+            typeset();
+        }
+
+        function toggleSolution(index) {
+            const solution = $('solution' + index);
+            const show = solution.style.display !== 'block';
+            solution.style.display = show ? 'block' : 'none';
+            $('toggle' + index).textContent = show ? 'Hide model solution' : 'Show model solution';
+            if (show) typeset();
+        }
+
+        function typeset() {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise().catch(() => {});
+            }
+        }
+
+        newSet();
+        renderWritten();
+    </script>
+</body>
+</html>

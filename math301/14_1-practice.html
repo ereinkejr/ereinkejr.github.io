@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH 301 | Section 14.1: Transformations</title>
+    <style>
+        :root {
+            --navy: #17324f;
+            --blue: #2465a1;
+            --pale: #eaf2fa;
+            --ink: #233344;
+            --muted: #627184;
+            --line: #dbe4ed;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f5f8fb;
+            color: var(--ink);
+            font: 16px/1.65 system-ui, -apple-system, Segoe UI, sans-serif;
+        }
+
+        header {
+            background: linear-gradient(115deg, #17324f, #276ba3);
+            color: white;
+            padding: 42px 20px;
+        }
+
+        header .wrap, main { max-width: 980px; margin: auto; }
+        header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+        header p { margin: 0; color: #e0edf8; }
+        .eyebrow { font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+        main { padding: 28px 18px 65px; }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 22px 0;
+            box-shadow: 0 5px 18px #1838580b;
+        }
+
+        h2 { color: var(--navy); margin: 0 0 12px; }
+        h3 { margin: 8px 0; }
+        .muted { color: var(--muted); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+        .rule { background: #f2f7fc; border-left: 4px solid #4382ba; border-radius: 8px; padding: 13px; }
+        .rule strong { color: var(--navy); }
+        .question { border-top: 1px solid var(--line); padding: 20px 0; }
+        .question:first-child { border-top: 0; }
+        .qhead { font-weight: 650; margin-bottom: 10px; }
+        .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 10px 0; }
+        .choices label { border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; cursor: pointer; }
+        .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+
+        button, .button {
+            background: var(--blue);
+            color: white;
+            border: 0;
+            border-radius: 9px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 650;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button:hover, .button:hover { background: #194e7e; }
+        button.secondary { background: #eaf2fa; color: var(--navy); }
+        button:disabled { opacity: .55; cursor: default; }
+        .feedback { margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; display: none; }
+        .feedback.ok { background: #e6f6eb; color: #19572d; }
+        .feedback.no { background: #fff0eb; color: #873d26; }
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .score { font-weight: 700; color: var(--navy); }
+        textarea { width: 100%; min-height: 90px; border: 1px solid #bdcbd8; border-radius: 8px; padding: 12px; font: inherit; resize: vertical; }
+        .solution { display: none; margin-top: 10px; padding: 12px 16px; background: #eef6fd; border-radius: 8px; }
+        .diagram { width: 100%; max-width: 560px; height: auto; display: block; margin: 14px auto; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+        footer { text-align: center; color: var(--muted); padding: 20px; }
+
+        @media (max-width: 550px) {
+            .panel { padding: 17px; }
+            .choices { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <div class="eyebrow">MATH 301 · Geometry</div>
+            <h1>Section 14.1: Transformations</h1>
+            <p>Interactive practice based on the Section 14.1 notes and homework.</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>Quick Reference</h2>
+            <p class="muted">A transformation assigns every point in the plane to another point in the plane. Some points may remain fixed.</p>
+            <div class="grid">
+                <div class="rule"><strong>Reflection</strong><br>Flips a figure across a line. A point and its image are the same perpendicular distance from the line of reflection.</div>
+                <div class="rule"><strong>Translation (slide)</strong><br>Moves every point the same distance and in the same direction.</div>
+                <div class="rule"><strong>Rotation</strong><br>Turns a figure around a fixed center through a specified angle.</div>
+                <div class="rule"><strong>Glide reflection</strong><br>Combines a reflection with a translation parallel to the line of reflection.</div>
+            </div>
+            <p>An <strong>isometry</strong> preserves distances and angle measures. Reflections, translations, rotations, and glide reflections are isometries.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Coordinate Rules</h2>
+            <div class="grid">
+                <div class="rule"><strong>Reflect across the x-axis</strong><br>\((x,y)\rightarrow(x,-y)\)</div>
+                <div class="rule"><strong>Reflect across \(y=k\)</strong><br>\((x,y)\rightarrow(x,2k-y)\)</div>
+                <div class="rule"><strong>Translate by \((a,b)\)</strong><br>\((x,y)\rightarrow(x+a,y+b)\)</div>
+                <div class="rule"><strong>Rotate about the origin</strong><br>90° counterclockwise: \((x,y)\rightarrow(-y,x)\)<br>90° clockwise: \((x,y)\rightarrow(y,-x)\)<br>180°: \((x,y)\rightarrow(-x,-y)\)</div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Transformation Diagrams</h2>
+            <p class="muted">Use the diagrams to recognize the type of transformation. They are schematic and are not intended to be measured.</p>
+            <svg class="diagram" viewBox="0 0 520 245" role="img" aria-label="A point reflected across the x-axis">
+                <defs>
+                    <pattern id="grid1" width="25" height="25" patternUnits="userSpaceOnUse">
+                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e3eaf1" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect x="15" y="10" width="490" height="225" fill="url(#grid1)"/>
+                <line x1="25" y1="122" x2="495" y2="122" stroke="#64748b" stroke-width="2"/>
+                <line x1="260" y1="18" x2="260" y2="228" stroke="#64748b" stroke-width="2"/>
+                <text x="480" y="113" font-size="13">x</text>
+                <text x="270" y="25" font-size="13">y</text>
+                <line x1="335" y1="52" x2="335" y2="192" stroke="#d26b38" stroke-width="2" stroke-dasharray="5 4"/>
+                <circle cx="335" cy="52" r="6" fill="#2465a1"/>
+                <circle cx="335" cy="192" r="6" fill="#2465a1"/>
+                <text x="347" y="48" fill="#17324f" font-size="16">A (x, y)</text>
+                <text x="347" y="198" fill="#17324f" font-size="16">A′ (x, −y)</text>
+                <text x="28" y="114" fill="#64748b" font-size="13">x-axis</text>
+            </svg>
+            <svg class="diagram" viewBox="0 0 520 245" role="img" aria-label="A triangle translated by a fixed vector">
+                <defs>
+                    <pattern id="grid2" width="25" height="25" patternUnits="userSpaceOnUse">
+                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e3eaf1" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect x="10" y="10" width="500" height="225" fill="url(#grid2)"/>
+                <polygon points="75,150 130,65 185,150" fill="#2465a1" fill-opacity=".13" stroke="#2465a1" stroke-width="3"/>
+                <polygon points="285,105 340,20 395,105" fill="#d26b38" fill-opacity=".13" stroke="#d26b38" stroke-width="3"/>
+                <g fill="#2465a1" font-size="15"><text x="62" y="168">A</text><text x="125" y="57">B</text><text x="190" y="168">C</text></g>
+                <g fill="#a64e25" font-size="15"><text x="272" y="123">A′</text><text x="335" y="15">B′</text><text x="400" y="123">C′</text></g>
+                <path d="M 190 180 L 275 125" stroke="#d26b38" stroke-width="3" fill="none"/>
+                <path d="M 265 125 L 275 125 L 272 136" stroke="#d26b38" stroke-width="3" fill="none"/>
+                <text x="205" y="205" fill="#17324f" font-size="14">Same vector for every point</text>
+            </svg>
+        </section>
+
+        <section class="panel">
+            <h2>Part A · Automatically Graded Practice</h2>
+            <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+            <div class="controls">
+                <span id="score" class="score">Score: 0 / 0 checked</span>
+                <button class="secondary" onclick="newSet()">New questions</button>
+            </div>
+            <div id="quiz"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Part B · Written-Response Practice</h2>
+            <p class="muted">Show your work, then reveal the model solution. The first exercises follow the transformations and coordinates in the Section 14.1 homework.</p>
+            <div id="written"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Isometries</h2>
+            <p>An isometry is a transformation that preserves distances and angles. According to the Section 14.1 notes, every plane isometry is equivalent to one of four basic transformations: reflection, translation, rotation, or glide reflection.</p>
+        </section>
+
+        <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+    </main>
+
+    <footer>MATH 301 · Section 14.1 · Practice independently and check your reasoning.</footer>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+        let questions = [];
+        let results = {};
+
+        function makeQuestion(prompt, choices, correct, explanation) {
+            return { prompt, choices, correct, explanation };
+        }
+
+        function newSet() {
+            results = {};
+            const qs = [];
+
+            const x = rand(-8, 8) || 3;
+            const y = rand(-8, 8) || 4;
+            qs.push(makeQuestion(
+                `Reflect the point \\(${String.raw`(${x},${y})`}\\) across the x-axis.`,
+                [`(${x}, ${-y})`, `(${-x}, ${y})`, `(${-x}, ${-y})`, `(${y}, ${x})`],
+                0,
+                `A reflection across the x-axis keeps the x-coordinate and changes the sign of the y-coordinate: (${x}, ${y}) becomes (${x}, ${-y}).`
+            ));
+
+            const k = rand(-4, 4);
+            const yy = rand(-6, 6);
+            const reflected = 2 * k - yy;
+            qs.push(makeQuestion(
+                `Reflect \\((2,${yy})\\) across the horizontal line \\(y=${k}\\). What is the image?`,
+                [`(2, ${reflected})`, `(${reflected}, 2)`, `(2, ${-yy})`, `(-2, ${reflected})`],
+                0,
+                `The line y = ${k} is the midpoint between y = ${yy} and the image's y-coordinate. Thus y′ = 2(${k}) − (${yy}) = ${reflected}.`
+            ));
+
+            const a = rand(-5, 5), b = rand(-5, 5), px = rand(-5, 5), py = rand(-5, 5);
+            qs.push(makeQuestion(
+                `Translate \\((${px},${py})\\) by the vector \\(<${a},${b}>\\).`,
+                [`(${px + a}, ${py + b})`, `(${px - a}, ${py - b})`, `(${py + a}, ${px + b})`, `(${px + b}, ${py + a})`],
+                0,
+                `Add the vector components to the corresponding coordinates: (${px} + ${a}, ${py} + ${b}) = (${px + a}, ${py + b}).`
+            ));
+
+            const rx = rand(-6, 6) || 2, ry = rand(-6, 6) || 3;
+            qs.push(makeQuestion(
+                `Rotate \\((${rx},${ry})\\) 90° counterclockwise about the origin.`,
+                [`(${-ry}, ${rx})`, `(${ry}, ${-rx})`, `(${-rx}, ${-ry})`, `(${rx}, ${-ry})`],
+                0,
+                `A 90° counterclockwise rotation uses (x, y) → (−y, x), giving (${-ry}, ${rx}).`
+            ));
+
+            const cx = rand(-6, 6) || 1, cy = rand(-6, 6) || 2;
+            qs.push(makeQuestion(
+                `Rotate \\((${cx},${cy})\\) 90° clockwise about the origin.`,
+                [`(${cy}, ${-cx})`, `(${-cy}, ${cx})`, `(${-cx}, ${-cy})`, `(${cx}, ${-cy})`],
+                0,
+                `A 90° clockwise rotation uses (x, y) → (y, −x), giving (${cy}, ${-cx}).`
+            ));
+
+            const hx = rand(-6, 6) || 3, hy = rand(-6, 6) || 2;
+            qs.push(makeQuestion(
+                `Rotate \\((${hx},${hy})\\) 180° about the origin.`,
+                [`(${-hx}, ${-hy})`, `(${hx}, ${-hy})`, `(${-hx}, ${hy})`, `(${hy}, ${hx})`],
+                0,
+                `A 180° rotation changes the signs of both coordinates: (${hx}, ${hy}) becomes (${-hx}, ${-hy}).`
+            ));
+
+            const dx = rand(2, 7), dy = rand(1, 6);
+            qs.push(makeQuestion(
+                `A translation moves every point ${dx} units right and ${dy} units down. What vector describes the translation?`,
+                [`<${dx}, ${-dy}>`, `<${-dx}, ${dy}>`, `<${dx}, ${dy}>`, `<${-dx}, ${-dy}>`],
+                0,
+                `Right is the positive x-direction and down is the negative y-direction, so the vector is <${dx}, ${-dy}>.`
+            ));
+
+            const kinds = [
+                ['A figure is flipped across a line.', 'Reflection', 'A reflection flips points across a line.'],
+                ['Every point moves the same distance in the same direction.', 'Translation', 'That describes a translation, or slide.'],
+                ['A figure turns around a fixed center.', 'Rotation', 'A rotation turns a figure around a fixed center.'],
+                ['A reflection is followed by a translation parallel to the line of reflection.', 'Glide reflection', 'That combination is a glide reflection.']
+            ];
+            const kind = kinds[rand(0, kinds.length - 1)];
+            const distractors = ['Reflection', 'Translation', 'Rotation', 'Glide reflection'].filter(v => v !== kind[1]);
+            const options = [kind[1], ...distractors];
+            qs.push(makeQuestion(kind[0], options, 0, kind[2]));
+
+            qs.push(makeQuestion(
+                'Which transformation preserves both distances and angle measures?',
+                ['An isometry', 'A dilation with scale factor 2', 'A nonuniform stretch', 'A shear that changes angles'],
+                0,
+                'An isometry preserves distances and angle measures. A dilation with scale factor 2 changes lengths.'
+            ));
+
+            qs.push(makeQuestion(
+                'What happens to a point that lies on the line of reflection?',
+                ['It remains fixed.', 'It moves twice as far from the line.', 'It moves to the opposite side of the origin.', 'It rotates 90° around the line.'],
+                0,
+                'Every point on the mirror line is the same distance (zero) from that line before and after reflection, so it remains fixed.'
+            ));
+
+            questions = qs;
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            const root = $('quiz');
+            root.innerHTML = '';
+            questions.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                const options = q.choices.map((choice, j) =>
+                    `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`
+                ).join('');
+                div.innerHTML = `
+                    <div class="qhead">${i + 1}. ${q.prompt}</div>
+                    <div class="choices">${options}</div>
+                    <button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button>
+                    <div class="feedback" id="fb${i}" aria-live="polite"></div>
+                `;
+                root.appendChild(div);
+            });
+            updateScore();
+            typeset();
+        }
+
+        function checkAnswer(i) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) return;
+            const q = questions[i];
+            const correct = Number(selected.value) === q.correct;
+            results[i] = correct;
+            const feedback = $('fb' + i);
+            feedback.style.display = 'block';
+            feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+            feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.explanation}`;
+            document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+            $('check' + i).disabled = true;
+            updateScore();
+            typeset();
+        }
+
+        function updateScore() {
+            $('score').textContent = `Score: ${Object.values(results).filter(Boolean).length} / ${Object.keys(results).length} checked`;
+        }
+
+        const written = [
+            [
+                'Reflect triangle ABC with vertices A(1, 2), B(3, 4), and C(5, 1) across the x-axis.',
+                'Use (x, y) → (x, −y). The image is A′(1, −2), B′(3, −4), and C′(5, −1).'
+            ],
+            [
+                'Reflect triangle ABC with vertices A(1, 2), B(3, 4), and C(5, 1) across the line y = −1.',
+                'Use (x, y) → (x, 2k − y) with k = −1. Thus y′ = −2 − y. The image is A′(1, −4), B′(3, −6), and C′(5, −3).'
+            ],
+            [
+                'The homework translation vector is shown by the arrow from (−1, 5) to (−5, 3). Find the vector and translate A(1, 3), B(3, 5), C(5, 1), D(−1, −2), E(−3, −5), F(4, −3), and G(3, −4).',
+                'The vector is ⟨−5 − (−1), 3 − 5⟩ = ⟨−4, −2⟩. Subtract 4 from each x-coordinate and 2 from each y-coordinate: A′(−3, 1), B′(−1, 3), C′(1, −1), D′(−5, −4), E′(−7, −7), F′(0, −5), and G′(−1, −6).'
+            ],
+            [
+                'Rotate A(3, 2), B(−4, 1), C(5, 4), and D(2, −4) 90° counterclockwise about the origin.',
+                'Use (x, y) → (−y, x). The images are A′(−2, 3), B′(−1, −4), C′(−4, 5), and D′(4, 2).'
+            ],
+            [
+                'Rotate A(3, 2), B(−4, 1), C(5, 4), and D(2, −4) 90° clockwise about the origin.',
+                'Use (x, y) → (y, −x). The images are A′(2, −3), B′(1, 4), C′(4, −5), and D′(−4, −2).'
+            ],
+            [
+                'Rotate A(3, 2), B(−4, 1), C(5, 4), and D(2, −4) 180° about the origin.',
+                'Use (x, y) → (−x, −y). The images are A′(−3, −2), B′(4, −1), C′(−5, −4), and D′(−2, 4).'
+            ],
+            [
+                'Explain what a transformation of the plane is and what it means for a point to be fixed.',
+                'A transformation is a function that assigns each point in the plane to a point in the plane. A fixed point is a point that remains in the same location after the transformation.'
+            ],
+            [
+                'Describe how two consecutive reflections across parallel lines are related to a translation.',
+                'The composition of two reflections across parallel lines is a translation (slide). The translation direction is perpendicular to the parallel lines, and its distance is twice the distance between the reflection lines.'
+            ],
+            [
+                'Describe how two consecutive reflections across intersecting, nonparallel lines are related to a rotation.',
+                'The composition is a rotation about the intersection of the two lines. The angle of rotation is twice the angle between the reflecting lines.'
+            ],
+            [
+                'Explain how a glide reflection is formed.',
+                'A glide reflection combines a reflection across a line with a translation parallel to that line.'
+            ],
+            [
+                'What is an isometry? Name the four basic transformations listed in the notes.',
+                'An isometry preserves distances and angle measures. The four basic transformations are reflection, translation, rotation, and glide reflection.'
+            ],
+            [
+                'A point is reflected across the x-axis and then translated by ⟨2, −3⟩. Write the image of a general point (x, y).',
+                'First reflect: (x, y) → (x, −y). Then translate: (x, −y) → (x + 2, −y − 3). The final image is (x + 2, −y − 3).'
+            ]
+        ];
+
+        function renderWritten() {
+            const root = $('written');
+            written.forEach((item, i) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `
+                    <div class="qhead">${i + 1}. ${item[0]}</div>
+                    <textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea>
+                    <div><button class="secondary" onclick="toggleSolution(${i})" id="toggle${i}">Show model solution</button></div>
+                    <div class="solution" id="sol${i}">${item[1]}</div>
+                `;
+                root.appendChild(div);
+            });
+            typeset();
+        }
+
+        function toggleSolution(i) {
+            const solution = $('sol' + i);
+            const show = solution.style.display !== 'block';
+            solution.style.display = show ? 'block' : 'none';
+            $('toggle' + i).textContent = show ? 'Hide model solution' : 'Show model solution';
+            if (show) typeset();
+        }
+
+        function typeset() {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise().catch(() => {});
+            }
+        }
+
+        newSet();
+        renderWritten();
+    </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH 301 | Section 15.2: Graphs</title>
+    <style>
+        :root { --navy:#17324f; --blue:#2465a1; --pale:#eaf2fa; --ink:#233344; --muted:#627184; --line:#dbe4ed; }
+        * { box-sizing:border-box; }
+        body { margin:0; background:#f5f8fb; color:var(--ink); font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif; }
+        header { background:linear-gradient(115deg,#17324f,#276ba3); color:white; padding:42px 20px; }
+        header .wrap, main { max-width:1000px; margin:auto; }
+        header h1 { margin:6px 0; font-size:clamp(1.8rem,4vw,2.6rem); }
+        header p { margin:0; color:#e0edf8; }
+        .eyebrow { font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:.8rem; }
+        main { padding:26px 18px 60px; }
+        .panel { background:white; border:1px solid var(--line); border-radius:16px; padding:24px; margin:22px 0; box-shadow:0 5px 18px #1838580b; }
+        h2 { color:var(--navy); margin:0 0 12px; }
+        h3 { color:var(--navy); margin:8px 0; }
+        .muted { color:var(--muted); }
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+        .concept { background:#f2f7fc; border-left:4px solid #4382ba; border-radius:8px; padding:13px; }
+        .diagram { width:100%; height:auto; display:block; margin:12px auto; }
+        .chart-card { border:1px solid var(--line); border-radius:12px; padding:16px; margin:16px 0; overflow-x:auto; }
+        .chart-card svg { max-width:100%; height:auto; display:block; margin:auto; }
+        .question { border-top:1px solid var(--line); padding:20px 0; }
+        .question:first-child { border-top:0; }
+        .qhead { font-weight:650; margin-bottom:10px; }
+        .choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin:10px 0; }
+        .choices label { border:1px solid var(--line); border-radius:8px; padding:9px 12px; cursor:pointer; }
+        .choices label:has(input:checked) { background:var(--pale); border-color:var(--blue); }
+        button,.button { background:var(--blue); color:white; border:0; border-radius:9px; padding:10px 16px; cursor:pointer; font:inherit; font-weight:650; text-decoration:none; display:inline-block; }
+        button:hover,.button:hover { background:#194e7e; }
+        button.secondary { background:#eaf2fa; color:var(--navy); }
+        button:disabled { opacity:.55; cursor:default; }
+        .feedback { margin-top:10px; padding:10px 13px; border-radius:8px; background:#f3f7fc; display:none; }
+        .feedback.ok { background:#e6f6eb; color:#19572d; }
+        .feedback.no { background:#fff0eb; color:#873d26; }
+        .controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+        .score { font-weight:700; color:var(--navy); }
+        textarea { width:100%; min-height:88px; border:1px solid #bdcbd8; border-radius:8px; padding:12px; font:inherit; resize:vertical; }
+        .solution { display:none; margin-top:10px; padding:12px 16px; background:#eef6fd; border-radius:8px; }
+        .tag { display:inline-block; background:#e7f0f8; color:#245c88; border-radius:99px; padding:2px 10px; font-size:.8rem; font-weight:700; }
+        footer { text-align:center; color:var(--muted); padding:20px; }
+        @media(max-width:550px) { .panel { padding:17px; } .choices { grid-template-columns:1fr 1fr; } }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<header>
+    <div class="wrap">
+        <div class="eyebrow">MATH 301 · Statistics</div>
+        <h1>Section 15.2: Graphs</h1>
+        <p>Interactive practice based on the Section 15.2 notes and homework.</p>
+    </div>
+</header>
+<main>
+    <section class="panel">
+        <h2>Quick Reference</h2>
+        <div class="grid">
+            <div class="concept"><strong>Bar graph</strong><br>Displays categorical data. Each bar represents a category; bars may be horizontal or vertical.</div>
+            <div class="concept"><strong>Pie chart</strong><br>Displays categorical data as portions of a whole. All sectors represent 100% together.</div>
+            <div class="concept"><strong>Histogram</strong><br>Displays numerical data grouped into intervals (bins). Adjacent bars touch.</div>
+            <div class="concept"><strong>Boxplot</strong><br>Displays the five-number summary: minimum, first quartile, median, third quartile, and maximum.</div>
+            <div class="concept"><strong>Line graph</strong><br>Displays change over time. A time series is plotted in chronological order.</div>
+            <div class="concept"><strong>Scatterplot</strong><br>Displays paired numerical data for two variables and can reveal association.</div>
+            <div class="concept"><strong>Normal distribution</strong><br>A symmetric, bell-shaped distribution centered at its mean.</div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Recognizing Graph Types</h2>
+        <div class="chart-card">
+            <span class="tag">Bar graph · categorical data</span>
+            <svg viewBox="0 0 620 245" role="img" aria-label="Bar graph of favorite subjects">
+                <line x1="65" y1="195" x2="585" y2="195" stroke="#334" stroke-width="2"/>
+                <line x1="65" y1="25" x2="65" y2="195" stroke="#334" stroke-width="2"/>
+                <g fill="#2465a1"><rect x="105" y="75" width="65" height="120"/><rect x="205" y="115" width="65" height="80"/><rect x="305" y="45" width="65" height="150"/><rect x="405" y="95" width="65" height="100"/><rect x="505" y="135" width="65" height="60"/></g>
+                <g fill="#233344" font-size="13" text-anchor="middle"><text x="137" y="215">Math</text><text x="237" y="215">Science</text><text x="337" y="215">History</text><text x="437" y="215">English</text><text x="537" y="215">Art</text></g>
+                <g stroke="#dbe4ed"><path d="M65 155H585M65 115H585M65 75H585M65 35H585"/></g>
+                <g fill="#627184" font-size="12" text-anchor="end"><text x="55" y="199">0</text><text x="55" y="159">10</text><text x="55" y="119">20</text><text x="55" y="79">30</text><text x="55" y="39">40</text></g>
+                <text x="18" y="18" fill="#233344" font-size="12">Frequency</text>
+            </svg>
+        </div>
+        <div class="chart-card">
+            <span class="tag">Histogram · numerical data</span>
+            <svg viewBox="0 0 620 245" role="img" aria-label="Histogram of measured values">
+                <line x1="65" y1="195" x2="585" y2="195" stroke="#334" stroke-width="2"/><line x1="65" y1="25" x2="65" y2="195" stroke="#334" stroke-width="2"/>
+                <g fill="#4382ba" stroke="white" stroke-width="1"><rect x="66" y="145" width="64" height="50"/><rect x="130" y="75" width="64" height="120"/><rect x="194" y="45" width="64" height="150"/><rect x="258" y="85" width="64" height="110"/><rect x="322" y="125" width="64" height="70"/><rect x="386" y="165" width="64" height="30"/><rect x="450" y="175" width="64" height="20"/></g>
+                <g fill="#233344" font-size="12" text-anchor="middle"><text x="98" y="215">0–10</text><text x="162" y="215">10–20</text><text x="226" y="215">20–30</text><text x="290" y="215">30–40</text><text x="354" y="215">40–50</text><text x="418" y="215">50–60</text><text x="482" y="215">60–70</text></g>
+                <g stroke="#dbe4ed"><path d="M65 155H585M65 115H585M65 75H585M65 35H585"/></g>
+                <text x="15" y="18" fill="#233344" font-size="12">Frequency</text>
+            </svg>
+        </div>
+        <div class="chart-card">
+            <span class="tag">Boxplot · five-number summary</span>
+            <svg viewBox="0 0 620 155" role="img" aria-label="Boxplot with whiskers, quartiles, and median">
+                <line x1="80" y1="75" x2="540" y2="75" stroke="#2465a1" stroke-width="3"/>
+                <line x1="80" y1="55" x2="80" y2="95" stroke="#2465a1" stroke-width="3"/><line x1="540" y1="55" x2="540" y2="95" stroke="#2465a1" stroke-width="3"/>
+                <rect x="190" y="40" width="230" height="70" fill="#eaf2fa" stroke="#2465a1" stroke-width="3"/><line x1="310" y1="40" x2="310" y2="110" stroke="#d26b38" stroke-width="4"/>
+                <g fill="#233344" font-size="13" text-anchor="middle"><text x="80" y="132">Minimum</text><text x="190" y="132">Q1</text><text x="310" y="132">Median</text><text x="420" y="132">Q3</text><text x="540" y="132">Maximum</text></g>
+            </svg>
+        </div>
+        <p class="muted">These are instructional examples. The source notes also discuss line graphs, scatterplots, and normal distributions.</p>
+    </section>
+
+    <section class="panel">
+        <h2>Part A · Automatically Graded Practice</h2>
+        <p>Choose an answer and select <strong>Check answer</strong>. Use <strong>New questions</strong> to generate another set.</p>
+        <div class="controls"><span class="score" id="score">Score: 0 / 0 checked</span><button class="secondary" onclick="newSet()">New questions</button></div>
+        <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+        <h2>Part B · Written-Response Practice</h2>
+        <p class="muted">Show your reasoning, then reveal the model solution. Several exercises are adapted from the Section 15.2 homework. Some original image files were not included with the uploaded source, so the associated graphs have been recreated schematically with new example data.</p>
+        <div id="written"></div>
+    </section>
+
+    <section class="panel">
+        <h2>Normal Distributions</h2>
+        <p>A normal distribution is symmetric and bell-shaped. In an ideal normal distribution, the mean, median, and mode coincide at the center. The standard deviation describes spread: a larger standard deviation produces a wider, flatter curve.</p>
+        <div class="chart-card">
+            <svg viewBox="0 0 620 230" role="img" aria-label="Symmetric bell-shaped normal curve">
+                <line x1="45" y1="185" x2="580" y2="185" stroke="#334" stroke-width="2"/>
+                <path d="M55 184 C125 184 150 176 190 130 C230 78 255 28 310 28 C365 28 390 78 430 130 C470 176 495 184 565 184" fill="none" stroke="#2465a1" stroke-width="4"/>
+                <line x1="310" y1="28" x2="310" y2="185" stroke="#d26b38" stroke-dasharray="6 5" stroke-width="2"/>
+                <g fill="#233344" font-size="13" text-anchor="middle"><text x="105" y="208">Low</text><text x="310" y="208">Mean</text><text x="515" y="208">High</text></g>
+            </svg>
+        </div>
+    </section>
+    <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+</main>
+<footer>MATH 301 · Section 15.2 · Practice independently and check your reasoning.</footer>
+<script>
+    const $ = id => document.getElementById(id);
+    let questions = [];
+    let results = {};
+    const written = [
+        ["A bar graph shows enrollment values of 50, 90, 70, 80, and 60 for five courses. Which course has the greatest enrollment?", "The course with 90 students has the greatest enrollment. Compare the heights or lengths of all five bars."],
+        ["Explain one way a bar graph can be misleading if its horizontal axis begins at 45 rather than 0. What change would improve it?", "Starting the numerical axis at 45 exaggerates differences because the bar lengths no longer represent values from a common zero baseline. Start the axis at 0, or clearly indicate an axis break and explain it."],
+        ["A graph displays the number of students enrolled in Chemistry, Physics, Economics, History, and Mathematics. Is a bar graph or histogram more appropriate? Explain.", "A bar graph is appropriate because the courses are categories. A histogram is used for numerical measurements grouped into intervals."],
+        ["A histogram has frequencies 8, 30, 20, 17, 6, 4, 3, 3, and 3 for consecutive 50-unit bins beginning at 0. Is the distribution symmetric or skewed?", "The distribution is right-skewed: the largest frequencies occur in the lower intervals, and a long tail extends toward larger values."],
+        ["Using the histogram in the previous question, how many observations are below 100 units?", "Add the first two bin frequencies: 8 + 30 = 38 observations below 100 units."],
+        ["Using the same histogram, how many observations are below 300 units?", "Add the first six frequencies: 8 + 30 + 20 + 17 + 6 + 4 = 85 observations."],
+        ["A line graph shows population over time. Why is a line graph appropriate for this data?", "Population is measured over time. Connecting chronological observations makes changes and trends across time visible."],
+        ["A scatterplot compares irrigation amount with sugar beet yield. The points generally rise from left to right. Describe the association.", "There is a positive association: larger irrigation amounts tend to be paired with larger yields. A scatterplot alone does not prove that irrigation caused the increase."],
+        ["A boxplot has minimum 2, first quartile 5, median 8, third quartile 12, and maximum 17. State the five-number summary and find the interquartile range.", "The five-number summary is (2, 5, 8, 12, 17). The interquartile range is Q3 − Q1 = 12 − 5 = 7."],
+        ["Compare two boxplots with the same median, but with the second box and whiskers noticeably longer. What does this suggest?", "The centers are similar because the medians match, but the second data set has greater spread or variability."],
+        ["Describe two important features of a normal distribution.", "A normal distribution is symmetric and bell-shaped. Its center is at the mean, which also equals the median and mode for an ideal normal distribution."],
+        ["A pie chart represents 40% of participants in one category. What central angle should that sector have?", "A full circle is 360°. The sector angle is 0.40 × 360° = 144°."],
+        ["Explain the difference between a histogram and a bar graph.", "A bar graph represents categorical groups, and gaps commonly separate the bars. A histogram represents numerical data grouped into intervals, and adjacent bars touch because the intervals are continuous."],
+        ["A scatterplot shows no clear upward or downward pattern. What can you conclude about the relationship between the two variables?", "The plot shows little or no apparent linear association. This does not rule out every possible nonlinear relationship." ]
+    ];
+
+    function makeQuestion(prompt, choices, correct, why) {
+        return { prompt, choices, correct, why };
+    }
+
+    function newSet() {
+        results = {};
+        const qs = [
+            makeQuestion("Which graph is most appropriate for displaying students' favorite academic subjects?", ["Bar graph", "Histogram", "Scatterplot", "Line graph"], 0, "Favorite subjects are categorical data, so a bar graph compares the categories."),
+            makeQuestion("Which graph groups numerical measurements into adjacent intervals or bins?", ["Pie chart", "Histogram", "Bar graph", "Line graph"], 1, "A histogram groups quantitative observations into intervals, with adjacent bars."),
+            makeQuestion("Which graph is designed to display the five-number summary?", ["Scatterplot", "Pie chart", "Boxplot", "Line graph"], 2, "A boxplot displays the minimum, Q1, median, Q3, and maximum."),
+            makeQuestion("Which graph is generally most appropriate for showing population changes from year to year?", ["Pie chart", "Line graph", "Boxplot", "Bar graph of categories"], 1, "A line graph connects time-ordered observations and highlights trends over time."),
+            makeQuestion("A data set has Q1 = 12 and Q3 = 29. What is its interquartile range?", ["17", "41", "12", "29"], 0, "The interquartile range is Q3 − Q1 = 29 − 12 = 17."),
+            makeQuestion("A pie-chart category represents 25% of the whole. What is its central angle?", ["45°", "90°", "120°", "180°"], 1, "One quarter of 360° is 90°."),
+            makeQuestion("Which graph is used to examine the relationship between two numerical variables?", ["Scatterplot", "Pie chart", "Bar graph", "Boxplot"], 0, "A scatterplot displays paired numerical values and can reveal association."),
+            makeQuestion("In a symmetric normal distribution, which statement is true?", ["The mean is greater than the median", "The mean, median, and mode coincide", "The distribution has two peaks", "The distribution is strongly skewed"], 1, "An ideal normal distribution is symmetric and has mean, median, and mode at the center."),
+            makeQuestion("A histogram has bin frequencies 8, 30, 20, 17, 6, 4, 3, 3, and 3. How many observations are in the first two bins?", ["28", "38", "50", "94"], 1, "Add the first two frequencies: 8 + 30 = 38."),
+            makeQuestion("A histogram has the frequencies above. How many observations are in its first six bins?", ["75", "81", "85", "91"], 2, "Add 8 + 30 + 20 + 17 + 6 + 4 = 85."),
+            makeQuestion("Which change can make a bar graph misleading when comparing numerical values?", ["Using category labels", "Starting the value axis far above zero without indicating a break", "Giving bars equal widths", "Providing a graph title"], 1, "A truncated axis can exaggerate visual differences between bar lengths."),
+            makeQuestion("A scatterplot's points generally rise from left to right. What type of association is shown?", ["Negative", "Positive", "No association", "Perfectly symmetric"], 1, "An upward trend indicates a positive association: larger values of one variable tend to accompany larger values of the other.")
+        ];
+        questions = qs;
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const root = $("quiz");
+        root.innerHTML = "";
+        questions.forEach((q, i) => {
+            const div = document.createElement("div");
+            div.className = "question";
+            const options = q.choices.map((choice, j) => `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`).join("");
+            div.innerHTML = `<div class="qhead">${i + 1}. ${q.prompt}</div><div class="choices">${options}</div><button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button><div class="feedback" id="fb${i}" aria-live="polite"></div>`;
+            root.appendChild(div);
+        });
+        updateScore();
+    }
+
+    function checkAnswer(i) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) return;
+        const q = questions[i];
+        const correct = Number(selected.value) === q.correct;
+        results[i] = correct;
+        const feedback = $("fb" + i);
+        feedback.style.display = "block";
+        feedback.className = "feedback " + (correct ? "ok" : "no");
+        feedback.textContent = (correct ? "Correct! " : "Not quite. ") + q.why;
+        document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+        $("check" + i).disabled = true;
+        updateScore();
+    }
+
+    function updateScore() {
+        $("score").textContent = `Score: ${Object.values(results).filter(Boolean).length} / ${Object.keys(results).length} checked`;
+    }
+
+    function renderWritten() {
+        const root = $("written");
+        written.forEach((item, i) => {
+            const div = document.createElement("div");
+            div.className = "question";
+            div.innerHTML = `<div class="qhead">${i + 1}. ${item[0]}</div><textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea><div><button class="secondary" type="button" id="toggle${i}" onclick="toggleSolution(${i})">Show model solution</button></div><div class="solution" id="sol${i}">${item[1]}</div>`;
+            root.appendChild(div);
+        });
+    }
+
+    function toggleSolution(i) {
+        const solution = $("sol" + i);
+        const show = solution.style.display !== "block";
+        solution.style.display = show ? "block" : "none";
+        $("toggle" + i).textContent = show ? "Hide model solution" : "Show model solution";
+    }
+
+    newSet();
+    renderWritten();
+</script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MATH 301 | Section 14.2 Symmetry and Congruence</title>
+  <style>
+    :root {
+      --navy: #17324f;
+      --blue: #2465a1;
+      --pale: #eaf2fa;
+      --ink: #233344;
+      --muted: #627184;
+      --line: #dbe4ed;
+      --green: #19572d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f8fb;
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      background: linear-gradient(115deg, #17324f, #276ba3);
+      color: white;
+      padding: 42px 20px;
+    }
+    header .wrap, main { max-width: 980px; margin: auto; }
+    header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    header p { margin: 0; color: #e0edf8; }
+    .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    main { padding: 28px 18px 65px; }
+    .panel {
+      margin: 22px 0;
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 5px 18px #1838580b;
+    }
+    h2 { margin: 0 0 12px; color: var(--navy); }
+    h3 { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .rule { padding: 13px; background: #f2f7fc; border-left: 4px solid #4382ba; border-radius: 8px; }
+    .rule strong { color: var(--navy); }
+    .question { padding: 20px 0; border-top: 1px solid var(--line); }
+    .question:first-child { border-top: 0; }
+    .qhead { margin-bottom: 10px; font-weight: 650; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 10px 0; }
+    .choices label { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+    .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+    button, .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--blue);
+      color: white;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    button:hover, .button:hover { background: #194e7e; }
+    button.secondary { background: #eaf2fa; color: var(--navy); }
+    button:disabled { opacity: .55; cursor: default; }
+    .feedback { display: none; margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; }
+    .feedback.ok { background: #e6f6eb; color: var(--green); }
+    .feedback.no { background: #fff0eb; color: #873d26; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .score { color: var(--navy); font-weight: 700; }
+    textarea { width: 100%; min-height: 88px; padding: 12px; border: 1px solid #bdcbd8; border-radius: 8px; font: inherit; resize: vertical; }
+    .solution { display: none; margin-top: 10px; padding: 12px 16px; border-radius: 8px; background: #eef6fd; }
+    .diagram { display: inline-block; max-width: 100%; height: auto; margin: 8px 14px 8px 0; }
+    .diagram text { fill: var(--ink); font: 15px system-ui, sans-serif; }
+    .callout { padding: 12px 15px; background: #f2f7fc; border-radius: 8px; }
+    footer { padding: 20px; color: var(--muted); text-align: center; }
+    @media (max-width: 550px) { .panel { padding: 17px; } .choices { grid-template-columns: 1fr 1fr; } }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Geometry</div>
+      <h1>Section 14.2: Symmetry and Congruence</h1>
+      <p>Interactive practice based on the Section 14.2 notes and homework.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Quick Reference</h2>
+      <div class="grid">
+        <div class="rule"><strong>Reflection symmetry</strong><br>A figure maps onto itself when reflected across a line of symmetry.</div>
+        <div class="rule"><strong>Translation symmetry</strong><br>A figure or pattern maps onto itself after a slide.</div>
+        <div class="rule"><strong>Rotational symmetry</strong><br>An order-\(n\) rotation maps a figure onto itself after a turn of \(360^\circ/n\).</div>
+        <div class="rule"><strong>Glide reflection</strong><br>A reflection followed by a translation parallel to the line of reflection.</div>
+        <div class="rule"><strong>Congruent figures</strong><br>Same shape and same size; one can be mapped to the other by an isometry.</div>
+        <div class="rule"><strong>Similar figures</strong><br>Same shape; corresponding lengths are proportional, though sizes may differ.</div>
+      </div>
+      <p class="callout">An <strong>isometry</strong> preserves distances and angles. Reflections, translations, and rotations are isometries.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Symmetry Examples</h2>
+      <p class="muted">These are schematic examples. For regular polygons, the number of rotational positions and reflection lines depends on the number of sides.</p>
+      <svg class="diagram" viewBox="0 0 510 150" role="img" aria-label="Regular triangle, square, and hexagon">
+        <polygon points="70,20 25,112 115,112" fill="#eaf2fa" stroke="#2465a1" stroke-width="2.5"/>
+        <polygon points="205,28 285,28 285,108 205,108" fill="#eaf2fa" stroke="#2465a1" stroke-width="2.5"/>
+        <polygon points="390,25 430,48 430,94 390,117 350,94 350,48" fill="#eaf2fa" stroke="#2465a1" stroke-width="2.5"/>
+        <text x="70" y="139" text-anchor="middle">Equilateral triangle</text>
+        <text x="245" y="139" text-anchor="middle">Square</text>
+        <text x="390" y="139" text-anchor="middle">Regular hexagon</text>
+      </svg>
+      <h3>Similar triangles and measurement</h3>
+      <p>When two triangles are similar, corresponding side lengths are proportional. For the shadow method:</p>
+      \[\frac{\text{object height}}{\text{object shadow}}=\frac{\text{person height}}{\text{person shadow}}\]
+      <p>For the mirror method in the notes:</p>
+      \[\frac{\text{object height}}{\text{object to mirror}}=\frac{\text{eye height}}{\text{person to mirror}}\]
+    </section>
+
+    <section class="panel">
+      <h2>Tessellations</h2>
+      <p>The interior angle of a regular polygon with \(n\) sides is</p>
+      \[\theta=180^\circ\left(\frac{n-2}{n}\right).\]
+      <p>For a regular polygon to tile a flat surface by itself, copies must fit around a point with no gaps or overlaps. Thus its interior angle must divide \(360^\circ\) evenly.</p>
+      <div class="grid">
+        <div class="rule"><strong>Equilateral triangle</strong><br>Interior angle: \(60^\circ\). Six meet at a point.</div>
+        <div class="rule"><strong>Square</strong><br>Interior angle: \(90^\circ\). Four meet at a point.</div>
+        <div class="rule"><strong>Regular hexagon</strong><br>Interior angle: \(120^\circ\). Three meet at a point.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+      <div class="controls">
+        <span id="score" class="score">Score: 0 / 0 checked</span>
+        <button class="secondary" type="button" onclick="newSet()">New questions</button>
+      </div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Show your reasoning, then reveal the model solution. The flagpole problem reproduces the values from the Section 14.2 homework.</p>
+      <div id="written"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Additional Ideas</h2>
+      <p><strong>Möbius strip:</strong> a surface with one continuous side and one boundary curve.</p>
+      <p><strong>Klein bottle:</strong> a non-orientable surface with no boundary; a familiar three-dimensional depiction passes through itself.</p>
+      <p><strong>Similarity versus congruence:</strong> congruent figures have equal corresponding lengths, while similar figures have proportional corresponding lengths.</p>
+    </section>
+
+    <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+  </main>
+
+  <footer>MATH 301 · Section 14.2 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+    let questions = [];
+    let results = {};
+
+    function makeQuestion(prompt, choices, correct, explanation) {
+      return { prompt, choices, correct, explanation };
+    }
+
+    function newSet() {
+      results = {};
+      const q = [];
+      const n = rand(3, 10);
+      q.push(makeQuestion(
+        `A regular polygon has ${n} sides. What is its smallest positive angle of rotational symmetry?`,
+        [`${360 / n}°`, `${360 / (n + 1)}°`, `${360 / (n - 1)}°`, `${180 * (n - 2) / n}°`],
+        0,
+        `An order-${n} rotational symmetry uses a turn of 360° ÷ ${n} = ${360 / n}°.`
+      ));
+      const sideCounts = [3, 4, 5, 6, 8, 10];
+      const s = sideCounts[rand(0, sideCounts.length - 1)];
+      const angle = 180 * (s - 2) / s;
+      q.push(makeQuestion(
+        `What is the interior angle of a regular ${s}-gon?`,
+        [`${angle}°`, `${360 / s}°`, `${180 * (s - 1) / s}°`, `${180 - angle}°`],
+        0,
+        `Use θ = 180°((n − 2)/n): θ = 180°((${s} − 2)/${s}) = ${angle}°.`
+      ));
+      const a = rand(35, 90);
+      const b = rand(60, 140);
+      const pole = a * b / 88;
+      q.push(makeQuestion(
+        `A ${a}-inch-tall person casts a ${b}-inch shadow. A pole casts a ${rand(150, 250)}-inch shadow. Which proportion should be used to find the pole's height?`,
+        [
+          `person height / person shadow = pole height / pole shadow`,
+          `person height / pole shadow = pole height / person shadow`,
+          `person shadow / person height = pole height / pole shadow`,
+          `person height × person shadow = pole height × pole shadow`
+        ],
+        0,
+        `Similar triangles match height with height and shadow with shadow. Set person height/person shadow equal to pole height/pole shadow.`
+      ));
+      const n2 = [3, 4, 5, 6, 8, 10][rand(0, 5)];
+      const theta = 180 * (n2 - 2) / n2;
+      const fits = 360 / theta;
+      q.push(makeQuestion(
+        `Can a regular ${n2}-gon tessellate the plane by itself using copies meeting edge-to-edge?`,
+        [Number.isInteger(fits) ? 'Yes; its interior angle divides 360° evenly.' : 'No; its interior angle does not divide 360° evenly.', 'Yes; every regular polygon tessellates.', 'No; only triangles tessellate.', 'Yes; because its exterior angle is 360°.'],
+        Number.isInteger(fits) ? 0 : 0,
+        Number.isInteger(fits)
+          ? `Its interior angle is ${theta}°. Since 360° ÷ ${theta}° = ${fits}, that many copies meet around a point.`
+          : `Its interior angle is ${theta}°. Since 360° ÷ ${theta}° is not an integer, identical regular ${n2}-gons cannot meet evenly around a point.`
+      ));
+      q.push(makeQuestion(
+        'Which transformation is a reflection followed by a translation parallel to the line of reflection?',
+        ['Glide reflection', 'Rotation', 'Dilation', 'Half-turn'], 0,
+        'A glide reflection combines a reflection with a translation parallel to the reflecting line.'
+      ));
+      q.push(makeQuestion(
+        'Two figures are congruent. Which statement must be true?',
+        ['They have the same shape and the same size.', 'They have the same shape but may have different sizes.', 'Their corresponding sides are only proportional.', 'One must be a reflection of the other.'], 0,
+        'Congruent figures have equal corresponding lengths and angles; an isometry maps one onto the other.'
+      ));
+      q.push(makeQuestion(
+        'Two figures are similar but not congruent. What is true of their corresponding side lengths?',
+        ['They are proportional with a scale factor other than 1.', 'They are all equal.', 'They are unrelated.', 'Their corresponding angles must differ.'], 0,
+        'Similar figures have the same shape, so corresponding side lengths have a common scale factor. If they are not congruent, that factor is not 1.'
+      ));
+      q.push(makeQuestion(
+        'How many lines of reflection symmetry does a non-square rectangle have?',
+        ['2', '1', '4', '0'], 0,
+        'A non-square rectangle has two reflection lines through its center: one horizontal and one vertical.'
+      ));
+      q.push(makeQuestion(
+        'What is the angle of rotation for a figure with 6-fold rotational symmetry?',
+        ['60°', '90°', '120°', '180°'], 0,
+        'The smallest rotation is 360° ÷ 6 = 60°.'
+      ));
+      q.push(makeQuestion(
+        'A mirror is placed between a person and a building. Which triangles are used to estimate the building height in the mirror method?',
+        ['Similar triangles formed by the object and person with the mirror.', 'Congruent triangles formed by the ground.', 'Right triangles with equal areas.', 'Equilateral triangles formed by the mirror.'], 0,
+        'The object-mirror and person-mirror distances, together with their heights, form similar triangles.'
+      ));
+      questions = q;
+      render();
+    }
+
+    function render() {
+      const root = $('quiz');
+      root.innerHTML = '';
+      questions.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        const options = q.choices.map((choice, j) =>
+          `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`
+        ).join('');
+        div.innerHTML = `
+          <div class="qhead">${i + 1}. ${q.prompt}</div>
+          <div class="choices">${options}</div>
+          <button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button>
+          <div class="feedback" id="feedback${i}" aria-live="polite"></div>`;
+        root.appendChild(div);
+      });
+      updateScore();
+      typeset();
+    }
+
+    function checkAnswer(i) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (!selected) return;
+      const q = questions[i];
+      const correct = Number(selected.value) === q.correct;
+      results[i] = correct;
+      const feedback = $('feedback' + i);
+      feedback.style.display = 'block';
+      feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+      feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.explanation}`;
+      document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+      $('check' + i).disabled = true;
+      updateScore();
+      typeset();
+    }
+
+    function updateScore() {
+      $('score').textContent = `Score: ${Object.values(results).filter(Boolean).length} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      [
+        'For each regular polygon with 3, 4, 5, and 6 sides, describe its rotational symmetry and give the smallest positive angle of rotation.',
+        'A regular n-gon has rotational symmetry of order n, with smallest positive angle 360°/n. The angles are 120°, 90°, 72°, and 60°, respectively.'
+      ],
+      [
+        'Describe the lines of symmetry of a regular triangle, square, regular pentagon, and regular hexagon.',
+        'A regular triangle has 3 lines of symmetry; a square has 4; a regular pentagon has 5; and a regular hexagon has 6. Each line passes through the center and a vertex or midpoint of an opposite side, as appropriate.'
+      ],
+      [
+        'A 64-inch-tall person casts a shadow 88 inches long. A flagpole casts a shadow 214 inches long. Use similar triangles to find the flagpole height.',
+        'Set 64/88 = h/214. Then h = (64 × 214)/88 = 155.636... inches, or approximately 155.6 inches (about 13.0 feet).'
+      ],
+      [
+        'A person has an eye height of 5.5 feet and stands 4 feet from a mirror. The mirror is 18 feet from a building. Use the mirror relationship to find the building height.',
+        'Using object height/object-to-mirror = eye height/person-to-mirror, H/18 = 5.5/4. Thus H = 18(5.5/4) = 24.75 feet.'
+      ],
+      [
+        'An  object is 12 feet tall and casts a 9-foot shadow. A nearby person casts a 6-foot shadow. Use similar triangles to find the person’s height.',
+        'Set 12/9 = h/6. Then h = 12(6)/9 = 8 feet.'
+      ],
+      [
+        'Explain the difference between congruent and similar figures.',
+        'Congruent figures have the same shape and size; corresponding sides and angles are equal. Similar figures have the same shape; corresponding angles are equal and corresponding side lengths are proportional, but the sizes may differ.'
+      ],
+      [
+        'Explain why the interior angle of a regular polygon must divide 360° evenly for that polygon to tessellate the plane by itself.',
+        'At a point where polygon vertices meet, the angles around the point must total 360°. If each interior angle is θ, then kθ = 360° for a whole number k. Therefore 360°/θ must be an integer.'
+      ],
+      [
+        'Determine whether regular triangles, squares, regular pentagons, and regular hexagons can each tessellate the plane by themselves.',
+        'The interior angles are 60°, 90°, 108°, and 120°. The values 360/60 = 6, 360/90 = 4, and 360/120 = 3 are integers, so equilateral triangles, squares, and regular hexagons tessellate. Since 360/108 is not an integer, regular pentagons do not tessellate by themselves.'
+      ],
+      [
+        'What is a glide reflection? Describe the two transformations involved.',
+        'A glide reflection is a reflection followed by a translation parallel to the line of reflection. A familiar example is a repeated footprint pattern.'
+      ],
+      [
+        'What is the difference between reflection symmetry, translation symmetry, and rotational symmetry?',
+        'Reflection symmetry maps a figure onto itself across a line; translation symmetry maps a pattern onto itself by sliding it; rotational symmetry maps a figure onto itself after a turn about a center.'
+      ],
+      [
+        'Describe one important feature of a Möbius strip and one important feature of a Klein bottle.',
+        'A Möbius strip has one continuous side and one boundary component. A Klein bottle is a non-orientable surface with no boundary; a three-dimensional representation typically intersects itself.'
+      ],
+      [
+        'A regular polygon has an interior angle of 135°. Find the number of sides and determine whether it tessellates by itself.',
+        'Solve 180((n − 2)/n) = 135. Then 180n − 360 = 135n, so 45n = 360 and n = 8. Since 360/135 = 8/3 is not an integer, a regular octagon does not tessellate by itself.'
+      ]
+    ];
+
+    function renderWritten() {
+      const root = $('written');
+      written.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `
+          <div class="qhead">${i + 1}. ${item[0]}</div>
+          <textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea>
+          <div><button class="secondary" type="button" id="toggle${i}" onclick="toggleSolution(${i})">Show model solution</button></div>
+          <div class="solution" id="solution${i}">${item[1]}</div>`;
+        root.appendChild(div);
+      });
+      typeset();
+    }
+
+    function toggleSolution(i) {
+      const solution = $('solution' + i);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      $('toggle' + i).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typeset();
+    }
+
+    function typeset() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    renderWritten();
+  </script>
+</body>
+</html>

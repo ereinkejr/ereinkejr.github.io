@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH 301 | Section 15.1: Statistics</title>
+    <style>
+        :root {
+            --navy: #17324f;
+            --blue: #2465a1;
+            --pale: #eaf2fa;
+            --ink: #233344;
+            --muted: #627184;
+            --line: #dbe4ed;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: #f5f8fb;
+            color: var(--ink);
+            font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
+        header {
+            background: linear-gradient(115deg, #17324f, #276ba3);
+            color: white;
+            padding: 42px 20px;
+        }
+        header .wrap, main { max-width: 980px; margin: auto; }
+        header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+        header p { margin: 0; color: #e0edf8; }
+        .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+        main { padding: 28px 18px 65px; }
+        .panel {
+            margin: 22px 0;
+            padding: 24px;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 5px 18px #1838580b;
+        }
+        h2 { margin: 0 0 12px; color: var(--navy); }
+        h3 { margin: 8px 0; }
+        .muted { color: var(--muted); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .concept {
+            padding: 13px;
+            background: #f2f7fc;
+            border-left: 4px solid #4382ba;
+            border-radius: 8px;
+        }
+        .concept strong { color: var(--navy); }
+        .question { padding: 20px 0; border-top: 1px solid var(--line); }
+        .question:first-child { border-top: 0; }
+        .qhead { margin-bottom: 10px; font-weight: 650; }
+        .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; margin: 10px 0; }
+        .choices label { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+        .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+        button, .button {
+            display: inline-block;
+            padding: 10px 16px;
+            border: 0;
+            border-radius: 9px;
+            background: var(--blue);
+            color: white;
+            font: inherit;
+            font-weight: 650;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        button:hover, .button:hover { background: #194e7e; }
+        button.secondary { background: #eaf2fa; color: var(--navy); }
+        button:disabled { opacity: .55; cursor: default; }
+        .feedback { display: none; margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; }
+        .feedback.ok { background: #e6f6eb; color: #19572d; }
+        .feedback.no { background: #fff0eb; color: #873d26; }
+        .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+        .score { color: var(--navy); font-weight: 700; }
+        textarea { width: 100%; min-height: 90px; padding: 12px; border: 1px solid #bdcbd8; border-radius: 8px; font: inherit; resize: vertical; }
+        .solution { display: none; margin-top: 10px; padding: 12px 16px; border-radius: 8px; background: #eef6fd; }
+        .tag { display: inline-block; padding: 2px 10px; border-radius: 99px; background: #e7f0f8; color: #245c88; font-size: .8rem; font-weight: 700; }
+        footer { padding: 20px; color: var(--muted); text-align: center; }
+        @media (max-width: 550px) {
+            .panel { padding: 17px; }
+            .choices { grid-template-columns: 1fr; }
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <div class="eyebrow">MATH 301 · Statistics</div>
+            <h1>Section 15.1: Statistics</h1>
+            <p>Interactive practice based on the Section 15.1 notes and homework.</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>Quick Reference</h2>
+            <p class="muted">Statistics uses data to answer questions and learn about a group.</p>
+            <div class="grid">
+                <div class="concept"><strong>Statistics</strong><br>The science of data. Its purpose is to learn something or answer a question.</div>
+                <div class="concept"><strong>Population</strong><br>The entire group we want to learn about.</div>
+                <div class="concept"><strong>Sample</strong><br>A subset of the population from which data are collected.</div>
+                <div class="concept"><strong>Quantitative data</strong><br>Numerical data resulting from measuring or counting.</div>
+                <div class="concept"><strong>Categorical data</strong><br>Qualitative data describing a characteristic or property.</div>
+                <div class="concept"><strong>Simple random sample</strong><br>Each member of the population has an equal chance of selection.</div>
+            </div>
+            <h3>Statistical process</h3>
+            <ol>
+                <li>Formulate a question or state a hypothesis.</li>
+                <li>Collect data.</li>
+                <li>Analyze data.</li>
+                <li>Interpret results and draw a conclusion.</li>
+            </ol>
+            <h3>Methods of collecting data</h3>
+            <p>Observational studies, experiments (including control and treatment groups and placebos), and surveys.</p>
+            <h3>Sampling methods</h3>
+            <p><span class="tag">Random</span> <span class="tag">Stratified random</span> <span class="tag">Voluntary response</span> <span class="tag">Convenience</span></p>
+            <p class="muted">A random sample is more likely to represent the population. Biased questions or sampling methods can produce misleading data and false conclusions.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Part A · Automatically Graded Practice</h2>
+            <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+            <div class="controls">
+                <span id="score" class="score">Score: 0 / 0 checked</span>
+                <button class="secondary" type="button" onclick="newSet()">New questions</button>
+            </div>
+            <div id="quiz"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Part B · Written-Response Practice</h2>
+            <p class="muted">Write your reasoning before revealing the model solution. The first exercises are based on the Section 15.1 homework.</p>
+            <div id="written"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Thinking About Bias</h2>
+            <p>A statistical question or sampling method is biased when it systematically favors certain responses or members of a population. A sample that is easy to obtain is not necessarily representative. Consider who had a chance to be selected and whether the wording of a question encourages a particular answer.</p>
+        </section>
+
+        <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+    </main>
+
+    <footer>MATH 301 · Section 15.1 · Practice independently and check your reasoning.</footer>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        let questions = [];
+        let results = {};
+
+        function shuffle(items) {
+            return [...items].sort(() => Math.random() - 0.5);
+        }
+
+        function makeQuestion(prompt, choices, correct, explanation) {
+            const shuffled = shuffle(choices.map((label, index) => ({ label, correct: index === correct })));
+            return {
+                prompt,
+                choices: shuffled.map(item => item.label),
+                correct: shuffled.findIndex(item => item.correct),
+                explanation
+            };
+        }
+
+        function newSet() {
+            results = {};
+            const blue = Math.floor(Math.random() * 8) + 3;
+            const sampleSize = 20;
+            const bowlSize = [200, 250, 300, 400, 500][Math.floor(Math.random() * 5)];
+            const predicted = Math.round((blue / sampleSize) * bowlSize);
+            const choices = [predicted, predicted + 10, Math.max(0, predicted - 10), predicted * 2].map(String);
+
+            questions = [
+                makeQuestion('Which statement best describes statistics?', [
+                    'The science of collecting, analyzing, and interpreting data',
+                    'The study of shapes and geometric measurements',
+                    'A method for proving that every hypothesis is correct',
+                    'The process of recording opinions without analyzing them'
+                ], 0, 'Statistics is the science of data. Its purpose is to learn something or answer a question.'),
+                makeQuestion('The entire group about which a study seeks to learn is called the:', [
+                    'sample', 'population', 'treatment group', 'response set'
+                ], 1, 'The population is the entire group we are trying to learn something about.'),
+                makeQuestion('A researcher records the number of minutes students spend studying. This is which type of data?', [
+                    'Categorical', 'Qualitative', 'Quantitative', 'Voluntary-response'
+                ], 2, 'Time in minutes is numerical data obtained by measuring, so it is quantitative.'),
+                makeQuestion('A survey asks students to identify their major. This produces:', [
+                    'Categorical data', 'Quantitative data', 'Continuous measurements', 'A numerical count'
+                ], 0, 'A major describes a characteristic or category rather than a numerical measurement.'),
+                makeQuestion('Which step comes immediately after collecting data in the statistical process?', [
+                    'Interpret results', 'Analyze data', 'State a new hypothesis', 'Select a new population'
+                ], 1, 'The sequence is formulate a question, collect data, analyze data, then interpret results.'),
+                makeQuestion('In a simple random sample, each member of the population:', [
+                    'Must be selected', 'Has an equal chance of being selected', 'Is selected only if available', 'Volunteers to participate'
+                ], 1, 'A simple random sample gives each member of the population an equal chance of being included.'),
+                makeQuestion('A researcher gives a treatment to one group and compares its results with a control group. This is a(n):', [
+                    'Survey', 'Observational study', 'Experiment', 'Convenience sample'
+                ], 2, 'An experiment imposes a treatment and compares outcomes, often using treatment and control groups.'),
+                makeQuestion('A poll is posted online and people choose whether to respond. This is most likely a:', [
+                    'Simple random sample', 'Stratified random sample', 'Voluntary response sample', 'Census'
+                ], 2, 'In a voluntary response sample, people decide for themselves whether to participate.'),
+                makeQuestion('A student interviews the people sitting at the same cafeteria table. This is a:', [
+                    'Convenience sample', 'Simple random sample', 'Stratified random sample', 'Placebo group'
+                ], 0, 'The student selects people who are easy to reach, which is convenience sampling.'),
+                makeQuestion('A bowl contains ' + bowlSize + ' candies. A sample of 20 contains ' + blue + ' blue candies. Using the sample proportion, about how many blue candies are in the bowl?', choices, choices.indexOf(String(predicted)), 'The sample proportion is ' + blue + '/20 = ' + (blue / 20) + '. Multiplying by ' + bowlSize + ' gives about ' + predicted + ' blue candies.'),
+                makeQuestion('A dean randomly selects 5 men and 5 women from each of 4 English classes. Which sampling method is described?', [
+                    'Convenience', 'Voluntary response', 'Stratified random', 'Simple random'
+                ], 2, 'The dean divides the population into groups (strata) and randomly selects from each group.'),
+                makeQuestion('Why is it important to avoid bias when collecting data?', [
+                    'Bias guarantees a larger sample', 'Bias can lead to misleading data and false conclusions', 'Bias makes every sample random', 'Bias eliminates the need to analyze data'
+                ], 1, 'Bias can systematically distort the data, making conclusions misleading.')
+            ];
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            const root = $('quiz');
+            root.innerHTML = '';
+            questions.forEach((question, index) => {
+                const item = document.createElement('div');
+                item.className = 'question';
+                const options = question.choices.map((choice, choiceIndex) =>
+                    `<label><input type="radio" name="q${index}" value="${choiceIndex}"> ${choice}</label>`
+                ).join('');
+                item.innerHTML = `
+                    <div class="qhead">${index + 1}. ${question.prompt}</div>
+                    <div class="choices">${options}</div>
+                    <button type="button" id="check${index}" onclick="checkAnswer(${index})">Check answer</button>
+                    <div class="feedback" id="feedback${index}" aria-live="polite"></div>
+                `;
+                root.appendChild(item);
+            });
+            updateScore();
+        }
+
+        function checkAnswer(index) {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (!selected) return;
+            const question = questions[index];
+            const correct = Number(selected.value) === question.correct;
+            results[index] = correct;
+            const feedback = $('feedback' + index);
+            feedback.style.display = 'block';
+            feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+            feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${question.explanation}`;
+            document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+            $('check' + index).disabled = true;
+            updateScore();
+        }
+
+        function updateScore() {
+            const correct = Object.values(results).filter(Boolean).length;
+            $('score').textContent = `Score: ${correct} / ${Object.keys(results).length} checked`;
+        }
+
+        const written = [
+            [
+                'A bowl contains 300 M&Ms. A sample of 20 M&Ms contains 6 blue. Predict how many blue M&Ms are in the bowl.',
+                'The sample proportion of blue M&Ms is 6/20 = 0.30. Estimate 30% of the 300 M&Ms: 0.30(300) = 90 blue M&Ms.'
+            ],
+            [
+                'Classify the sampling method: A dean selects 5 men and 5 women from each of 4 English classes.',
+                'This is stratified random sampling. The population is divided into groups (here, by class and gender), and a random selection is made from each group.'
+            ],
+            [
+                'Classify the sampling method: A researcher interviews 20 students chosen at random from a list of all mathematics students.',
+                'This is a simple random sample if every mathematics student on the list has an equal chance of being selected.'
+            ],
+            [
+                'Classify the sampling method: You interview the students sitting at the same table as you in the cafeteria.',
+                'This is convenience sampling because the students are selected because they are easy to reach.'
+            ],
+            [
+                'A student newspaper wants to interview 100 business students at a college. Describe one possible simple random sample.',
+                'Obtain a complete list of all business students, assign each student a number, and use a random-number generator to select 100 different students.'
+            ],
+            [
+                'For the newspaper survey, describe a voluntary response sample.',
+                'Invite all business students to respond to an online survey and interview the first 100 students who choose to participate. This is voluntary response because participation is self-selected.'
+            ],
+            [
+                'For the newspaper survey, describe a stratified random sample.',
+                'Divide business students into meaningful groups, such as class year (first-year, sophomore, junior, and senior). Randomly select students from each group until the sample contains 100 students.'
+            ],
+            [
+                'Explain the difference between a population and a sample.',
+                'The population is the entire group a study is about. A sample is a subset of that population from which data are collected.'
+            ],
+            [
+                'Explain the difference between quantitative and categorical data. Give one example of each.',
+                'Quantitative data are numerical measurements or counts, such as a student’s height or number of courses. Categorical data describe a property or group, such as a student’s major or eye color.'
+            ],
+            [
+                'List the four steps in the statistical process in the correct order.',
+                '1. Formulate a question or state a hypothesis. 2. Collect data. 3. Analyze data. 4. Interpret the results and draw a conclusion.'
+            ],
+            [
+                'Describe the difference between an observational study and an experiment.',
+                'In an observational study, researchers observe or measure subjects without assigning a treatment. In an experiment, researchers impose a treatment and study its effects, often comparing treatment and control groups.'
+            ],
+            [
+                'What is a placebo, and why might it be used in an experiment?',
+                'A placebo is an inactive treatment that resembles the actual treatment. It can help researchers compare the effects of the actual treatment with expectations or other effects associated with receiving a treatment.'
+            ]
+        ];
+
+        function renderWritten() {
+            const root = $('written');
+            written.forEach((item, index) => {
+                const block = document.createElement('div');
+                block.className = 'question';
+                block.innerHTML = `
+                    <div class="qhead">${index + 1}. ${item[0]}</div>
+                    <textarea aria-label="Your response to written question ${index + 1}" placeholder="Write your reasoning here..."></textarea>
+                    <div><button class="secondary" type="button" onclick="toggleSolution(${index})" id="toggle${index}">Show model solution</button></div>
+                    <div class="solution" id="solution${index}">${item[1]}</div>
+                `;
+                root.appendChild(block);
+            });
+        }
+
+        function toggleSolution(index) {
+            const solution = $('solution' + index);
+            const show = solution.style.display !== 'block';
+            solution.style.display = show ? 'block' : 'none';
+            $('toggle' + index).textContent = show ? 'Hide model solution' : 'Show model solution';
+        }
+
+        newSet();
+        renderWritten();
+    </script>
+</body>
+</html>
