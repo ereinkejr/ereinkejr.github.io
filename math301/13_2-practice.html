@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MATH 301 | Section 13.2: Surface Area</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root {
+      --navy: #17324f;
+      --blue: #2465a1;
+      --pale: #eaf2fa;
+      --ink: #233344;
+      --muted: #627184;
+      --line: #dbe4ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f8fb;
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header { background: linear-gradient(115deg, #17324f, #276ba3); color: white; padding: 42px 20px; }
+    header .wrap, main { max-width: 980px; margin: auto; }
+    header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    header p { margin: 0; color: #e0edf8; }
+    .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    main { padding: 28px 18px 65px; }
+    .panel { margin: 22px 0; padding: 24px; background: white; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 5px 18px #1838580b; }
+    h2 { margin: 0 0 12px; color: var(--navy); }
+    h3 { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .term { padding: 13px; background: #f2f7fc; border-left: 4px solid #4382ba; border-radius: 8px; }
+    .term strong { color: var(--navy); }
+    .question { padding: 20px 0; border-top: 1px solid var(--line); }
+    .question:first-child { border-top: 0; }
+    .qhead { margin-bottom: 10px; font-weight: 650; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 8px; margin: 10px 0; }
+    .choices label { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+    .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+    button, .button { display: inline-block; padding: 10px 16px; border: 0; border-radius: 9px; background: var(--blue); color: white; font: inherit; font-weight: 650; text-decoration: none; cursor: pointer; }
+    button:hover, .button:hover { background: #194e7e; }
+    button.secondary { background: #eaf2fa; color: var(--navy); }
+    button:disabled { opacity: .55; cursor: default; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .score { color: var(--navy); font-weight: 700; }
+    .feedback { display: none; margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; }
+    .feedback.ok { background: #e6f6eb; color: #19572d; }
+    .feedback.no { background: #fff0eb; color: #873d26; }
+    textarea { width: 100%; min-height: 85px; padding: 12px; border: 1px solid #bdcbd8; border-radius: 8px; font: inherit; resize: vertical; }
+    .solution { display: none; margin-top: 10px; padding: 12px 16px; background: #eef6fd; border-radius: 8px; }
+    .diagram { display: block; width: 100%; max-width: 560px; height: auto; margin: 16px auto; }
+    .diagram-caption { text-align: center; color: var(--muted); font-size: .92rem; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+    th, td { padding: 9px; border: 1px solid var(--line); text-align: center; }
+    th { background: #f2f7fc; color: var(--navy); }
+    footer { padding: 20px; color: var(--muted); text-align: center; }
+    @media (max-width: 550px) { .panel { padding: 17px; } .choices { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Geometry</div>
+      <h1>Section 13.2: Surface Area</h1>
+      <p>Interactive practice based on the Section 13.2 notes and homework.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Quick Reference</h2>
+      <div class="grid">
+        <div class="term"><strong>Surface area</strong><br>The sum of the areas of all outside faces or surfaces of a solid.</div>
+        <div class="term"><strong>Net</strong><br>A flat pattern that can be folded to construct a three-dimensional solid.</div>
+        <div class="term"><strong>Faces</strong><br>The polygons in a net that form the surfaces of a polyhedron.</div>
+        <div class="term"><strong>Sphere</strong><br>For radius \(r\), surface area is \(A=4\pi r^2\).</div>
+        <div class="term"><strong>Cone</strong><br>For radius \(r\) and slant height \(l\), total surface area is \(A=\pi rl+\pi r^2\).</div>
+        <div class="term"><strong>Slant height</strong><br>The distance along the sloping side of a cone from its vertex to the edge of its base.</div>
+      </div>
+      <p><strong>Strategy:</strong> Identify every component of the surface, find each component's area, and add the areas. Keep track of whether a problem asks for total surface area or only lateral surface area.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Understanding Nets</h2>
+      <p>A net represents all the surfaces of a solid laid flat. When folded along the edges, the pieces form the solid.</p>
+      <svg class="diagram" viewBox="0 0 560 190" role="img" aria-label="Net of a square pyramid showing a square base and four triangular faces">
+        <polygon points="210,65 270,65 270,125 210,125" fill="#eaf2fa" stroke="#2465a1" stroke-width="2.5"/>
+        <polygon points="210,65 240,15 270,65" fill="#f8e9dc" stroke="#d26b38" stroke-width="2.5"/>
+        <polygon points="270,65 320,95 270,125" fill="#f8e9dc" stroke="#d26b38" stroke-width="2.5"/>
+        <polygon points="210,125 240,175 270,125" fill="#f8e9dc" stroke="#d26b38" stroke-width="2.5"/>
+        <polygon points="210,65 160,95 210,125" fill="#f8e9dc" stroke="#d26b38" stroke-width="2.5"/>
+        <text x="240" y="100" text-anchor="middle" font-size="14" fill="#17324f">Square base</text>
+        <text x="240" y="10" text-anchor="middle" font-size="13" fill="#873d26">Triangle</text>
+        <text x="360" y="95" font-size="14" fill="#627184">4 triangular faces + 1 square</text>
+      </svg>
+      <p class="diagram-caption">Schematic net of a right square pyramid. The four triangular faces surround the square base.</p>
+      <p>For a cylinder, a net consists of two congruent circles and one rectangle. For a cone, a net consists of one circle and one circular sector.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Surface Area Formulas</h2>
+      <table>
+        <thead><tr><th>Solid</th><th>Total surface area</th><th>Information needed</th></tr></thead>
+        <tbody>
+          <tr><td>Rectangular prism</td><td>\(A=2lw+2lh+2wh\)</td><td>Length, width, height</td></tr>
+          <tr><td>Cylinder</td><td>\(A=2\pi rh+2\pi r^2\)</td><td>Radius and height</td></tr>
+          <tr><td>Sphere</td><td>\(A=4\pi r^2\)</td><td>Radius</td></tr>
+          <tr><td>Cone</td><td>\(A=\pi rl+\pi r^2\)</td><td>Radius and slant height</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">The cylinder and rectangular-prism formulas are included as reference connections for the homework applications. Use the formulas and definitions emphasized in the Section 13.2 notes.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+      <div class="controls">
+        <span id="score" class="score">Score: 0 / 0 checked</span>
+        <button class="secondary" type="button" onclick="newSet()">New questions</button>
+      </div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Show your reasoning, then reveal the model solution. The exercises include the types of solids and numerical applications from the Section 13.2 homework.</p>
+      <div id="written"></div>
+    </section>
+
+    <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+  </main>
+
+  <footer>MATH 301 · Section 13.2 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const rand = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    let questions = [];
+    let results = {};
+
+    function makeQuestion(prompt, choices, correct, explanation) {
+      return { prompt, choices, correct, explanation };
+    }
+
+    function newSet() {
+      results = {};
+      const r = rand(2, 8);
+      const h = rand(4, 12);
+      const l = rand(3, 8);
+      const w = rand(2, 7);
+      const boxArea = 2 * (l * w + l * h + w * h);
+      const sphereArea = 4 * r * r;
+      const cylinderArea = 2 * r * h + 2 * r * r;
+
+      questions = [
+        makeQuestion(
+          'What is surface area?',
+          ['The sum of the areas of all outside surfaces', 'The distance around the base of a solid', 'The amount of space inside a solid', 'The area of only the largest face'],
+          0,
+          'Surface area is found by adding the areas of all the components that make up the outside surface of the solid.'
+        ),
+        makeQuestion(
+          'What is a net?',
+          ['A flat pattern that folds to form a solid', 'A drawing showing only the front face', 'A formula for volume', 'A three-dimensional wireframe'],
+          0,
+          'A net is a flat pattern that can be folded along its edges to construct a three-dimensional solid.'
+        ),
+        makeQuestion(
+          'Which pieces make up a net for a right square pyramid?',
+          ['One square and four triangles', 'Two squares and four triangles', 'One square and four rectangles', 'Four squares and one triangle'],
+          0,
+          'A right square pyramid has one square base and four triangular lateral faces.'
+        ),
+        makeQuestion(
+          'Which formula gives the surface area of a sphere with radius r?',
+          ['4πr²', 'πr²', '2πr²', '4πr'],
+          0,
+          'The surface area of a sphere is A = 4πr².'
+        ),
+        makeQuestion(
+          'In the cone formula A = πrl + πr², what does l represent?',
+          ['The slant height', 'The vertical height', 'The circumference', 'The diameter'],
+          0,
+          'The variable l represents the slant height, measured along the cone from its vertex to the edge of the base.'
+        ),
+        makeQuestion(
+          `A sphere has radius ${r} cm. What is its surface area?`,
+          [`${sphereArea}π cm²`, `${2 * r}π cm²`, `${r * r}π cm²`, `${4 * r}π cm²`],
+          0,
+          `Use A = 4πr². With r = ${r}, A = 4π(${r})² = ${sphereArea}π cm².`
+        ),
+        makeQuestion(
+          `A rectangular box measures ${l} cm by ${w} cm by ${h} cm. What is its total surface area?`,
+          [`${boxArea} cm²`, `${l * w * h} cm²`, `${2 * (l * w + l * h)} cm²`, `${l * w + l * h + w * h} cm²`],
+          0,
+          `Add the areas of three pairs of congruent faces: 2(lw + lh + wh) = 2(${l * w} + ${l * h} + ${w * h}) = ${boxArea} cm².`
+        ),
+        makeQuestion(
+          `A cylinder has radius ${r} cm and height ${h} cm. What is its total surface area?`,
+          [`${cylinderArea}π cm²`, `${2 * r * h}π cm²`, `${r * h + r * r}π cm²`, `${2 * r * h + r * r}π cm²`],
+          0,
+          `Add the curved surface area and the two circular bases: 2πrh + 2πr² = 2π(${r})(${h}) + 2π(${r})² = ${cylinderArea}π cm².`
+        ),
+        makeQuestion(
+          'Which description of a cone net is correct?',
+          ['A circle and a circular sector', 'Two circles and a rectangle', 'A rectangle and two triangles', 'One square and four triangles'],
+          0,
+          'The cone net consists of its circular base and the sector that forms its curved lateral surface.'
+        ),
+        makeQuestion(
+          'Why is it useful to draw a net when finding the surface area of a polyhedron?',
+          ['It displays the individual faces so their areas can be added', 'It gives the volume without calculation', 'It removes the need to know face dimensions', 'It shows only the hidden faces'],
+          0,
+          'A net lays out the faces separately, making it easier to identify and add the area of each face.'
+        )
+      ];
+      renderQuiz();
+    }
+
+    function renderQuiz() {
+      const root = $('quiz');
+      root.innerHTML = '';
+      questions.forEach((question, index) => {
+        const item = document.createElement('div');
+        item.className = 'question';
+        const options = question.choices.map((choice, choiceIndex) =>
+          `<label><input type="radio" name="q${index}" value="${choiceIndex}"> ${choice}</label>`
+        ).join('');
+        item.innerHTML = `
+          <div class="qhead">${index + 1}. ${question.prompt}</div>
+          <div class="choices">${options}</div>
+          <button type="button" id="check${index}" onclick="checkAnswer(${index})">Check answer</button>
+          <div class="feedback" id="feedback${index}" aria-live="polite"></div>
+        `;
+        root.appendChild(item);
+      });
+      updateScore();
+      typeset();
+    }
+
+    function checkAnswer(index) {
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (!selected) return;
+      const question = questions[index];
+      const correct = Number(selected.value) === question.correct;
+      results[index] = correct;
+      const feedback = $('feedback' + index);
+      feedback.style.display = 'block';
+      feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+      feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${question.explanation}`;
+      document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+      $('check' + index).disabled = true;
+      updateScore();
+      typeset();
+    }
+
+    function updateScore() {
+      const correct = Object.values(results).filter(Boolean).length;
+      $('score').textContent = `Score: ${correct} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      [
+        'Explain what a net is and how it relates to surface area.',
+        'A net is a flat pattern that can be folded to form a solid. Each polygon in the net corresponds to a face of the solid. The surface area is the sum of the areas of all those faces.'
+      ],
+      [
+        'Describe the net of a right square pyramid.',
+        'The net consists of one square for the base and four triangles for the lateral faces. When the four triangles are folded upward, their vertices meet at the apex.'
+      ],
+      [
+        'A rectangular box has dimensions 3 cm by 4 cm by 5 cm. Find its total surface area.',
+        'There are two faces of each dimension pair. The total area is 2(3·4) + 2(3·5) + 2(4·5) = 24 + 30 + 40 = 94 cm².'
+      ],
+      [
+        'A cylindrical can has radius 3 cm and height 7 cm. Find its total surface area.',
+        'The total surface area is the lateral area plus the two circular bases: 2πrh + 2πr² = 2π(3)(7) + 2π(3²) = 42π + 18π = 60π cm².'
+      ],
+      [
+        'Find the surface area of a sphere with radius 5 cm.',
+        'Use A = 4πr². Substituting r = 5 gives A = 4π(25) = 100π cm².'
+      ],
+      [
+        'A right square pyramid has a base side length of 8 ft. Its apex is 3 ft directly above the center of the base. Find its total surface area.',
+        'The base area is 8² = 64 ft². The slant height of a triangular face is found using a right triangle with legs 3 ft and 4 ft (half the base side): l = √(3² + 4²) = 5 ft. Each triangular face has area (1/2)(8)(5) = 20 ft². Four triangles have total area 80 ft². Total surface area = 64 + 80 = 144 ft².'
+      ],
+      [
+        'A cone has radius 4 cm and slant height 7 cm. Find its total surface area.',
+        'Use A = πrl + πr². Substituting r = 4 and l = 7 gives A = π(4)(7) + π(4²) = 28π + 16π = 44π cm².'
+      ],
+      [
+        'For a cone, explain the difference between vertical height and slant height.',
+        'The vertical height is the perpendicular distance from the apex to the center of the circular base. The slant height is measured along the sloping side from the apex to the edge of the base. The cone surface-area formula uses the slant height.'
+      ],
+      [
+        'Describe the net of a cylinder.',
+        'A cylinder net contains two congruent circles for the bases and one rectangle for the curved lateral surface. The rectangle has one side equal to the cylinder height and the other equal to the circumference of the base.'
+      ],
+      [
+        'Describe the net of a cone.',
+        'A cone net consists of one circle for the base and one circular sector for the curved lateral surface.'
+      ],
+      [
+        'A sphere has diameter 12 cm. Find its surface area.',
+        'The radius is half the diameter, so r = 6 cm. Then A = 4π(6²) = 144π cm².'
+      ],
+      [
+        'Explain why finding surface area by using a net involves addition.',
+        'A net separates the outside of the solid into its component faces or surfaces. Since these pieces together cover the entire outside without overlap, the total surface area is the sum of their individual areas.'
+      ]
+    ];
+
+    function renderWritten() {
+      const root = $('written');
+      written.forEach((problem, index) => {
+        const item = document.createElement('div');
+        item.className = 'question';
+        item.innerHTML = `
+          <div class="qhead">${index + 1}. ${problem[0]}</div>
+          <textarea aria-label="Your response to written question ${index + 1}" placeholder="Show your work and explain your reasoning..."></textarea>
+          <div><button class="secondary" type="button" onclick="toggleSolution(${index})" id="toggle${index}">Show model solution</button></div>
+          <div class="solution" id="solution${index}">${problem[1]}</div>
+        `;
+        root.appendChild(item);
+      });
+      typeset();
+    }
+
+    function toggleSolution(index) {
+      const solution = $('solution' + index);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      $('toggle' + index).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typeset();
+    }
+
+    function typeset() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    renderWritten();
+  </script>
+</body>
+</html>

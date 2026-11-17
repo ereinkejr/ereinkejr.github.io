@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MATH 301 | Section 13.1: Polyhedra</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root {
+      --navy: #17324f;
+      --blue: #2465a1;
+      --pale: #eaf2fa;
+      --ink: #233344;
+      --muted: #627184;
+      --line: #dbe4ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f8fb;
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      background: linear-gradient(115deg, #17324f, #276ba3);
+      color: white;
+      padding: 42px 20px;
+    }
+    header .wrap, main { max-width: 980px; margin: auto; }
+    header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    header p { margin: 0; color: #e0edf8; }
+    .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    main { padding: 28px 18px 65px; }
+    .panel {
+      margin: 22px 0;
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 5px 18px #1838580b;
+    }
+    h2 { margin: 0 0 12px; color: var(--navy); }
+    h3 { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .term { padding: 13px; background: #f2f7fc; border-left: 4px solid #4382ba; border-radius: 8px; }
+    .term strong { color: var(--navy); }
+    .question { padding: 20px 0; border-top: 1px solid var(--line); }
+    .question:first-child { border-top: 0; }
+    .qhead { margin-bottom: 10px; font-weight: 650; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 8px; margin: 10px 0; }
+    .choices label { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+    .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+    button, .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--blue);
+      color: white;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    button:hover, .button:hover { background: #194e7e; }
+    button.secondary { background: #eaf2fa; color: var(--navy); }
+    button:disabled { opacity: .55; cursor: default; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .score { color: var(--navy); font-weight: 700; }
+    .feedback { display: none; margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; }
+    .feedback.ok { background: #e6f6eb; color: #19572d; }
+    .feedback.no { background: #fff0eb; color: #873d26; }
+    textarea { width: 100%; min-height: 85px; padding: 12px; border: 1px solid #bdcbd8; border-radius: 8px; font: inherit; resize: vertical; }
+    .solution { display: none; margin-top: 10px; padding: 12px 16px; background: #eef6fd; border-radius: 8px; }
+    .diagram { display: block; width: 100%; max-width: 560px; height: auto; margin: 16px auto; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+    th, td { padding: 9px; border: 1px solid var(--line); text-align: center; }
+    th { background: #f2f7fc; color: var(--navy); }
+    footer { padding: 20px; color: var(--muted); text-align: center; }
+    @media (max-width: 550px) { .panel { padding: 17px; } .choices { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Geometry</div>
+      <h1>Section 13.1: Polyhedra</h1>
+      <p>Interactive practice based on the Section 13.1 notes and homework.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Quick Reference</h2>
+      <div class="grid">
+        <div class="term"><strong>Polyhedron</strong><br>A three-dimensional solid whose outer surface consists of polygons.</div>
+        <div class="term"><strong>Face</strong><br>A polygonal surface of a polyhedron.</div>
+        <div class="term"><strong>Edge</strong><br>A line segment where two faces meet.</div>
+        <div class="term"><strong>Vertex</strong><br>An endpoint where edges meet. The plural is <em>vertices</em>.</div>
+        <div class="term"><strong>Prism</strong><br>Has two congruent, parallel polygonal bases. Lateral faces are quadrilaterals.</div>
+        <div class="term"><strong>Pyramid</strong><br>Has one polygonal base; triangular faces meet at a common apex.</div>
+        <div class="term"><strong>Right / oblique</strong><br>A right prism has rectangular lateral faces. An oblique prism is tilted and has parallelogram lateral faces.</div>
+        <div class="term"><strong>Euler's Formula</strong><br>For a convex polyhedron, \(F-E+V=2\).</div>
+      </div>
+      <p><strong>Important distinction:</strong> A sphere, cylinder, and cone are not polyhedra because their surfaces are not made entirely of polygonal faces.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Platonic Solids</h2>
+      <p class="muted">The five regular convex polyhedra have congruent regular polygonal faces, with the same arrangement of faces at every vertex.</p>
+      <table>
+        <thead><tr><th>Solid</th><th>Faces</th><th>Edges</th><th>Vertices</th></tr></thead>
+        <tbody>
+          <tr><td>Tetrahedron</td><td>4</td><td>6</td><td>4</td></tr>
+          <tr><td>Hexahedron (cube)</td><td>6</td><td>12</td><td>8</td></tr>
+          <tr><td>Octahedron</td><td>8</td><td>12</td><td>6</td></tr>
+          <tr><td>Dodecahedron</td><td>12</td><td>30</td><td>20</td></tr>
+          <tr><td>Icosahedron</td><td>20</td><td>30</td><td>12</td></tr>
+        </tbody>
+      </table>
+      <p>For each row, verify that \(F-E+V=2\).</p>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+      <div class="controls">
+        <span id="score" class="score">Score: 0 / 0 checked</span>
+        <button class="secondary" type="button" onclick="newSet()">New questions</button>
+      </div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Show your reasoning, then reveal the model solution.</p>
+      <div id="written"></div>
+    </section>
+
+    <section class="panel">
+      <h2>General Counting Patterns</h2>
+      <p>For a prism with an \(n\)-sided base:</p>
+      \[
+        F=n+2,\qquad E=3n,\qquad V=2n.
+      \]
+      <p>For a pyramid with an \(n\)-sided base:</p>
+      \[
+        F=n+1,\qquad E=2n,\qquad V=n+1.
+      \]
+      <p>Both patterns satisfy Euler's formula:</p>
+      \[
+        F-E+V=2.
+      \]
+    </section>
+
+    <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+  </main>
+
+  <footer>MATH 301 · Section 13.1 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const rand = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    let questions = [];
+    let results = {};
+
+    function makeQuestion(prompt, choices, correct, explanation) {
+      return { prompt, choices, correct, explanation };
+    }
+
+    function newSet() {
+      results = {};
+      const n = rand(5, 12);
+      const prismFaces = n + 2;
+      const pyramidEdges = 2 * n;
+      const V = rand(7, 16);
+      const E = rand(12, 25);
+      const F = E - V + 2;
+
+      questions = [
+        makeQuestion(
+          'Which description defines a polyhedron?',
+          ['A solid bounded by polygonal faces', 'A solid with at least one curved surface', 'A flat figure made of line segments', 'A solid whose bases must be circles'],
+          0,
+          'A polyhedron is a three-dimensional solid whose outer surface consists of polygons.'
+        ),
+        makeQuestion(
+          'What is the name for a polygonal surface of a polyhedron?',
+          ['An edge', 'A face', 'A vertex', 'An apex'],
+          1,
+          'Each polygon that forms part of the outside of a polyhedron is a face.'
+        ),
+        makeQuestion(
+          'Where do two faces of a polyhedron meet?',
+          ['At an edge', 'At a base', 'At a radius', 'At a diameter'],
+          0,
+          'An edge is the line segment where two polygonal faces meet.'
+        ),
+        makeQuestion(
+          'A solid has two congruent, parallel pentagonal bases and rectangular lateral faces. What is it?',
+          ['A pentagonal pyramid', 'A pentagonal prism', 'A pentagonal cone', 'A pentagonal bipyramid'],
+          1,
+          'A prism has two congruent, parallel polygonal bases; this one has pentagonal bases.'
+        ),
+        makeQuestion(
+          'A solid has one hexagonal base and six triangular faces meeting at one point. What is it?',
+          ['A hexagonal prism', 'A hexagonal pyramid', 'A cylinder', 'An oblique prism'],
+          1,
+          'A pyramid has one polygonal base and triangular lateral faces that meet at a common apex.'
+        ),
+        makeQuestion(
+          'Which solid is NOT a polyhedron?',
+          ['Cube', 'Triangular prism', 'Sphere', 'Square pyramid'],
+          2,
+          'A sphere has a curved surface rather than a surface made entirely of polygonal faces.'
+        ),
+        makeQuestion(
+          `How many faces does a prism with a ${n}-sided base have?`,
+          [String(prismFaces), String(n + 1), String(2 * n), String(3 * n)],
+          0,
+          `An n-sided prism has n lateral faces plus 2 bases, so F = n + 2 = ${prismFaces}.`
+        ),
+        makeQuestion(
+          `How many edges does a pyramid with a ${n}-sided base have?`,
+          [String(n + 1), String(2 * n), String(3 * n), String(2 * n + 1)],
+          1,
+          `A pyramid has n base edges and n edges from the base vertices to the apex, for 2n = ${pyramidEdges} edges.`
+        ),
+        makeQuestion(
+          `A polyhedron has ${V} vertices and ${E} edges. If Euler's formula applies, how many faces does it have?`,
+          [String(F), String(E - V), String(E + V - 2), String(V + 2)],
+          0,
+          `Euler's formula gives F - ${E} + ${V} = 2, so F = ${E} - ${V} + 2 = ${F}.`
+        ),
+        makeQuestion(
+          'How many faces, edges, and vertices does a right hexagonal prism have?',
+          ['6 faces, 18 edges, 12 vertices', '8 faces, 18 edges, 12 vertices', '8 faces, 12 edges, 18 vertices', '7 faces, 12 edges, 7 vertices'],
+          1,
+          'For a prism with n = 6: F = n + 2 = 8, E = 3n = 18, and V = 2n = 12.'
+        ),
+        makeQuestion(
+          'Which statement about a right pyramid is correct?',
+          ['Its apex is directly above the center of the base.', 'Its lateral faces must be rectangles.', 'It has two congruent parallel bases.', 'Its base must be circular.'],
+          0,
+          'In a right pyramid, the apex is directly above the center of the base.'
+        ),
+        makeQuestion(
+          'What is the value of F - E + V for each of the five Platonic solids?',
+          ['0', '1', '2', 'It varies by solid'],
+          2,
+          'Each Platonic solid is a convex polyhedron, so Euler’s formula gives F - E + V = 2.'
+        )
+      ];
+      renderQuiz();
+    }
+
+    function renderQuiz() {
+      const root = $('quiz');
+      root.innerHTML = '';
+      questions.forEach((q, i) => {
+        const item = document.createElement('div');
+        item.className = 'question';
+        const options = q.choices.map((choice, j) =>
+          `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`
+        ).join('');
+        item.innerHTML = `
+          <div class="qhead">${i + 1}. ${q.prompt}</div>
+          <div class="choices">${options}</div>
+          <button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button>
+          <div class="feedback" id="feedback${i}" aria-live="polite"></div>
+        `;
+        root.appendChild(item);
+      });
+      updateScore();
+      typeset();
+    }
+
+    function checkAnswer(i) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (!selected) return;
+      const q = questions[i];
+      const correct = Number(selected.value) === q.correct;
+      results[i] = correct;
+      const feedback = $('feedback' + i);
+      feedback.style.display = 'block';
+      feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+      feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.explanation}`;
+      document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+      $('check' + i).disabled = true;
+      updateScore();
+      typeset();
+    }
+
+    function updateScore() {
+      const correct = Object.values(results).filter(Boolean).length;
+      $('score').textContent = `Score: ${correct} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      [
+        'Identify the faces, edges, and vertices of a cube. How many of each are there?',
+        'A cube has 6 square faces, 12 edges, and 8 vertices. Check: 6 - 12 + 8 = 2.'
+      ],
+      [
+        'Identify each solid: (a) two congruent parallel triangular bases; (b) one square base with four triangular faces meeting at an apex; (c) one curved surface and two circular bases.',
+        '(a) Triangular prism. (b) Square pyramid. (c) Cylinder. The defining features are the number and shape of the bases and whether the lateral surface is polygonal or curved.'
+      ],
+      [
+        'Explain why a sphere, cylinder, and cone are not polyhedra.',
+        'A polyhedron has an outer surface made entirely of polygonal faces. A sphere has a curved surface; a cylinder has a curved lateral surface and circular bases; a cone has a curved lateral surface and a circular base.'
+      ],
+      [
+        'A right hexagonal prism is given. Find its number of faces, edges, and vertices.',
+        'For n = 6, F = n + 2 = 8, E = 3n = 18, and V = 2n = 12.'
+      ],
+      [
+        'A prism has a 9-sided base. Determine its faces, edges, and vertices.',
+        'F = 9 + 2 = 11, E = 3(9) = 27, and V = 2(9) = 18.'
+      ],
+      [
+        'A pyramid has a base with n sides. Derive formulas for its faces, edges, and vertices.',
+        'There are n triangular lateral faces and one base, so F = n + 1. There are n base edges and n lateral edges, so E = 2n. There are n base vertices plus the apex, so V = n + 1.'
+      ],
+      [
+        'A pyramid has a 7-sided base. Find its faces, edges, and vertices, then verify Euler’s formula.',
+        'F = 7 + 1 = 8, E = 2(7) = 14, and V = 7 + 1 = 8. Thus F - E + V = 8 - 14 + 8 = 2.'
+      ],
+      [
+        'A polyhedron has 12 vertices and 18 edges. Assuming Euler’s formula applies, find the number of faces.',
+        'F - 18 + 12 = 2, so F - 6 = 2 and F = 8.'
+      ],
+      [
+        'A student claims every solid with six faces must be a cube. Is the student correct? Give a counterexample.',
+        'No. A rectangular prism (for example, a non-cube box) has six faces but is not a cube. Having six faces alone does not require all faces to be congruent squares.'
+      ],
+      [
+        'A student says a square pyramid has five faces, so it must have five vertices and five edges. Correct the error.',
+        'A square pyramid has 5 faces, 8 edges, and 5 vertices. The student incorrectly assumes that the counts of faces, edges, and vertices must be equal. Euler’s formula gives 5 - 8 + 5 = 2.'
+      ],
+      [
+        'Explain the difference between a right prism and an oblique prism. Also explain the difference between a right pyramid and an oblique pyramid.',
+        'A right prism has rectangular lateral faces perpendicular to its bases; an oblique prism is tilted and has parallelogram lateral faces. In a right pyramid, the apex is directly above the center of the base; in an oblique pyramid, it is not.'
+      ],
+      [
+        'Complete the face-edge-vertex counts for the five Platonic solids and verify Euler’s formula for the octahedron.',
+        'Tetrahedron: (F,E,V) = (4,6,4). Cube/hexahedron: (6,12,8). Octahedron: (8,12,6). Dodecahedron: (12,30,20). Icosahedron: (20,30,12). For the octahedron, 8 - 12 + 6 = 2.'
+      ]
+    ];
+
+    function renderWritten() {
+      const root = $('written');
+      written.forEach((item, i) => {
+        const block = document.createElement('div');
+        block.className = 'question';
+        block.innerHTML = `
+          <div class="qhead">${i + 1}. ${item[0]}</div>
+          <textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea>
+          <div><button class="secondary" type="button" id="toggle${i}" onclick="toggleSolution(${i})">Show model solution</button></div>
+          <div class="solution" id="solution${i}">${item[1]}</div>
+        `;
+        root.appendChild(block);
+      });
+      typeset();
+    }
+
+    function toggleSolution(i) {
+      const solution = $('solution' + i);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      $('toggle' + i).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typeset();
+    }
+
+    function typeset() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    renderWritten();
+  </script>
+</body>
+</html>

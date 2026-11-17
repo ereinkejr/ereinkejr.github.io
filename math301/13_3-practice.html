@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MATH 301 | Section 13.3: Volume</title>
+  <style>
+    :root {
+      --navy: #17324f;
+      --blue: #2465a1;
+      --pale: #eaf2fa;
+      --ink: #233344;
+      --muted: #627184;
+      --line: #dbe4ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f8fb;
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    header {
+      background: linear-gradient(115deg, #17324f, #276ba3);
+      color: white;
+      padding: 42px 20px;
+    }
+    header .wrap, main { max-width: 980px; margin: auto; }
+    header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    header p { margin: 0; color: #e0edf8; }
+    .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    main { padding: 26px 18px 60px; }
+    .panel {
+      margin: 22px 0;
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 5px 18px #1838580b;
+    }
+    h2 { margin: 0 0 12px; color: var(--navy); }
+    h3 { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .formula-grid, .diagram-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+    .formula, .diagram-card {
+      padding: 14px;
+      background: #f2f7fc;
+      border-radius: 10px;
+      border-left: 4px solid #4382ba;
+    }
+    .formula strong { color: var(--navy); }
+    .diagram { display: block; width: 100%; max-width: 330px; height: auto; margin: 8px auto; }
+    .question { padding: 19px 0; border-top: 1px solid var(--line); }
+    .question:first-child { border-top: 0; }
+    .qhead { margin-bottom: 10px; font-weight: 650; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 8px; margin: 10px 0; }
+    .choices label { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+    .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+    button, .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--blue);
+      color: white;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    button:hover, .button:hover { background: #194e7e; }
+    button.secondary { background: #eaf2fa; color: var(--navy); }
+    button:disabled { opacity: .55; cursor: default; }
+    .controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .score { color: var(--navy); font-weight: 700; }
+    .feedback { display: none; margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; }
+    .feedback.ok { background: #e6f6eb; color: #19572d; }
+    .feedback.no { background: #fff0eb; color: #873d26; }
+    textarea { width: 100%; min-height: 90px; padding: 11px; border: 1px solid #bdcbd8; border-radius: 8px; font: inherit; }
+    .solution { display: none; margin-top: 10px; padding: 12px 15px; background: #eef6fd; border-radius: 8px; }
+    footer { padding: 20px; text-align: center; color: var(--muted); }
+    @media (max-width: 550px) { .panel { padding: 17px; } }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Geometry and Measurement</div>
+      <h1>Section 13.3: Volume</h1>
+      <p>Interactive practice based on the Section 13.3 notes and homework.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Quick Reference</h2>
+      <p class="muted">Volume measures the number of unit cubes needed to fill a three-dimensional solid. Use cubic units.</p>
+      <div class="formula-grid">
+        <div class="formula"><strong>Right rectangular prism</strong><div>\(V=lwh\)</div></div>
+        <div class="formula"><strong>Any prism or cylinder</strong><div>\(V=Ah\)</div><small>\(A\) is the area of the base.</small></div>
+        <div class="formula"><strong>Pyramid or cone</strong><div>\(V=\frac{1}{3}Ah\)</div></div>
+        <div class="formula"><strong>Sphere</strong><div>\(V=\frac{4}{3}\pi r^3\)</div></div>
+      </div>
+      <p><strong>Remember:</strong> The height is the perpendicular distance between the bases (or from the apex to the base). For an oblique prism, use the perpendicular height, not a slanted edge.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Understanding the Solids</h2>
+      <p class="muted">The diagrams are schematic. Use the stated dimensions and formulas rather than measuring the drawings.</p>
+      <div class="diagram-grid">
+        <div class="diagram-card">
+          <strong>Prism or cylinder</strong>
+          <svg class="diagram" viewBox="0 0 260 150" role="img" aria-label="Prism with base area A and perpendicular height h">
+            <polygon points="45,48 115,20 190,48 120,77" fill="#dceaf7" stroke="#2465a1" stroke-width="2"/>
+            <polygon points="45,48 45,112 120,140 120,77" fill="#eef5fb" stroke="#2465a1" stroke-width="2"/>
+            <polygon points="120,77 190,48 190,112 120,140" fill="#c7dced" stroke="#2465a1" stroke-width="2"/>
+            <text x="112" y="52" font-size="13" fill="#17324f">A</text>
+            <text x="198" y="93" font-size="13" fill="#17324f">h</text>
+          </svg>
+          <div>\(V=Ah\)</div>
+        </div>
+        <div class="diagram-card">
+          <strong>Pyramid or cone</strong>
+          <svg class="diagram" viewBox="0 0 260 150" role="img" aria-label="Pyramid with base area A and perpendicular height h">
+            <polygon points="55,112 130,132 205,108 130,88" fill="#dceaf7" stroke="#2465a1" stroke-width="2"/>
+            <path d="M130 18 L55 112 M130 18 L130 132 M130 18 L205 108" fill="none" stroke="#2465a1" stroke-width="2"/>
+            <path d="M130 18 L130 110" stroke="#d26b38" stroke-width="2" stroke-dasharray="5 4"/>
+            <text x="139" y="67" font-size="13" fill="#17324f">h</text>
+            <text x="126" y="118" font-size="13" fill="#17324f">A</text>
+          </svg>
+          <div>\(V=\frac{1}{3}Ah\)</div>
+        </div>
+        <div class="diagram-card">
+          <strong>Sphere</strong>
+          <svg class="diagram" viewBox="0 0 260 150" role="img" aria-label="Sphere with radius r">
+            <circle cx="125" cy="75" r="54" fill="#dceaf7" fill-opacity=".55" stroke="#2465a1" stroke-width="2"/>
+            <ellipse cx="125" cy="75" rx="54" ry="16" fill="none" stroke="#2465a1" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <path d="M125 75 L179 75" stroke="#d26b38" stroke-width="2"/>
+            <circle cx="125" cy="75" r="3" fill="#17324f"/>
+            <text x="150" y="67" font-size="13" fill="#17324f">r</text>
+          </svg>
+          <div>\(V=\frac{4}{3}\pi r^3\)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> for another set of examples.</p>
+      <div class="controls">
+        <span id="score" class="score">Score: 0 / 0 checked</span>
+        <button class="secondary" type="button" onclick="newSet()">New questions</button>
+      </div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Show your work, including the formula, substitutions, and units. Then reveal the model solution.</p>
+      <div id="written"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Common Volume Strategies</h2>
+      <ul>
+        <li>For a prism or cylinder, calculate the base area first, then multiply by the perpendicular height.</li>
+        <li>For a pyramid or cone, calculate one-third of the corresponding prism or cylinder volume.</li>
+        <li>For a composite solid, split it into familiar solids and add their volumes. For a missing or hollow portion, subtract its volume.</li>
+        <li>Keep exact answers involving \(\pi\) when appropriate, and include cubic units such as \(\text{cm}^3\), \(\text{ft}^3\), or \(\text{m}^3\).</li>
+      </ul>
+    </section>
+
+    <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+  </main>
+
+  <footer>MATH 301 · Section 13.3 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const byId = (id) => document.getElementById(id);
+    const randomInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    let questions = [];
+    let results = {};
+
+    function multipleChoice(prompt, choices, correctIndex, explanation) {
+      return { prompt, choices, correctIndex, explanation };
+    }
+
+    function newSet() {
+      results = {};
+      const qs = [];
+
+      // Rectangular-prism volume.
+      let l = randomInt(2, 9), w = randomInt(2, 8), h = randomInt(2, 7);
+      let v = l * w * h;
+      qs.push(multipleChoice(
+        `A rectangular box is ${l} units long, ${w} units wide, and ${h} units high. What is its volume?`,
+        [String(v), String(l * w + h), String(2 * (l * w + l * h + w * h)), String(v + l + w + h)],
+        0, `Use V = lwh: ${l} × ${w} × ${h} = ${v} cubic units.`
+      ));
+
+      // Prism base-area calculation.
+      let base = randomInt(8, 30), height = randomInt(2, 9);
+      let prismV = base * height;
+      qs.push(multipleChoice(
+        `A prism has base area ${base} square units and perpendicular height ${height} units. Find its volume.`,
+        [String(prismV), String(base + height), String(base * height / 3), String(2 * base * height)],
+        0, `For a prism, V = Ah = ${base} × ${height} = ${prismV} cubic units.`
+      ));
+
+      // Oblique prism concept.
+      qs.push(multipleChoice(
+        'An oblique rectangular prism has a base measuring 6 by 5 units and a perpendicular height of 8 units. What is its volume?',
+        ['240 cubic units', '300 cubic units', '120 cubic units', '480 cubic units'],
+        0, 'The base area is 6 × 5 = 30. Multiply by the perpendicular height: 30 × 8 = 240 cubic units.'
+      ));
+
+      // Cylinder.
+      let r = randomInt(2, 6), ch = randomInt(3, 9);
+      qs.push(multipleChoice(
+        `A cylinder has radius ${r} units and height ${ch} units. Which expression gives its volume?`,
+        [`${r * r * ch}π cubic units`, `${2 * r * ch}π cubic units`, `${r * ch}π cubic units`, `${4 * r * r * ch / 3}π cubic units`],
+        0, `The base is a circle with area πr². Thus V = π(${r})²(${ch}) = ${r * r * ch}π cubic units.`
+      ));
+
+      // Cone.
+      r = randomInt(2, 5);
+      let coneH = randomInt(3, 9);
+      let coneCoefficient = r * r * coneH / 3;
+      qs.push(multipleChoice(
+        `A cone has radius ${r} units and perpendicular height ${coneH} units. What is its volume?`,
+        [`${coneCoefficient}π cubic units`, `${r * r * coneH}π cubic units`, `${2 * r * coneH}π cubic units`, `${4 * r * r * coneH / 3}π cubic units`],
+        0, `Use V = (1/3)πr²h = (1/3)π(${r})²(${coneH}) = ${coneCoefficient}π cubic units.`
+      ));
+
+      // Pyramid.
+      let side = randomInt(3, 9), pyramidH = randomInt(2, 8);
+      let pyramidV = side * side * pyramidH / 3;
+      qs.push(multipleChoice(
+        `A square pyramid has a base side length of ${side} ft and a perpendicular height of ${pyramidH} ft. Find its volume.`,
+        [`${pyramidV} ft³`, `${side * side * pyramidH} ft³`, `${4 * side * pyramidH} ft³`, `${side * side + pyramidH} ft³`],
+        0, `The base area is ${side}² = ${side * side}. V = (1/3)Ah = (1/3)(${side * side})(${pyramidH}) = ${pyramidV} ft³.`
+      ));
+
+      // Sphere.
+      r = randomInt(2, 6);
+      qs.push(multipleChoice(
+        `A sphere has radius ${r} units. Which expression is its volume?`,
+        [`${4 * r * r * r / 3}π cubic units`, `${4 * r * r}π cubic units`, `${r * r * r}π cubic units`, `${2 * r * r * r}π cubic units`],
+        0, `Use V = (4/3)πr³ = (4/3)π(${r})³ = ${4 * r * r * r / 3}π cubic units.`
+      ));
+
+      // Silo composite volume.
+      qs.push(multipleChoice(
+        'A silo consists of a cylinder with a hemisphere on top. Its total height is 10 m and its radius is 3 m. What is its total volume?',
+        ['81π m³', '90π m³', '99π m³', '108π m³'],
+        0, 'The hemisphere height is its radius, 3 m, so the cylinder height is 10 − 3 = 7 m. Cylinder: π(3²)(7) = 63π. Hemisphere: (1/2)(4/3)π(3³) = 18π. Total = 81π m³.'
+      ));
+
+      // Find missing prism dimension.
+      let boxV = randomInt(4, 12) * 6 * 5;
+      qs.push(multipleChoice(
+        `A box has volume ${boxV} cubic units, width 6 units, and height 5 units. What is its length?`,
+        [String(boxV / 30) + ' units', String(boxV / 11) + ' units', String(boxV / 6) + ' units', String(boxV / 5) + ' units'],
+        0, `Since V = lwh, l = V/(wh) = ${boxV}/(6 × 5) = ${boxV / 30} units.`
+      ));
+
+      // Units concept.
+      qs.push(multipleChoice(
+        'Which unit is appropriate for reporting the volume of a storage box?',
+        ['cm³', 'cm²', 'cm', 'cm/min'],
+        0, 'Volume measures three-dimensional space, so it is expressed in cubic units such as cm³.'
+      ));
+
+      // Cone vs cylinder.
+      qs.push(multipleChoice(
+        'A cone and a cylinder have the same base area and the same perpendicular height. How do their volumes compare?',
+        ['The cone has one-third the cylinder volume.', 'The cone has the same volume as the cylinder.', 'The cone has twice the cylinder volume.', 'The cone has three times the cylinder volume.'],
+        0, 'The cylinder has volume Ah and the cone has volume (1/3)Ah, so the cone has one-third the cylinder volume.'
+      ));
+
+      questions = qs;
+      renderQuestions();
+    }
+
+    function renderQuestions() {
+      const root = byId('quiz');
+      root.innerHTML = '';
+      questions.forEach((q, index) => {
+        const item = document.createElement('div');
+        item.className = 'question';
+        const options = q.choices.map((choice, choiceIndex) =>
+          `<label><input type="radio" name="q${index}" value="${choiceIndex}"> ${choice}</label>`
+        ).join('');
+        item.innerHTML = `
+          <div class="qhead">${index + 1}. ${q.prompt}</div>
+          <div class="choices">${options}</div>
+          <button type="button" id="check${index}" onclick="checkAnswer(${index})">Check answer</button>
+          <div class="feedback" id="feedback${index}" aria-live="polite"></div>
+        `;
+        root.appendChild(item);
+      });
+      updateScore();
+      typesetMath();
+    }
+
+    function checkAnswer(index) {
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (!selected) return;
+      const q = questions[index];
+      const correct = Number(selected.value) === q.correctIndex;
+      results[index] = correct;
+      const feedback = byId(`feedback${index}`);
+      feedback.style.display = 'block';
+      feedback.className = `feedback ${correct ? 'ok' : 'no'}`;
+      feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.explanation}`;
+      document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+      byId(`check${index}`).disabled = true;
+      updateScore();
+      typesetMath();
+    }
+
+    function updateScore() {
+      const correct = Object.values(results).filter(Boolean).length;
+      byId('score').textContent = `Score: ${correct} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      ['Find the volume of a rectangular box with dimensions 3 × 4 × 5.', 'Use V = lwh. Therefore V = 3 × 4 × 5 = 60 cubic units.'],
+      ['A rectangular prism has length 8 cm, width 3 cm, and height 6 cm. Find its volume.', 'V = lwh = 8 × 3 × 6 = 144 cm³.'],
+      ['A prism has a base area of 24 square inches and a perpendicular height of 9 inches. Find its volume.', 'V = Ah = 24 × 9 = 216 in³.'],
+      ['An oblique rectangular prism has a base measuring 6 by 5 units and perpendicular height 8 units. Find its volume.', 'The base area is 6 × 5 = 30 square units. The volume is 30 × 8 = 240 cubic units. The slanted edges do not determine the height; use the perpendicular height.'],
+      ['A cylindrical can has a height of 7 cm and a radius of 3 cm. Find its volume.', 'V = πr²h = π(3²)(7) = 63π cm³, approximately 197.9 cm³.'],
+      ['An ice cream cone has a diameter of 2 inches and a height of 5 inches. Find its volume.', 'The radius is 1 inch. V = (1/3)πr²h = (1/3)π(1²)(5) = (5π/3) in³, approximately 5.24 in³.'],
+      ['A square pyramid has a base side length of 8 ft. Its apex is 3 ft above the base. Find its volume.', 'The base area is 8² = 64 ft². V = (1/3)Ah = (1/3)(64)(3) = 64 ft³.'],
+      ['A silo is formed by a cylinder with a hemisphere at the top. The total height is 10 m and the radius is 3 m. Find the total volume.', 'The hemisphere height equals its radius, 3 m, so the cylinder height is 10 − 3 = 7 m. Cylinder volume = π(3²)(7) = 63π m³. Hemisphere volume = (1/2)(4/3)π(3³) = 18π m³. Total = 81π m³, approximately 254.5 m³.'],
+      ['Explain why the volume of a cone is one-third the volume of a cylinder with the same base area and height.', 'For the same base area A and height h, the cylinder volume is Ah and the cone volume is (1/3)Ah. Therefore, the cone occupies one-third of the cylinder volume.'],
+      ['A sphere has radius 3 units. Find its exact volume.', 'V = (4/3)πr³ = (4/3)π(27) = 36π cubic units.'],
+      ['A box has volume 120 cubic units, width 4 units, and height 5 units. Find its length.', 'From V = lwh, l = V/(wh) = 120/(4 × 5) = 6 units.'],
+      ['A solid is made by joining two non-overlapping solids. Explain how to find its total volume.', 'Find the volume of each component using the appropriate formula, then add the component volumes. If a portion is removed or hollow, subtract that portion instead.']
+    ];
+
+    function renderWritten() {
+      const root = byId('written');
+      written.forEach((item, index) => {
+        const block = document.createElement('div');
+        block.className = 'question';
+        block.innerHTML = `
+          <div class="qhead">${index + 1}. ${item[0]}</div>
+          <textarea aria-label="Your response to written question ${index + 1}" placeholder="Show your work here..."></textarea>
+          <div><button class="secondary" type="button" onclick="toggleSolution(${index})" id="toggle${index}">Show model solution</button></div>
+          <div class="solution" id="solution${index}">${item[1]}</div>
+        `;
+        root.appendChild(block);
+      });
+      typesetMath();
+    }
+
+    function toggleSolution(index) {
+      const solution = byId(`solution${index}`);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      byId(`toggle${index}`).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typesetMath();
+    }
+
+    function typesetMath() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    renderWritten();
+  </script>
+</body>
+</html>
