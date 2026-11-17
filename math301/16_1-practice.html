@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH 301 | Section 16.1: Probability</title>
+    <style>
+        :root {
+            --navy: #17324f;
+            --blue: #2465a1;
+            --pale: #eaf2fa;
+            --ink: #233344;
+            --muted: #627184;
+            --line: #dbe4ed;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: #f5f8fb;
+            color: var(--ink);
+            font: 16px/1.65 system-ui, -apple-system, Segoe UI, sans-serif;
+        }
+        header {
+            background: linear-gradient(115deg, #17324f, #276ba3);
+            color: white;
+            padding: 42px 20px;
+        }
+        header .wrap, main { max-width: 980px; margin: auto; }
+        header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+        header p { margin: 0; color: #e0edf8; }
+        .eyebrow {
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            font-size: .8rem;
+        }
+        main { padding: 28px 18px 65px; }
+        .panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 22px 0;
+            box-shadow: 0 5px 18px #1838580b;
+        }
+        h2 { color: var(--navy); margin: 0 0 12px; }
+        h3 { margin: 8px 0; }
+        .muted { color: var(--muted); }
+        .callout {
+            background: #f2f7fc;
+            border-left: 4px solid #4382ba;
+            border-radius: 8px;
+            padding: 13px 16px;
+            margin: 12px 0;
+        }
+        .question { border-top: 1px solid var(--line); padding: 20px 0; }
+        .question:first-child { border-top: 0; }
+        .qhead { font-weight: 650; margin-bottom: 10px; }
+        .choices {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .choices label {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 9px 12px;
+            cursor: pointer;
+        }
+        .choices label:has(input:checked) {
+            background: var(--pale);
+            border-color: var(--blue);
+        }
+        button, .button {
+            background: var(--blue);
+            color: white;
+            border: 0;
+            border-radius: 9px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 650;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .button:hover { background: #194e7e; }
+        button.secondary { background: #eaf2fa; color: var(--navy); }
+        button:disabled { opacity: .55; cursor: default; }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px 13px;
+            border-radius: 8px;
+            background: #f3f7fc;
+            display: none;
+        }
+        .feedback.ok { background: #e6f6eb; color: #19572d; }
+        .feedback.no { background: #fff0eb; color: #873d26; }
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .score { font-weight: 700; color: var(--navy); }
+        textarea {
+            width: 100%;
+            min-height: 88px;
+            border: 1px solid #bdcbd8;
+            border-radius: 8px;
+            padding: 12px;
+            font: inherit;
+            resize: vertical;
+        }
+        .solution {
+            display: none;
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: #eef6fd;
+            border-radius: 8px;
+        }
+        .table-wrap { overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+        th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: center; }
+        th { background: #f2f7fc; }
+        footer { text-align: center; color: var(--muted); padding: 20px; }
+        @media (max-width: 550px) {
+            .panel { padding: 17px; }
+            .choices { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <div class="eyebrow">MATH 301 · Probability</div>
+            <h1>Section 16.1: Probability</h1>
+            <p>Interactive practice based on the Section 16.1 notes and homework.</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>Quick Reference</h2>
+            <div class="callout">
+                <strong>Probability</strong> is the study of chance. A <strong>sample space</strong> is the set of all possible outcomes. An <strong>event</strong> is a collection of one or more outcomes.
+            </div>
+            <div class="callout">
+                For any event \(A\),
+                \[
+                    0 \leq P(A) \leq 1.
+                \]
+                An impossible event has probability \(0\); an event that is certain has probability \(1\).
+            </div>
+            <div class="callout">
+                <strong>Theoretical probability:</strong> When outcomes are equally likely,
+                \[
+                    P(A)=\frac{n(A)}{n(S)}=\frac{\text{number of outcomes in }A}{\text{number of outcomes in }S}.
+                \]
+            </div>
+            <div class="callout">
+                <strong>Empirical (experimental) probability:</strong>
+                \[
+                    P(A)=\frac{\text{number of times }A\text{ occurred}}{\text{number of trials}}.
+                \]
+                This is also called relative frequency. With many repetitions, relative frequency tends to approach theoretical probability.
+            </div>
+            <div class="callout">
+                <strong>Complement:</strong> The complement \(\overline{E}\) means that event \(E\) does not happen.
+                \[
+                    P(\overline{E})=1-P(E).
+                \]
+            </div>
+            <p class="muted">A uniform probability model applies when all possible outcomes are equally likely. Do not assume outcomes are equally likely just because there are two possible results.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Part A · Automatically Graded Practice</h2>
+            <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate a new set of numerical examples.</p>
+            <div class="controls">
+                <span id="score" class="score">Score: 0 / 0 checked</span>
+                <button class="secondary" type="button" onclick="newSet()">New questions</button>
+            </div>
+            <div id="quiz"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Part B · Written-Response Practice</h2>
+            <p class="muted">Write your reasoning before revealing the model solution. These exercises include the situations from the Section 16.1 homework.</p>
+            <div id="written"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Sample Space Practice</h2>
+            <p>For three coin tosses, each outcome is an ordered sequence of heads (H) and tails (T). The eight possible outcomes are:</p>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>HHH</th><th>HHT</th><th>HTH</th><th>HTT</th></tr>
+                    <tr><th>THH</th><th>THT</th><th>TTH</th><th>TTT</th></tr>
+                </table>
+            </div>
+            <p>Exactly one tail occurs in HHT, HTH, and THH, so its probability is \(3/8\). Exactly three tails occurs only in TTT, so its probability is \(1/8\).</p>
+        </section>
+
+        <section class="panel">
+            <h2>Important Distinction: Equally Likely Outcomes</h2>
+            <p>For a fair die, the six faces are equally likely. For a coin, heads and tails are equally likely when the coin is fair. However, a basketball shot being made or missed, or a car starting or not starting, does not automatically create equally likely outcomes. The likelihood depends on the situation.</p>
+        </section>
+
+        <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+    </main>
+
+    <footer>MATH 301 · Section 16.1 · Practice independently and check your reasoning.</footer>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        const rand = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+        let questions = [];
+        let results = {};
+
+        function gcd(a, b) {
+            while (b) [a, b] = [b, a % b];
+            return a;
+        }
+
+        function fraction(n, d) {
+            const g = gcd(Math.abs(n), d);
+            return `${n / g}/${d / g}`;
+        }
+
+        function makeQuestion(prompt, choices, correct, why) {
+            return { prompt, choices, correct, why };
+        }
+
+        function newSet() {
+            results = {};
+            const qs = [];
+
+            const die = rand(1, 6);
+            qs.push(makeQuestion(
+                `A fair six-sided die is rolled. What is the probability of rolling a ${die}?`,
+                ['1/2', '1/3', '1/6', '1'], 2,
+                'A fair die has six equally likely outcomes, and exactly one outcome is the specified face. The probability is 1/6.'
+            ));
+
+            const tails = rand(0, 3);
+            const ways = [1, 3, 3, 1][tails];
+            qs.push(makeQuestion(
+                `Three fair coins are tossed. What is the probability of getting exactly ${tails} ${tails === 1 ? 'tail' : 'tails'}?`,
+                [fraction(ways, 8), fraction(ways + 1, 8), fraction(ways === 1 ? 3 : 1, 8), '1/2'], 0,
+                `There are 8 equally likely ordered outcomes. Exactly ${tails} ${tails === 1 ? 'tail' : 'tails'} can occur in ${ways} outcomes, so the probability is ${fraction(ways, 8)}.`
+            ));
+
+            const favorable = rand(1, 5);
+            qs.push(makeQuestion(
+                `An experiment has 6 equally likely outcomes, and ${favorable} of them belong to event A. Find P(A).`,
+                [fraction(favorable, 6), fraction(1, 6), fraction(6 - favorable, 6), '1'], 0,
+                `For equally likely outcomes, P(A) = favorable outcomes / total outcomes = ${favorable}/6 = ${fraction(favorable, 6)}.`
+            ));
+
+            const successes = rand(8, 42);
+            const trials = 50;
+            qs.push(makeQuestion(
+                `In ${trials} trials, event A occurred ${successes} times. What is the empirical probability of A?`,
+                [fraction(successes, trials), fraction(trials, successes), '1/2', '1'], 0,
+                `Empirical probability is occurrences divided by trials: ${successes}/${trials} = ${fraction(successes, trials)}.`
+            ));
+
+            const pNum = rand(1, 8);
+            const pDen = 10;
+            qs.push(makeQuestion(
+                `If P(E) = ${fraction(pNum, pDen)}, what is P(not E)?`,
+                [fraction(pNum, pDen), fraction(pDen - pNum, pDen), '1', '0'], 1,
+                `Use the complement rule: P(not E) = 1 - P(E) = 1 - ${fraction(pNum, pDen)} = ${fraction(pDen - pNum, pDen)}.`
+            ));
+
+            const cards = rand(2, 12);
+            qs.push(makeQuestion(
+                `A standard deck has 52 cards. What is the probability of drawing one of the ${cards} cards in a specified group of ${cards} cards?`,
+                [fraction(cards, 52), fraction(1, cards), fraction(1, 52), fraction(52, cards)], 0,
+                `There are ${cards} favorable cards among 52 equally likely cards. Thus P(A) = ${cards}/52 = ${fraction(cards, 52)}.`
+            ));
+
+            qs.push(makeQuestion(
+                'Which situation is a uniform probability model?',
+                ['A randomly selected student passes a test or fails it', 'A fair coin is tossed and lands heads or tails', 'A car is started and starts or does not start', 'A basketball shot is made or missed'], 1,
+                'A fair coin has two equally likely outcomes. The other pairs of outcomes are not necessarily equally likely.'
+            ));
+
+            qs.push(makeQuestion(
+                'A probability value of 0 represents which kind of event?',
+                ['An event that is certain', 'An event that is equally likely', 'An impossible event', 'An event that occurs half the time'], 2,
+                'An impossible event has probability 0. A certain event has probability 1.'
+            ));
+
+            qs.push(makeQuestion(
+                'A probability value of 1 represents which kind of event?',
+                ['An impossible event', 'An event that is certain to occur', 'An event that occurs once in two trials', 'An event with no outcomes'], 1,
+                'A certain event has probability 1, while an impossible event has probability 0.'
+            ));
+
+            const clubs = 13;
+            qs.push(makeQuestion(
+                'One card is drawn from a standard 52-card deck. What is the probability that it is a club?',
+                ['1/52', '1/13', '1/4', '1/2'], 2,
+                `There are 13 clubs in a 52-card deck, so P(club) = 13/52 = 1/4.`
+            ));
+
+            questions = qs;
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            const root = $('quiz');
+            root.innerHTML = '';
+            questions.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                const options = q.choices.map((choice, j) =>
+                    `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`
+                ).join('');
+                div.innerHTML = `
+                    <div class="qhead">${i + 1}. ${q.prompt}</div>
+                    <div class="choices">${options}</div>
+                    <button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button>
+                    <div class="feedback" id="fb${i}" aria-live="polite"></div>
+                `;
+                root.appendChild(div);
+            });
+            updateScore();
+            typeset();
+        }
+
+        function checkAnswer(i) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) return;
+            const q = questions[i];
+            const correct = Number(selected.value) === q.correct;
+            results[i] = correct;
+            const feedback = $('fb' + i);
+            feedback.style.display = 'block';
+            feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+            feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.why}`;
+            document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+            $('check' + i).disabled = true;
+            updateScore();
+            typeset();
+        }
+
+        function updateScore() {
+            $('score').textContent = `Score: ${Object.values(results).filter(Boolean).length} / ${Object.keys(results).length} checked`;
+        }
+
+        const written = [
+            [
+                'You roll a fair six-sided die. List the sample space and state whether the outcomes are equally likely.',
+                'The sample space is S = {1, 2, 3, 4, 5, 6}. Because the die is fair, each face is equally likely.'
+            ],
+            [
+                'You toss three coins. List the sample space.',
+                'The sample space is {HHH, HHT, HTH, HTT, THH, THT, TTH, TTT}. There are 8 ordered outcomes.'
+            ],
+            [
+                'Three fair coins are tossed. Find the probability of exactly one tail.',
+                'Exactly one tail occurs in HHT, HTH, and THH. There are 3 favorable outcomes out of 8 equally likely outcomes, so P(exactly one tail) = 3/8.'
+            ],
+            [
+                'Three fair coins are tossed. Find the probability of exactly three tails.',
+                'Only TTT has three tails. Thus the probability is 1/8.'
+            ],
+            [
+                'Two fair tetrahedra are rolled. Each tetrahedron has faces numbered 1 through 4. List the sample space as ordered pairs.',
+                'The sample space contains 16 ordered pairs: (1,1), (1,2), (1,3), (1,4), (2,1), (2,2), (2,3), (2,4), (3,1), (3,2), (3,3), (3,4), (4,1), (4,2), (4,3), and (4,4).'
+            ],
+            [
+                'Using two fair tetrahedra numbered 1 through 4, find the probability that the total is 3.',
+                'The ordered outcomes with total 3 are (1,2) and (2,1). There are 2 favorable outcomes out of 16, so the probability is 2/16 = 1/8.'
+            ],
+            [
+                'You roll a fair six-sided die and toss a coin. List the sample space.',
+                'There are 12 ordered outcomes: (1,H), (1,T), (2,H), (2,T), (3,H), (3,T), (4,H), (4,T), (5,H), (5,T), (6,H), and (6,T).'
+            ],
+            [
+                'A standard deck has 52 cards. Find the probability of drawing a club.',
+                'There are 13 clubs in the deck. The probability is 13/52 = 1/4.'
+            ],
+            [
+                'A standard deck has 52 cards. Find the probability of drawing a queen.',
+                'There are 4 queens in the deck. The probability is 4/52 = 1/13.'
+            ],
+            [
+                'A standard deck has 52 cards. Find the probability of drawing a club or a queen.',
+                'There are 13 clubs and 4 queens, but the queen of clubs belongs to both groups. Count it only once: 13 + 4 - 1 = 16 favorable cards. The probability is 16/52 = 4/13.'
+            ],
+            [
+                'In 80 thumbtack trials, the tack landed point-up 29 times. Find the empirical probability of point-up.',
+                'Empirical probability = number of point-up results / number of trials = 29/80 = 0.3625.'
+            ],
+            [
+                'Explain the difference between theoretical and empirical probability.',
+                'Theoretical probability is based on the possible outcomes and their likelihoods in a probability model. Empirical probability is based on observed results from repeated trials: occurrences of the event divided by the number of trials.'
+            ],
+            [
+                'An event E has probability 0.37. Find the probability that E does not occur.',
+                'Use the complement rule: P(not E) = 1 - P(E) = 1 - 0.37 = 0.63.'
+            ],
+            [
+                'A process has 20 equally likely outcomes. Event A contains 7 of them. Find P(A) and P(not A).',
+                'P(A) = 7/20. Its complement has 20 - 7 = 13 outcomes, so P(not A) = 13/20. The probabilities add to 1.'
+            ],
+            [
+                'Are the outcomes “make” and “miss” equally likely when a person shoots a basketball? Explain.',
+                'Not necessarily. The two outcomes are not automatically equally likely. Their probabilities depend on the shooter and the conditions of the shot.'
+            ]
+        ];
+
+        function renderWritten() {
+            const root = $('written');
+            written.forEach((item, i) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `
+                    <div class="qhead">${i + 1}. ${item[0]}</div>
+                    <textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea>
+                    <div><button class="secondary" type="button" onclick="toggleSolution(${i})" id="toggle${i}">Show model solution</button></div>
+                    <div class="solution" id="sol${i}">${item[1]}</div>
+                `;
+                root.appendChild(div);
+            });
+            typeset();
+        }
+
+        function toggleSolution(i) {
+            const solution = $('sol' + i);
+            const show = solution.style.display !== 'block';
+            solution.style.display = show ? 'block' : 'none';
+            $('toggle' + i).textContent = show ? 'Hide model solution' : 'Show model solution';
+            if (show) typeset();
+        }
+
+        function typeset() {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise().catch(() => {});
+            }
+        }
+
+        newSet();
+        renderWritten();
+    </script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MATH 301 | Section 16.2: Compound Probability and Expected Value</title>
+    <style>
+        :root {
+            --navy: #17324f;
+            --blue: #2465a1;
+            --pale: #eaf2fa;
+            --ink: #233344;
+            --muted: #627184;
+            --line: #dbe4ed;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: #f5f8fb;
+            color: var(--ink);
+            font: 16px/1.65 system-ui, -apple-system, Segoe UI, sans-serif;
+        }
+        header {
+            background: linear-gradient(115deg, #17324f, #276ba3);
+            color: white;
+            padding: 42px 20px;
+        }
+        header .wrap, main { max-width: 980px; margin: auto; }
+        header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+        header p { margin: 0; color: #e0edf8; }
+        .eyebrow { font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+        main { padding: 26px 18px 65px; }
+        .panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 22px 0;
+            box-shadow: 0 5px 18px #1838580b;
+        }
+        h2 { color: var(--navy); margin: 0 0 12px; }
+        h3 { margin: 8px 0; }
+        .muted { color: var(--muted); }
+        .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+        .rule { background: #f2f7fc; border-left: 4px solid #4382ba; border-radius: 8px; padding: 12px; }
+        .rule strong { color: var(--navy); }
+        .question { border-top: 1px solid var(--line); padding: 20px 0; }
+        .question:first-child { border-top: 0; }
+        .qhead { font-weight: 650; margin-bottom: 10px; }
+        .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 10px 0; }
+        .choices label { border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; cursor: pointer; }
+        .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+        button, .button {
+            background: var(--blue);
+            color: white;
+            border: 0;
+            border-radius: 9px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 650;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .button:hover { background: #194e7e; }
+        button.secondary { background: #eaf2fa; color: var(--navy); }
+        button:disabled { opacity: .55; cursor: default; }
+        .feedback { margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; display: none; }
+        .feedback.ok { background: #e6f6eb; color: #19572d; }
+        .feedback.no { background: #fff0eb; color: #873d26; }
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .score { font-weight: 700; color: var(--navy); }
+        textarea { width: 100%; min-height: 95px; border: 1px solid #bdcbd8; border-radius: 8px; padding: 12px; font: inherit; resize: vertical; }
+        .solution { display: none; margin-top: 10px; padding: 12px 16px; background: #eef6fd; border-radius: 8px; }
+        .formula { background: #f2f7fc; border-radius: 10px; padding: 12px 16px; margin: 10px 0; overflow-x: auto; }
+        table { border-collapse: collapse; margin: 12px auto; }
+        th, td { border: 1px solid #9aabba; padding: 7px 13px; text-align: center; }
+        footer { text-align: center; color: var(--muted); padding: 20px; }
+        @media (max-width: 550px) {
+            .panel { padding: 17px; }
+            .choices { grid-template-columns: 1fr; }
+        }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <div class="eyebrow">MATH 301 · Probability</div>
+            <h1>Section 16.2: Compound Probability and Expected Value</h1>
+            <p>Interactive practice based on the Section 16.2 notes and homework.</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>Quick Reference</h2>
+            <div class="rules">
+                <div class="rule">
+                    <strong>Independent events</strong>
+                    <div>One event occurring does not change the probability of the other.</div>
+                </div>
+                <div class="rule">
+                    <strong>Independent-event rule</strong>
+                    <div>\(P(A\text{ and }B)=P(A)\cdot P(B)\).</div>
+                </div>
+                <div class="rule">
+                    <strong>Multiplication rule</strong>
+                    <div>For any two events, \(P(A\text{ and }B)=P(A)\cdot P(B\mid A)\).</div>
+                </div>
+                <div class="rule">
+                    <strong>Dependent events</strong>
+                    <div>The occurrence of one event changes the probability of the other. For example, drawing cards without replacement.</div>
+                </div>
+                <div class="rule">
+                    <strong>Expected value</strong>
+                    <div>Multiply each numerical outcome by its probability, then add the products.</div>
+                </div>
+            </div>
+            <div class="formula">
+                \[
+                E=n_1p_1+n_2p_2+\cdots+n_rp_r
+                \]
+            </div>
+            <p class="muted">For expected-value problems, use the net gain or loss for each outcome. Make sure the probabilities add to 1.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Part A · Automatically Graded Practice</h2>
+            <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> for a new set of problems.</p>
+            <div class="controls">
+                <span id="score" class="score">Score: 0 / 0 checked</span>
+                <button class="secondary" type="button" onclick="newSet()">New questions</button>
+            </div>
+            <div id="quiz"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Part B · Written-Response Practice</h2>
+            <p class="muted">Show your reasoning, then reveal the model solution. These exercises are based on the Section 16.2 homework.</p>
+            <div id="written"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Independent or Dependent?</h2>
+            <p><strong>Independent:</strong> Tossing a coin and rolling a die. The coin result does not affect the die result.</p>
+            <p><strong>Dependent:</strong> Drawing two cards from a deck without replacement. The first card changes the number of cards remaining for the second draw.</p>
+            <p>When events are dependent, use the probability of the second event <em>given</em> that the first event occurred.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Interpreting Expected Value</h2>
+            <p>Expected value is a long-run average outcome over many repetitions of an experiment. A negative expected value represents an average loss to the player; a positive expected value represents an average gain.</p>
+            <p>For a game with a win and a loss, calculate the expected value using the net amounts won or lost, not simply the amount paid out.</p>
+        </section>
+
+        <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+    </main>
+
+    <footer>MATH 301 · Section 16.2 · Practice independently and check your reasoning.</footer>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+        let questions = [];
+        let results = {};
+
+        function makeQuestion(prompt, choices, correct, explanation) {
+            return { prompt, choices, correct, explanation };
+        }
+
+        function newSet() {
+            results = {};
+            const qs = [];
+
+            let d = rand(1, 6);
+            let oddCount = 3;
+            qs.push(makeQuestion(
+                `A fair die is rolled twice. What is the probability of rolling a ${d} first and an odd number second?`,
+                ['1/12', '1/6', '1/3', '1/2'], 0,
+                `The rolls are independent. The probability is \\(\\frac16\\cdot\\frac36=\\frac{3}{36}=\\frac1{12}\\).`
+            ));
+
+            let tosses = rand(4, 8);
+            qs.push(makeQuestion(
+                `A fair coin is tossed ${tosses} times. What is the probability that every toss is tails?`,
+                [`1/${2 ** tosses}`, `1/${tosses * 2}`, `${tosses}/2`, `1/${tosses}`], 0,
+                `Each toss has probability \\(\\frac12\\) of tails, and the tosses are independent. The probability is \\(\\left(\\frac12\\right)^{${tosses}}=\\frac1{${2 ** tosses}}\\).`
+            ));
+
+            let whites = rand(3, 7);
+            let totalSocks = whites + rand(5, 10);
+            qs.push(makeQuestion(
+                `A drawer has ${whites} white socks and ${totalSocks - whites} black socks. Two socks are selected without replacement. What is the probability both are white?`,
+                [
+                    `${whites}/${totalSocks} × ${whites}/${totalSocks}`,
+                    `${whites}/${totalSocks} × ${whites - 1}/${totalSocks - 1}`,
+                    `${whites}/${totalSocks} × ${whites - 1}/${totalSocks}`,
+                    `${whites - 1}/${totalSocks - 1}`
+                ], 1,
+                `The draws are dependent. After one white sock is selected, ${whites - 1} white socks remain among ${totalSocks - 1} socks. Multiply \\(\\frac{${whites}}{${totalSocks}}\\cdot\\frac{${whites - 1}}{${totalSocks - 1}}\\).`
+            ));
+
+            qs.push(makeQuestion(
+                'Which situation describes independent events?',
+                ['Drawing two cards without replacement', 'Selecting two socks without replacement', 'Tossing a coin and rolling a die', 'Drawing two marbles without replacement'],
+                2,
+                'A coin toss does not change the outcomes or probabilities for a die roll. The other examples involve sampling without replacement.'
+            ));
+
+            qs.push(makeQuestion(
+                'A fair coin is tossed and a fair six-sided die is rolled. What is the probability of heads and a 4?',
+                ['1/12', '1/8', '1/6', '1/3'], 0,
+                `The events are independent, so \\(P(H\\text{ and }4)=\\frac12\\cdot\\frac16=\\frac1{12}\\).`
+            ));
+
+            qs.push(makeQuestion(
+                'A bag contains 3 red and 2 blue marbles. Two are drawn without replacement. What is the probability of different colors?',
+                ['3/10', '6/10', '7/10', '9/10'], 1,
+                `Different colors can occur as red then blue or blue then red: \\(\\frac35\\cdot\\frac24+\\frac25\\cdot\\frac34=\\frac6{20}+\\frac6{20}=\\frac{12}{20}=\\frac35\\). The correct choice is 6/10.`
+            ));
+
+            qs.push(makeQuestion(
+                'A survey table shows 15 Grade 6 students play a sport out of 20 Grade 6 students. Given that a student is in Grade 6, what is the probability the student plays a sport?',
+                ['15/40', '15/27', '15/20', '20/40'], 2,
+                `The condition restricts the sample to Grade 6. Therefore, \\(P(\\text{sport}\\mid\\text{Grade 6})=\\frac{15}{20}=\\frac34\\).`
+            ));
+
+            const winAmount = rand(4, 8);
+            const expected = (winAmount - 2) / 3;
+            const expectedLabel = expected < 0 ? `-$${Math.abs(expected).toFixed(2)}` : `$${expected.toFixed(2)}`;
+            qs.push(makeQuestion(
+                `A game pays $${winAmount} net for a win and loses $1 otherwise. The probability of winning is 1/3. What is the expected value?`,
+                [expectedLabel, `$${(winAmount / 3).toFixed(2)}`, `-$${(2 / 3).toFixed(2)}`, `$${(winAmount - 1).toFixed(2)}`],
+                0,
+                `Weight each net outcome by its probability: \(E=${winAmount}\left(\frac13\right)+(-1)\left(\frac23\right)=\frac{${winAmount}-2}{3}=${expected.toFixed(2)}\) dollars.`
+            ));
+
+            qs.push(makeQuestion(
+                'Which expression gives the expected value when outcomes are 2, 5, and 10 with probabilities 0.2, 0.5, and 0.3?',
+                ['2 + 5 + 10', '2(0.2) + 5(0.5) + 10(0.3)', '(2 + 5 + 10)/3', '0.2 + 0.5 + 0.3'],
+                1,
+                `Expected value is the sum of each numerical outcome multiplied by its corresponding probability: \\(E=2(0.2)+5(0.5)+10(0.3)=5.9\\).`
+            ));
+
+            qs.push(makeQuestion(
+                'A fair die is rolled. You win $4 on a 3 and lose $1 on any other result. What is the expected value?',
+                ['-$1/6', '$0', '$1/6', '$1'], 0,
+                `There is a \\(1/6\\) chance of gaining $4 and a \\(5/6\\) chance of losing $1. Thus \\(E=4(1/6)-1(5/6)=-1/6\\) dollar.`
+            ));
+
+            qs.push(makeQuestion(
+                'In a two-card draw without replacement, what happens to the probability of drawing a queen on the second draw if the first card was a queen?',
+                ['It remains 4/52', 'It becomes 3/51', 'It becomes 4/51', 'It becomes 3/52'],
+                1,
+                'After a queen is drawn first, 3 queens remain among 51 cards. The conditional probability is 3/51.'
+            ));
+
+            qs.push(makeQuestion(
+                'A roulette bet has probability 1/38 of winning $35 net and probability 37/38 of losing $1. What is its expected value?',
+                ['-$1/19', '$1/19', '-$35/38', '$0'], 0,
+                `\\(E=35\\left(\\frac1{38}\\right)-1\\left(\\frac{37}{38}\\right)=\\frac{35-37}{38}=-\\frac1{19}\\) dollar.`
+            ));
+
+            questions = qs;
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            const root = $('quiz');
+            root.innerHTML = '';
+            questions.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                const options = q.choices.map((choice, j) =>
+                    `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`
+                ).join('');
+                div.innerHTML = `
+                    <div class="qhead">${i + 1}. ${q.prompt}</div>
+                    <div class="choices">${options}</div>
+                    <button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button>
+                    <div class="feedback" id="fb${i}" aria-live="polite"></div>
+                `;
+                root.appendChild(div);
+            });
+            updateScore();
+            typeset();
+        }
+
+        function checkAnswer(i) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) return;
+            const q = questions[i];
+            const correct = Number(selected.value) === q.correct;
+            results[i] = correct;
+            const feedback = $('fb' + i);
+            feedback.style.display = 'block';
+            feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+            feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.explanation}`;
+            document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+            $('check' + i).disabled = true;
+            updateScore();
+            typeset();
+        }
+
+        function updateScore() {
+            $('score').textContent = `Score: ${Object.values(results).filter(Boolean).length} / ${Object.keys(results).length} checked`;
+        }
+
+        const written = [
+            [
+                'A fair die is tossed twice. Find the probability of rolling a 3 first, followed by an odd number.',
+                `The events are independent. The probability is \\(\\frac16\\cdot\\frac36=\\frac3{36}=\\frac1{12}\\).`
+            ],
+            [
+                'A fair die is tossed twice. Find the probability of rolling a 5 on both tosses.',
+                `The tosses are independent, so \\(P(5\\text{ and }5)=\\frac16\\cdot\\frac16=\\frac1{36}\\).`
+            ],
+            [
+                'Ten fair coins are tossed. Find the probability that all ten show tails.',
+                `Each coin has probability \\(\\frac12\\) of tails. The probability is \\(\\left(\\frac12\\right)^{10}=\\frac1{1024}\\).`
+            ],
+            [
+                'A drawer has 10 black socks and 6 white socks. Two socks are selected at random without replacement. Find the probability both are white.',
+                `The first white sock has probability \\(\\frac6{16}\\). Then 5 white socks remain among 15 socks. Thus \\(P=\\frac6{16}\\cdot\\frac5{15}=\\frac18\\).`
+            ],
+            [
+                'Two cards are selected from a standard 52-card deck without replacement. Find the probability both are queens.',
+                `There are 4 queens initially, then 3 queens among 51 remaining cards. \\(P=\\frac4{52}\\cdot\\frac3{51}=\\frac1{221}\\).`
+            ],
+            [
+                'Two cards are selected from a standard deck without replacement. Find the probability both are diamonds.',
+                `There are 13 diamonds initially and 12 diamonds among the 51 remaining cards. \\(P=\\frac{13}{52}\\cdot\\frac{12}{51}=\\frac1{17}\\).`
+            ],
+            [
+                'You guess on five true/false questions. Find the probability that all five answers are correct.',
+                `Each guess has probability \\(\\frac12\\) of being correct. Assuming independent guesses, \\(P=\\left(\\frac12\\right)^5=\\frac1{32}\\).`
+            ],
+            [
+                'A bag contains 3 red marbles and 2 blue marbles. Two marbles are drawn without replacement. Draw a tree diagram or list the color outcomes and their probabilities.',
+                `The possible color paths are RR, RB, BR, and BB. Their probabilities are \\(P(RR)=\\frac35\\cdot\\frac24=\\frac3{10}\\), \\(P(RB)=\\frac35\\cdot\\frac24=\\frac3{10}\\), \\(P(BR)=\\frac25\\cdot\\frac34=\\frac3{10}\\), and \\(P(BB)=\\frac25\\cdot\\frac14=\\frac1{10}\\).`
+            ],
+            [
+                'Using the same bag of 3 red and 2 blue marbles, find the probability both marbles are red.',
+                `\\(P(RR)=\\frac35\\cdot\\frac24=\\frac6{20}=\\frac3{10}\\).`
+            ],
+            [
+                'Using the same bag of 3 red and 2 blue marbles, find the probability the two marbles are different colors.',
+                `Different colors occur as RB or BR. \\(P(RB)+P(BR)=\\frac35\\cdot\\frac24+\\frac25\\cdot\\frac34=\\frac3{10}+\\frac3{10}=\\frac35\\).`
+            ],
+            [
+                'A teacher surveys 40 students: 15 Grade 6 students play a sport, and there are 20 Grade 6 students total. Find the probability a randomly selected student plays a sport given that the student is in Grade 6.',
+                `The condition restricts attention to the 20 Grade 6 students. Therefore, \\(P(\\text{sport}\\mid\\text{Grade 6})=\\frac{15}{20}=\\frac34\\).`
+            ],
+            [
+                'You roll one die. You win $4 if you roll a 3; otherwise you lose $1. Find the expected value.',
+                `\\(E=4\\left(\\frac16\\right)+(-1)\\left(\\frac56\\right)=\\frac46-\\frac56=-\\frac16\\) dollar. The expected loss is about 16.7 cents per roll.`
+            ],
+            [
+                'In roulette, a $1 bet has probability 1/38 of winning $35 net; otherwise you lose $1. Find the expected value.',
+                `\\(E=35\\left(\\frac1{38}\\right)+(-1)\\left(\\frac{37}{38}\\right)=\\frac{35-37}{38}=-\\frac1{19}\\) dollar, or about a 5.26-cent expected loss.`
+            ],
+            [
+                'You purchase $50,000 of air travel insurance for $1. The probability of dying on the flight is 1 in 300,000. From your perspective, use a net outcome of $49,999 if the insured event occurs and -$1 otherwise. Find the expected value.',
+                `\\(E=49,999\\left(\\frac1{300,000}\\right)+(-1)\\left(\\frac{299,999}{300,000}\\right)\\). The numerator is \\(49,999-299,999=-250,000\\), so \\(E=-\\frac56\\) dollar, approximately -$0.83.`
+            ]
+        ];
+
+        function renderWritten() {
+            const root = $('written');
+            written.forEach((item, i) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `
+                    <div class="qhead">${i + 1}. ${item[0]}</div>
+                    <textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea>
+                    <div><button class="secondary" type="button" onclick="toggleSolution(${i})" id="toggle${i}">Show model solution</button></div>
+                    <div class="solution" id="sol${i}">${item[1]}</div>
+                `;
+                root.appendChild(div);
+            });
+            typeset();
+        }
+
+        function toggleSolution(i) {
+            const solution = $('sol' + i);
+            const show = solution.style.display !== 'block';
+            solution.style.display = show ? 'block' : 'none';
+            $('toggle' + i).textContent = show ? 'Hide model solution' : 'Show model solution';
+            if (show) typeset();
+        }
+
+        function typeset() {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise().catch(() => {});
+            }
+        }
+
+        newSet();
+        renderWritten();
+    </script>
+</body>
+</html>
