@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MATH 301 | Section 12.2: Additivity and Area of Triangles</title>
+  <style>
+    :root { --navy:#17324f; --blue:#2465a1; --pale:#eaf2fa; --ink:#233344; --muted:#627184; --line:#dbe4ed; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f5f8fb; color:var(--ink); font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif; }
+    header { background:linear-gradient(115deg,#17324f,#276ba3); color:white; padding:42px 20px; }
+    header .wrap, main { max-width:980px; margin:auto; }
+    header h1 { margin:6px 0; font-size:clamp(1.8rem,4vw,2.6rem); line-height:1.2; }
+    header p { margin:8px 0 0; color:#e0edf8; }
+    .eyebrow { font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:.8rem; }
+    main { padding:26px 18px 60px; }
+    .panel { background:white; border:1px solid var(--line); border-radius:16px; padding:24px; margin:22px 0; box-shadow:0 5px 18px #1838580b; }
+    h2 { color:var(--navy); margin:0 0 12px; }
+    h3 { color:var(--navy); margin:12px 0 6px; }
+    .muted { color:var(--muted); }
+    .callout { background:#f2f7fc; border-left:4px solid #4382ba; border-radius:8px; padding:14px 16px; margin:14px 0; }
+    .formula { text-align:center; font-size:1.25rem; padding:12px; background:#f7faff; border-radius:10px; }
+    .diagram-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+    .diagram-card { border:1px solid var(--line); border-radius:10px; padding:12px; text-align:center; }
+    svg { max-width:100%; height:auto; }
+    .question { border-top:1px solid var(--line); padding:20px 0; }
+    .question:first-child { border-top:0; }
+    .qhead { font-weight:650; margin-bottom:10px; }
+    .choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin:10px 0; }
+    .choices label { border:1px solid var(--line); border-radius:8px; padding:9px 12px; cursor:pointer; }
+    .choices label:has(input:checked) { background:var(--pale); border-color:var(--blue); }
+    button,.button { background:var(--blue); color:white; border:0; border-radius:9px; padding:10px 16px; cursor:pointer; font:inherit; font-weight:650; text-decoration:none; display:inline-block; }
+    button:hover,.button:hover { background:#194e7e; }
+    button.secondary { background:#eaf2fa; color:var(--navy); }
+    button:disabled { opacity:.55; cursor:default; }
+    .feedback { margin-top:10px; padding:10px 13px; border-radius:8px; background:#f3f7fc; display:none; }
+    .feedback.ok { background:#e6f6eb; color:#19572d; }
+    .feedback.no { background:#fff0eb; color:#873d26; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .score { font-weight:700; color:var(--navy); }
+    textarea { width:100%; min-height:90px; border:1px solid #bdcbd8; border-radius:8px; padding:12px; font:inherit; resize:vertical; }
+    .solution { display:none; margin-top:10px; padding:12px 16px; background:#eef6fd; border-radius:8px; }
+    .tag { display:inline-block; background:#e7f0f8; color:#245c88; border-radius:99px; padding:2px 10px; font-size:.8rem; font-weight:700; }
+    footer { text-align:center; color:var(--muted); padding:20px; }
+    @media(max-width:550px) { .panel { padding:17px; } .choices { grid-template-columns:1fr 1fr; } }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Measurement and Geometry</div>
+      <h1>Section 12.2: Additivity and Area of Triangles</h1>
+      <p>Interactive practice based on the Section 12.2 notes and homework.</p>
+    </div>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>Key Ideas</h2>
+      <div class="callout"><strong>Moving Principle:</strong> Moving a region rigidly does not change its area.</div>
+      <div class="callout"><strong>Additivity Principle:</strong> If a region is dissected into non-overlapping pieces, the area of the whole region equals the sum of the areas of its pieces.</div>
+      <h3>Area of a triangle</h3>
+      <div class="formula">\[A=\frac{bh}{2}\]</div>
+      <p><strong>Base:</strong> the length of a chosen side. <strong>Height:</strong> the perpendicular distance from that base to the opposite vertex. The height is not necessarily a slanted side.</p>
+      <div class="diagram-grid">
+        <div class="diagram-card">
+          <svg viewBox="0 0 220 145" role="img" aria-label="Triangle with horizontal base and perpendicular height">
+            <polygon points="28,112 190,112 28,20" fill="#9bb8d3" fill-opacity=".45" stroke="#2465a1" stroke-width="2.5"/>
+            <line x1="28" y1="20" x2="28" y2="112" stroke="#d26b38" stroke-width="2" stroke-dasharray="5 4"/>
+            <path d="M28 101 H39 V112" fill="none" stroke="#233344" stroke-width="1.5"/>
+            <text x="108" y="132" font-size="13" text-anchor="middle">base b</text>
+            <text x="14" y="68" font-size="13" text-anchor="middle">h</text>
+          </svg>
+          <div class="muted">Height is perpendicular to the base.</div>
+        </div>
+        <div class="diagram-card">
+          <svg viewBox="0 0 220 145" role="img" aria-label="Obtuse triangle with an external perpendicular height">
+            <polygon points="25,112 190,112 72,25" fill="#9bb8d3" fill-opacity=".45" stroke="#2465a1" stroke-width="2.5"/>
+            <line x1="72" y1="25" x2="72" y2="112" stroke="#d26b38" stroke-width="2" stroke-dasharray="5 4"/>
+            <path d="M72 101 H83 V112" fill="none" stroke="#233344" stroke-width="1.5"/>
+            <text x="110" y="132" font-size="13" text-anchor="middle">base b</text>
+            <text x="58" y="70" font-size="13" text-anchor="middle">h</text>
+          </svg>
+          <div class="muted">The perpendicular height can fall inside the triangle.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+      <div class="controls"><span id="score" class="score">Score: 0 / 0 checked</span><button class="secondary" type="button" onclick="newSet()">New questions</button></div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Show your reasoning before revealing the model solution. These exercises follow the examples and homework structure.</p>
+      <div id="written"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Area by Additivity</h2>
+      <p>For a complicated shaded region, divide it into familiar shapes, find each area, and add the non-overlapping pieces. For a region with a hole, subtract the area of the unshaded part from the area of the outside shape.</p>
+      <div class="diagram-grid">
+        <div class="diagram-card">
+          <svg viewBox="0 0 220 145" role="img" aria-label="Rectangle dissected into two triangles">
+            <rect x="25" y="20" width="170" height="100" fill="#9bb8d3" fill-opacity=".35" stroke="#2465a1" stroke-width="2.5"/>
+            <line x1="25" y1="120" x2="195" y2="20" stroke="#d26b38" stroke-width="2.5"/>
+            <text x="75" y="58" font-size="13">Piece 1</text><text x="132" y="88" font-size="13">Piece 2</text>
+          </svg>
+          <div class="muted">Add the areas of the two triangles.</div>
+        </div>
+        <div class="diagram-card">
+          <svg viewBox="0 0 220 145" role="img" aria-label="Shaded rectangular frame around an unshaded rectangle">
+            <rect x="25" y="15" width="170" height="115" fill="#9bb8d3" fill-opacity=".45" stroke="#2465a1" stroke-width="2.5"/>
+            <rect x="58" y="38" width="104" height="69" fill="white" stroke="#2465a1" stroke-width="2"/>
+          </svg>
+          <div class="muted">Subtract the inner area from the outer area.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="controls"><a class="button" href="index.html">MATH 301 Hub</a></div>
+  </main>
+  <footer>MATH 301 · Section 12.2 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const rand = (a,b) => a + Math.floor(Math.random() * (b-a+1));
+    let questions = [];
+    let results = {};
+
+    function makeQuestion(prompt, choices, correct, explanation) {
+      return { prompt, choices, correct, explanation };
+    }
+
+    function newSet() {
+      results = {};
+      const b = rand(3,18);
+      const h = rand(2,14);
+      const area = b*h/2;
+      const q = [
+        makeQuestion(`A triangle has base \\(${b}\\) units and perpendicular height \\(${h}\\) units. What is its area?`, [`${area} square units`, `${b*h} square units`, `${b+h} square units`, `${area*2} square units`], 0, `Use \\(A=\\frac{bh}{2}\\): \\(A=\\frac{${b}\\cdot${h}}{2}=${area}\\) square units.`),
+        makeQuestion('Which description correctly defines the height of a triangle?', ['The perpendicular distance from the base to the opposite vertex','The length of any slanted side','The perimeter divided by three','The distance between the two longest vertices'], 0, 'The height is measured at a right angle to the chosen base. It may lie inside or outside the triangle.'),
+        makeQuestion('If a region is divided into non-overlapping pieces, how is the total area found?', ['Add the areas of the pieces','Multiply the areas of the pieces','Subtract every piece from the largest piece','Average the areas of the pieces'], 0, 'The Additivity Principle says the area of the whole is the sum of the areas of its non-overlapping parts.'),
+        makeQuestion('A rigid translation moves a triangle without stretching or changing its shape. What happens to its area?', ['It stays the same','It doubles','It becomes zero','It depends on the direction moved'], 0, 'The Moving Principle states that rigidly moving a region does not change its area.'),
+        makeQuestion('A triangle has area \\(15\\) square feet and base \\(10\\) feet. What is its height?', ['3 ft','1.5 ft','5 ft','6 ft'], 0, 'Rearrange \\(A=\\frac{bh}{2}\\): \\(h=\\frac{2A}{b}=\\frac{30}{10}=3\\) ft.'),
+        makeQuestion('Which unit is appropriate for the area of a triangular garden?', ['Square meters','Meters','Cubic meters','Meters per second'], 0, 'Area measures two-dimensional coverage, so it uses square units.'),
+        makeQuestion('A rectangle is split along a diagonal into two congruent triangles. Each triangle has what fraction of the rectangle’s area?', ['One-half','One-third','One-fourth','The same area as the rectangle'], 0, 'A diagonal divides a rectangle into two equal-area triangles.'),
+        makeQuestion('A triangle has base \\(\\frac{4}{5}\\) m and height \\(\\frac{5}{2}\\) m. What is its area?', ['1 m²','2 m²','\\(\\frac{1}{2}\\) m²','\\(\\frac{5}{4}\\) m²'], 0, ' \\(A=\\frac12\\left(\\frac45\\right)\\left(\\frac52\\right)=1\\) m².'),
+        makeQuestion('A shaded frame is formed by removing a smaller rectangle from a larger rectangle. Which calculation gives its area?', ['Outer area minus inner area','Outer area plus inner area','Inner area minus outer area','Outer perimeter minus inner perimeter'], 0, 'The unshaded interior is removed, so subtract its area from the outside area.'),
+        makeQuestion('A triangle’s base is doubled while its perpendicular height is unchanged. What happens to its area?', ['It doubles','It is halved','It is unchanged','It is quadrupled'], 0, 'Since \\(A=\\frac{bh}{2}\\), doubling the base while keeping height fixed doubles the area.')
+      ];
+      questions = q;
+      renderQuiz();
+    }
+
+    function renderQuiz() {
+      const root = $('quiz');
+      root.innerHTML = '';
+      questions.forEach((q,i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        const options = q.choices.map((choice,j) => `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`).join('');
+        div.innerHTML = `<div class="qhead">${i+1}. ${q.prompt}</div><div class="choices">${options}</div><button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button><div class="feedback" id="fb${i}" aria-live="polite"></div>`;
+        root.appendChild(div);
+      });
+      updateScore();
+      typeset();
+    }
+
+    function checkAnswer(i) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (!selected) return;
+      const q = questions[i];
+      const correct = Number(selected.value) === q.correct;
+      results[i] = correct;
+      const fb = $('fb'+i);
+      fb.style.display = 'block';
+      fb.className = 'feedback ' + (correct ? 'ok' : 'no');
+      fb.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.explanation}`;
+      document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+      $('check'+i).disabled = true;
+      updateScore();
+      typeset();
+    }
+
+    function updateScore() {
+      $('score').textContent = `Score: ${Object.values(results).filter(Boolean).length} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      ['Calculate the area of a triangle with base 6 cm and height 4 cm.', 'Use \\(A=\\frac{bh}{2}\\): \\(A=\\frac{6\\cdot4}{2}=12\\text{ cm}^2\\).'],
+      ['Calculate the area of a triangle with base 3.5 in and height 2 in.', ' \\(A=\\frac{3.5\\cdot2}{2}=3.5\\text{ in}^2\\).'],
+      ['Calculate the area of a triangle with base \\(\\frac45\\) m and height \\(\\frac52\\) m.', ' \\(A=\\frac12\\cdot\\frac45\\cdot\\frac52=1\\text{ m}^2\\).'],
+      ['A triangle has base 10 ft and area 15 square feet. Find its height.', ' \\(15=\\frac{10h}{2}=5h\\), so \\(h=3\\) ft.'],
+      ['Explain why the height of a triangle is not necessarily the length of a slanted side. Use a triangle with base 6 units and height 4 units.', 'The height is the perpendicular distance to the line containing the base. A slanted side is measured along the edge and generally does not meet the base at a right angle. The area is \\(\\frac12(6)(4)=12\\) square units.'],
+      ['List three base-height pairs that give a triangle area of 6 m²: one pair of whole numbers, one pair including a decimal, and one pair using fractions.', 'Examples: whole numbers \\(b=4\\), \\(h=3\\); decimal \\(b=2.4\\), \\(h=5\\); fractions \\(b=\\frac32\\), \\(h=8\\). Each pair gives \\(bh/2=6\\). Many other answers are possible.'],
+      ['A rectangular frame has outside dimensions 40 by 30 units. A centered rectangular opening has dimensions 30 by 20 units. Find the area of the shaded frame.', 'Outside area: \\(40\\cdot30=1200\\). Opening: \\(30\\cdot20=600\\). Shaded area: \\(1200-600=600\\) square units.'],
+      ['A square has side length 4 units. A diamond-shaped opening inside it has diagonals of length 4 units each. Find the shaded area.', 'Square area: \\(4\\cdot4=16\\). Diamond area: \\(\\frac{d_1d_2}{2}=\\frac{4\\cdot4}{2}=8\\). Shaded area: \\(16-8=8\\) square units.'],
+      ['A triangle is drawn on a unit grid with vertices \\((0,2)\\), \\((7,0)\\), and \\((5,4)\\). Find its area.', 'Using the shoelace formula or base-height decomposition gives \\(12\\) square units. For example, the determinant calculation is \\(\\frac12|0(0-4)+7(4-2)+5(2-0)|=12\\).'],
+      ['A triangle is drawn on a unit grid with vertices \\((0,2)\\), \\((6,0)\\), and \\((3,7)\\). Find its area.', ' \\(A=\\frac12|0(0-7)+6(7-2)+3(2-0)|=18\\) square units.'],
+      ['A polygon on a unit grid has vertices \\((0,1),(6,0),(7,4),(10,6),(5,7),(2,5),(4,3)\\). Find its area.', 'Applying the shoelace formula gives \\(A=\\frac12|171-109|=31\\) square units.'],
+      ['A polygon on a unit grid has vertices \\((0,5),(4,0),(8,2),(10,1),(6,4),(4,2)\\). Find its area.', 'Applying the shoelace formula gives \\(A=\\frac12|80-62|=9\\) square units.']
+    ];
+
+    function renderWritten() {
+      const root = $('written');
+      written.forEach((item,i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `<div class="qhead">${i+1}. ${item[0]}</div><textarea aria-label="Your response to written question ${i+1}" placeholder="Show your work and explain your reasoning..."></textarea><div><button class="secondary" type="button" onclick="toggleSolution(${i})" id="toggle${i}">Show model solution</button></div><div class="solution" id="sol${i}">${item[1]}</div>`;
+        root.appendChild(div);
+      });
+      typeset();
+    }
+
+    function toggleSolution(i) {
+      const solution = $('sol'+i);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      $('toggle'+i).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typeset();
+    }
+
+    function typeset() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    renderWritten();
+  </script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MATH 301 | Section 12.5: Area of Polygons</title>
+  <style>
+    :root {
+      --navy: #17324f;
+      --blue: #2465a1;
+      --pale: #eaf2fa;
+      --ink: #233344;
+      --muted: #627184;
+      --line: #dbe4ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f8fb;
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    header {
+      background: linear-gradient(115deg, #17324f, #276ba3);
+      color: white;
+      padding: 44px 20px;
+    }
+    header .wrap, main { max-width: 980px; margin: auto; }
+    header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    header p { margin: 0; color: #e0edf8; }
+    .eyebrow { font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+    main { padding: 28px 18px 65px; }
+    .panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 22px 0;
+      box-shadow: 0 5px 18px #1838580b;
+    }
+    h2 { color: var(--navy); margin: 0 0 12px; }
+    h3 { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .rule { background: #f2f7fc; border-left: 4px solid #4382ba; border-radius: 8px; padding: 12px; }
+    .rule strong { color: var(--navy); }
+    .question { border-top: 1px solid var(--line); padding: 20px 0; }
+    .question:first-child { border-top: 0; }
+    .qhead { font-weight: 650; margin-bottom: 10px; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 10px 0; }
+    .choices label { border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; cursor: pointer; }
+    .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+    button, .button {
+      background: var(--blue); color: white; border: 0; border-radius: 9px;
+      padding: 10px 16px; cursor: pointer; font: inherit; font-weight: 650;
+      text-decoration: none; display: inline-block;
+    }
+    button:hover, .button:hover { background: #194e7e; }
+    button.secondary { background: #eaf2fa; color: var(--navy); }
+    button:disabled { opacity: .55; cursor: default; }
+    .feedback { margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; display: none; }
+    .feedback.ok { background: #e6f6eb; color: #19572d; }
+    .feedback.no { background: #fff0eb; color: #873d26; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .score { font-weight: 700; color: var(--navy); }
+    textarea { width: 100%; min-height: 90px; border: 1px solid #bdcbd8; border-radius: 8px; padding: 12px; font: inherit; resize: vertical; }
+    .solution { display: none; margin-top: 10px; padding: 12px 16px; background: #eef6fd; border-radius: 8px; }
+    .diagram { width: 100%; max-width: 600px; height: auto; display: block; margin: 14px auto; }
+    footer { text-align: center; color: var(--muted); padding: 20px; }
+    @media (max-width: 550px) { .panel { padding: 17px; } .choices { grid-template-columns: 1fr 1fr; } }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Geometry and Measurement</div>
+      <h1>Section 12.5: Area of Polygons</h1>
+      <p>Interactive practice based on the Section 12.5 notes and homework.</p>
+      <p style="margin-top:16px"><a class="button" href="index.html">MATH 301 Hub</a></p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Quick Reference</h2>
+      <div class="rules">
+        <div class="rule"><strong>Parallelogram</strong><div>Area is base times perpendicular height: \(A=bh\).</div></div>
+        <div class="rule"><strong>Shearing</strong><div>Shearing a parallelogram or triangle without changing its base or perpendicular height does not change its area.</div></div>
+        <div class="rule"><strong>Pick's Formula</strong><div>For a simple polygon whose vertices lie on a unit grid, \(A=I+\frac{B}{2}-1\).</div></div>
+        <div class="rule"><strong>Perimeter and area</strong><div>Perimeter measures boundary length; area measures the region covered. They are independent concepts.</div></div>
+      </div>
+      <svg class="diagram" viewBox="0 0 600 205" role="img" aria-label="Two parallelograms with equal bases and heights but different slants">
+        <polygon points="55,155 205,155 250,45 100,45" fill="#dceaf7" stroke="#2465a1" stroke-width="3"/>
+        <line x1="100" y1="45" x2="100" y2="155" stroke="#627184" stroke-dasharray="5 4"/>
+        <text x="120" y="180" fill="#17324f">Same base and height</text>
+        <polygon points="345,155 495,155 555,45 405,45" fill="#e7f2e8" stroke="#39804c" stroke-width="3"/>
+        <line x1="405" y1="45" x2="405" y2="155" stroke="#627184" stroke-dasharray="5 4"/>
+        <text x="390" y="180" fill="#17324f">Different slant</text>
+        <text x="260" y="100" text-anchor="middle" fill="#17324f" font-size="22">=</text>
+      </svg>
+      <p class="muted">The parallelograms above have the same base and perpendicular height, so they have the same area even though their shapes look different.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> for another set.</p>
+      <div class="controls">
+        <span id="score" class="score">Score: 0 / 0 checked</span>
+        <button class="secondary" type="button" onclick="newSet()">New questions</button>
+      </div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Show your reasoning, then reveal the model solution. The first exercises use the polygon and parallelogram ideas from the Section 12.5 homework.</p>
+      <div id="written"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Grid-Based Polygon Practice</h2>
+      <p>Pick's Formula applies when a simple polygon is drawn on a grid of lattice points one unit apart. Count the interior points \(I\) and boundary points \(B\), then substitute into the formula.</p>
+      <svg class="diagram" viewBox="0 0 420 230" role="img" aria-label="A triangle drawn on a lattice grid">
+        <defs><pattern id="grid" width="35" height="35" patternUnits="userSpaceOnUse"><path d="M 35 0 L 0 0 0 35" fill="none" stroke="#cbd5df" stroke-width="1"/></pattern></defs>
+        <rect x="30" y="20" width="350" height="175" fill="url(#grid)"/>
+        <polygon points="65,160 275,160 170,55" fill="#b9d8ef" fill-opacity=".65" stroke="#2465a1" stroke-width="3"/>
+        <g fill="#17324f">
+          <circle cx="65" cy="160" r="3"/><circle cx="100" cy="160" r="3"/><circle cx="135" cy="160" r="3"/><circle cx="170" cy="160" r="3"/><circle cx="205" cy="160" r="3"/><circle cx="240" cy="160" r="3"/><circle cx="275" cy="160" r="3"/>
+          <circle cx="170" cy="55" r="3"/><circle cx="135" cy="90" r="3"/><circle cx="205" cy="90" r="3"/><circle cx="100" cy="125" r="3"/><circle cx="240" cy="125" r="3"/>
+        </g>
+      </svg>
+      <p class="muted">Remember: boundary points are counted once, including vertices. Interior points do not lie on an edge.</p>
+    </section>
+  </main>
+
+  <footer>MATH 301 · Section 12.5 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const randomInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    let questions = [];
+    let results = {};
+
+    function makeQuestion(prompt, choices, correct, explanation) {
+      return { prompt, choices, correct, explanation };
+    }
+
+    function newSet() {
+      results = {};
+      const base = randomInt(4, 18);
+      const height = randomInt(3, 12);
+      const area = base * height;
+      const b2 = randomInt(3, 15);
+      const h2 = randomInt(3, 12);
+      const i = randomInt(3, 12);
+      const boundary = randomInt(6, 18);
+      const pickArea = i + boundary / 2 - 1;
+      const p = randomInt(4, 16);
+      const q = randomInt(3, 14);
+      const questionsNow = [
+        makeQuestion(`A parallelogram has base \\(${base}\\) units and perpendicular height \\(${height}\\) units. What is its area?`, [String(area), String(2 * (base + height)), String(base + height), String(area / 2)], 0, `Use \\(A=bh\\): \\(${base}\\times${height}=${area}\\) square units.`),
+        makeQuestion(`A parallelogram has area \\(${area}\\) square units and base \\(${base}\\) units. What is its height?`, [String(height), String(base), String(area), String(height * 2)], 0, `Since \\(A=bh\\), height is \\(${area}\\div${base}=${height}\\) units.`),
+        makeQuestion(`A parallelogram is sheared while its base and perpendicular height stay the same. What happens to its area?`, ['It stays the same', 'It increases', 'It decreases', 'It becomes zero'], 0, 'The area remains \\(bh\\). Changing the slant does not change the base or perpendicular height.'),
+        makeQuestion(`A rectangle and a parallelogram both have base \\(${p}\\) units and perpendicular height \\(${q}\\) units. Which statement is true?`, ['They have equal areas', 'The rectangle has greater area', 'The parallelogram has greater area', 'Their areas cannot be compared'], 0, `Both areas are \\(${p}\\times${q}=${p*q}\\) square units.`),
+        makeQuestion(`A lattice polygon has \\(I=${i}\\) interior points and \\(B=${boundary}\\) boundary points. What is its area by Pick's Formula?`, [String(pickArea), String(i + boundary - 1), String(i + boundary / 2), String(i + boundary / 2 + 1)], 0, `Pick's Formula gives \\(A=I+\\frac{B}{2}-1=${i}+\\frac{${boundary}}{2}-1=${pickArea}\\) square units.`),
+        makeQuestion('Which points are included in the boundary count in Pick\'s Formula?', ['All lattice points on the polygon edges, including vertices', 'Only the vertices', 'Only points strictly inside the polygon', 'All points inside and outside the polygon'], 0, 'The boundary count includes every lattice point on the edges, with each boundary point counted once.'),
+        makeQuestion('Which description correctly distinguishes area from perimeter?', ['Area measures the region; perimeter measures its boundary length', 'Area and perimeter both measure boundary length', 'Area measures boundary length; perimeter measures the region', 'Area and perimeter are always equal'], 0, 'Area is measured in square units; perimeter is measured in linear units.'),
+        makeQuestion(`A parallelogram has base \\(${b2}\\) units and height \\(${h2}\\) units. Which expression gives its area?`, [`\\(${b2}\\cdot${h2}\\)`, `\\(2(${b2}+${h2})\\)`, `\\(${b2}+${h2}\\)`, `\\(\\frac{${b2}${h2}}{2}\\)`], 0, `For a parallelogram, multiply base by perpendicular height: \\(${b2}\\times${h2}=${b2*h2}\\).`),
+        makeQuestion('A parallelogram and a triangle have the same base and perpendicular height. How do their areas compare?', ['The parallelogram has twice the area of the triangle', 'They have equal areas', 'The triangle has twice the area', 'The parallelogram has four times the area'], 0, 'The triangle area is \\(\\frac12 bh\\), while the parallelogram area is \\(bh\\).'),
+        makeQuestion('Pick\'s Formula is intended for which kind of polygon?', ['A simple polygon whose vertices lie on lattice points of a unit grid', 'Any curved region', 'A polygon with no grid points on its boundary', 'Only rectangles with integer side lengths'], 0, 'Pick\'s Formula applies to simple polygons drawn on a lattice grid with vertices at lattice points.')
+      ];
+      questions = questionsNow;
+      renderQuestions();
+    }
+
+    function renderQuestions() {
+      const root = $('quiz');
+      root.innerHTML = '';
+      questions.forEach((question, index) => {
+        const block = document.createElement('div');
+        block.className = 'question';
+        const choices = question.choices.map((choice, choiceIndex) =>
+          `<label><input type="radio" name="q${index}" value="${choiceIndex}"> ${choice}</label>`
+        ).join('');
+        block.innerHTML = `
+          <div class="qhead">${index + 1}. ${question.prompt}</div>
+          <div class="choices">${choices}</div>
+          <button type="button" id="check${index}" onclick="checkAnswer(${index})">Check answer</button>
+          <div class="feedback" id="feedback${index}" aria-live="polite"></div>`;
+        root.appendChild(block);
+      });
+      updateScore();
+      typeset();
+    }
+
+    function checkAnswer(index) {
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (!selected) return;
+      const question = questions[index];
+      const correct = Number(selected.value) === question.correct;
+      results[index] = correct;
+      const feedback = $('feedback' + index);
+      feedback.style.display = 'block';
+      feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+      feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${question.explanation}`;
+      document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+      $('check' + index).disabled = true;
+      updateScore();
+      typeset();
+    }
+
+    function updateScore() {
+      const correct = Object.values(results).filter(Boolean).length;
+      $('score').textContent = `Score: ${correct} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      ['Find the area of the parallelogram with base 7 units and perpendicular height 4 units.', 'Use \\(A=bh\\). Thus \\(A=7\\cdot4=28\\) square units.'],
+      ['Find the area of the parallelogram with base 9 units and height 5 units.', 'The area is \\(9\\cdot5=45\\) square units.'],
+      ['A parallelogram has area 72 square units and base 8 units. Find its height.', 'Solve \\(72=8h\\). Dividing by 8 gives \\(h=9\\) units.'],
+      ['Explain why shearing a parallelogram does not change its area when its base and perpendicular height remain fixed.', 'The area formula is \\(A=bh\\). A shear changes the slant of the sides but preserves the base and perpendicular height, so the product \\(bh\\) remains unchanged.'],
+      ['A rectangle has dimensions 5 units by 3 units. A parallelogram has base 5 units and perpendicular height 3 units. Compare their areas.', 'Each area is \\(5\\cdot3=15\\) square units. The shapes differ, but their base and perpendicular height are the same.'],
+      ['Use Pick\'s Formula when a lattice polygon has 8 interior points and 10 boundary points.', 'Substitute into \\(A=I+\\frac B2-1\\): \\(A=8+\\frac{10}{2}-1=8+5-1=12\\) square units.'],
+      ['A lattice polygon has 14 interior points and 12 boundary points. Find its area.', 'Pick\'s Formula gives \\(A=14+\\frac{12}{2}-1=14+6-1=19\\) square units.'],
+      ['A lattice polygon has area 16 square units and 10 boundary points. How many interior points does it have?', 'Rearrange Pick\'s Formula: \\(I=A-\\frac B2+1\\). Therefore \\(I=16-5+1=12\\) interior points.'],
+      ['Find the area of the first shaded triangle in the homework. Its vertices are (0,2), (7,0), and (5,4) on a unit grid.', 'The triangle has area 12 square units. For example, use the grid to count lattice points and apply Pick\'s Formula, or decompose the triangle into simpler regions.'],
+      ['Find the area of the second shaded triangle in the homework. Its vertices are (0,2), (6,0), and (3,7) on a unit grid.', 'The triangle has area 18 square units. This can be found by decomposing the surrounding rectangle into the triangle and three outside right triangles.'],
+      ['A parallelogram has base 4 units, perpendicular height 7 units, and slanted side length 9 units. Find its area and perimeter.', 'Area: \\(4\\cdot7=28\\) square units. Perimeter: \\(2(4+9)=26\\) units. Notice that the height is used for area, while the slanted side is used for perimeter.'],
+      ['Explain why perimeter and area are independent concepts.', 'Perimeter measures the total distance around a figure and uses linear units. Area measures the amount of surface inside the figure and uses square units. Figures can have the same perimeter but different areas, or the same area but different perimeters.']
+    ];
+
+    function renderWritten() {
+      const root = $('written');
+      written.forEach((item, index) => {
+        const block = document.createElement('div');
+        block.className = 'question';
+        block.innerHTML = `
+          <div class="qhead">${index + 1}. ${item[0]}</div>
+          <textarea aria-label="Your response to written question ${index + 1}" placeholder="Write your reasoning here..."></textarea>
+          <div><button class="secondary" type="button" onclick="toggleSolution(${index})" id="toggle${index}">Show model solution</button></div>
+          <div class="solution" id="solution${index}">${item[1]}</div>`;
+        root.appendChild(block);
+      });
+      typeset();
+    }
+
+    function toggleSolution(index) {
+      const solution = $('solution' + index);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      $('toggle' + index).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typeset();
+    }
+
+    function typeset() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    renderWritten();
+  </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MATH 301 | Section 12.1: Area of Rectangles</title>
+  <style>
+    :root {
+      --navy: #17324f;
+      --blue: #2465a1;
+      --pale: #eaf2fa;
+      --ink: #233344;
+      --muted: #627184;
+      --line: #dbe4ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f8fb;
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    header {
+      background: linear-gradient(115deg, #17324f, #276ba3);
+      color: white;
+      padding: 42px 20px;
+    }
+    header .wrap, main { max-width: 980px; margin: auto; }
+    header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    header p { margin: 0; color: #e0edf8; }
+    .eyebrow { font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+    main { padding: 28px 18px 65px; }
+    .panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 22px 0;
+      box-shadow: 0 5px 18px #1838580b;
+    }
+    h2 { color: var(--navy); margin: 0 0 12px; }
+    h3 { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .formula {
+      background: #f2f7fc;
+      border-left: 4px solid #4382ba;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 12px 0;
+    }
+    .question { border-top: 1px solid var(--line); padding: 20px 0; }
+    .question:first-child { border-top: 0; }
+    .qhead { font-weight: 650; margin-bottom: 10px; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .choices label { border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; cursor: pointer; }
+    .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+    button, .button {
+      background: var(--blue);
+      color: white;
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button:hover, .button:hover { background: #194e7e; }
+    button.secondary { background: #eaf2fa; color: var(--navy); }
+    button:disabled { opacity: .55; cursor: default; }
+    .feedback { margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; display: none; }
+    .feedback.ok { background: #e6f6eb; color: #19572d; }
+    .feedback.no { background: #fff0eb; color: #873d26; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .score { font-weight: 700; color: var(--navy); }
+    textarea { width: 100%; min-height: 88px; border: 1px solid #bdcbd8; border-radius: 8px; padding: 12px; font: inherit; resize: vertical; }
+    .solution { display: none; margin-top: 10px; padding: 12px 16px; background: #eef6fd; border-radius: 8px; }
+    .diagram-wrap { overflow-x: auto; }
+    .grid-diagram { display: block; max-width: 100%; height: auto; margin: 12px auto; }
+    footer { text-align: center; color: var(--muted); padding: 20px; }
+    @media (max-width: 550px) { .panel { padding: 17px; } .choices { grid-template-columns: 1fr 1fr; } }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Area of Shapes</div>
+      <h1>Section 12.1: Area of Rectangles</h1>
+      <p>Interactive practice based on the Section 12.1 notes and homework.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Quick Reference</h2>
+      <div class="formula">
+        **Area of a rectangle**
+        \[A=L\cdot W\]
+        The area is the number of square units that cover the inside of the rectangle without gaps or overlaps.
+      </div>
+      <div class="formula">
+        **Square units and conversions**
+        If a length conversion is multiplied by a factor, the corresponding area conversion uses the square of that factor. For example,
+        \[1\text{ yd}=3\text{ ft}\quad\Longrightarrow\quad 1\text{ yd}^2=9\text{ ft}^2.\]
+      </div>
+      <div class="diagram-wrap">
+        <svg class="grid-diagram" viewBox="0 0 440 190" role="img" aria-label="Rectangle divided into unit squares, 6 units by 3 units">
+          <defs>
+            <pattern id="unitGrid" width="45" height="35" patternUnits="userSpaceOnUse">
+              <path d="M 45 0 L 0 0 0 35" fill="none" stroke="#2465a1" stroke-width="1.4"/>
+            </pattern>
+          </defs>
+          <rect x="85" y="28" width="270" height="105" fill="#eaf2fa" stroke="#17324f" stroke-width="2"/>
+          <rect x="85" y="28" width="270" height="105" fill="url(#unitGrid)"/>
+          <text x="220" y="164" text-anchor="middle" fill="#233344" font-size="15">6 units</text>
+          <text x="53" y="84" text-anchor="middle" fill="#233344" font-size="15">3 units</text>
+          <text x="220" y="88" text-anchor="middle" fill="#17324f" font-size="17" font-weight="600">18 square units</text>
+        </svg>
+      </div>
+      <p class="muted">A 6-by-3 rectangle contains 18 unit squares, so its area is \(6\cdot3=18\) square units.</p>
+      <div class="formula">
+        **Area of a rectangle with algebraic side lengths**
+        \[(x+a)(x+b)=x^2+(a+b)x+ab.\]
+        A rectangle model can show the four partial areas that make up this product (often called FOIL).
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+      <div class="controls">
+        <span id="score" class="score">Score: 0 / 0 checked</span>
+        <button class="secondary" type="button" onclick="newSet()">New questions</button>
+      </div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Show your reasoning, then reveal the model solution. These exercises include the Section 12.1 homework problems.</p>
+      <div id="written"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Area with a Border or Sidewalk</h2>
+      <p>A common strategy for a rectangular border is to find the area of the larger rectangle and subtract the area of the inner rectangle:</p>
+      \[A_{\text{border}}=A_{\text{outer}}-A_{\text{inner}}.\]
+      <p>For a 8 ft by 12 ft garden surrounded by a 1 ft sidewalk, the outside dimensions are 10 ft by 14 ft. The sidewalk area is \(10\cdot14-8\cdot12=44\) square feet.</p>
+    </section>
+
+    <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+  </main>
+
+  <footer>MATH 301 · Section 12.1 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+    let questions = [];
+    let results = {};
+
+    function makeQuestion(prompt, choices, correct, why) {
+      return { prompt, choices, correct, why };
+    }
+
+    function newSet() {
+      results = {};
+      const qs = [];
+
+      let length = rand(3, 12);
+      let width = rand(2, 9);
+      qs.push(makeQuestion(
+        `A rectangle has length \\(${length}\\) units and width \\(${width}\\) units. What is its area?`,
+        [`${length * width} square units`, `${2 * (length + width)} square units`, `${length + width} square units`, `${length * width} units`],
+        0,
+        `Use area = length × width: \\(${length}\\cdot${width}=${length * width}\\). Area is measured in square units.`
+      ));
+
+      let a = rand(2, 9);
+      let b = rand(2, 8);
+      let area = a * b;
+      qs.push(makeQuestion(
+        `A rectangle has area \\(${area}\\) square units and width \\(${b}\\) units. What is its length?`,
+        [`${a} units`, `${area + b} units`, `${area - b} units`, `${area / 2} units`],
+        0,
+        `Divide area by width: \\(${area}\\div${b}=${a}\\) units.`
+      ));
+
+      let l = rand(2, 8) + 0.5;
+      let w = rand(2, 7) + 0.3;
+      let ar = Math.round(l * w * 100) / 100;
+      qs.push(makeQuestion(
+        `A rectangle measures \\(${l}\\) units by \\(${w}\\) units. Find its area.`,
+        [`${ar} square units`, `${Math.round((l + w) * 100) / 100} square units`, `${Math.round(2 * (l + w) * 100) / 100} square units`, `${Math.round(ar * 2 * 100) / 100} square units`],
+        0,
+        `Multiply the side lengths: \\(${l}\\cdot${w}=${ar}\\) square units.`
+      ));
+
+      let yd = rand(2, 8);
+      qs.push(makeQuestion(
+        `A rectangular floor is \\(${yd}\\) yards by \\(4\\) yards. What is its area in square feet?`,
+        [`${yd * 4 * 9} square feet`, `${yd * 4 * 3} square feet`, `${yd * 4} square feet`, `${yd * 4 * 6} square feet`],
+        0,
+        `The area is \\(${yd * 4}\\) square yards. Since \\(1\\text{ yd}^2=9\\text{ ft}^2\\), multiply by 9: \\(${yd * 4}\\cdot9=${yd * 4 * 9}\\) square feet.`
+      ));
+
+      let x = rand(2, 7);
+      let y = rand(2, 7);
+      qs.push(makeQuestion(
+        `A rectangle has side lengths \\(${x}\\) cm and \\(${y}\\) cm. Which unit describes its area?`,
+        ['Square centimeters (cm²)', 'Centimeters (cm)', 'Cubic centimeters (cm³)', 'Square centimeters per centimeter'],
+        0,
+        `Area is two-dimensional, so the units are multiplied: cm × cm = cm².`
+      ));
+
+      let sideA = rand(2, 8);
+      let sideB = rand(2, 8);
+      let sideSum = sideA + sideB;
+      let product = sideA * sideB;
+      qs.push(makeQuestion(
+        `A rectangle has side lengths \\(${sideA}\\) and \\(${sideB}\\). Which expression gives its area?`,
+        [`\\(${sideA}\\cdot${sideB}\\)`, `\\(2(${sideA}+${sideB})\\)`, `\\(${sideA}+${sideB}\\)`, `\\(2\\cdot${sideA}\\cdot${sideB}\\)`],
+        0,
+        `Area is the product of the length and width: \\(${sideA}\\cdot${sideB}=${product}\\) square units.`
+      ));
+
+      let gardenL = rand(6, 12);
+      let gardenW = rand(5, 10);
+      qs.push(makeQuestion(
+        `A \\(${gardenL}\\)-ft by \\(${gardenW}\\)-ft garden has a 1-ft-wide sidewalk around it. What are the outside dimensions?`,
+        [`${gardenL + 2} ft by ${gardenW + 2} ft`, `${gardenL + 1} ft by ${gardenW + 1} ft`, `${gardenL + 2} ft by ${gardenW} ft`, `${gardenL} ft by ${gardenW + 2} ft`],
+        0,
+        `The sidewalk adds 1 ft to each side, so each total dimension increases by 2 ft.`
+      ));
+
+      let n = rand(2, 9);
+      qs.push(makeQuestion(
+        `A square has side length \\(${n}\\) inches. What is its area?`,
+        [`${n * n} square inches`, `${4 * n} square inches`, `${2 * n} square inches`, `${n} square inches`],
+        0,
+        `A square is a rectangle with equal side lengths: \\(${n}\\cdot${n}=${n * n}\\) square inches.`
+      ));
+
+      let side1 = rand(2, 6);
+      let side2 = rand(2, 6);
+      let side3 = rand(2, 6);
+      let sumArea = side1 * side2 + side1 * side3 + side2 * side3;
+      qs.push(makeQuestion(
+        `A rectangle is divided into four parts with side lengths x and ${side1}, and x and ${side2}. Which term is the constant area part of \\((x+${side1})(x+${side2})\\)?`,
+        [`${side1 * side2}`, `${side1 + side2}x`, `\\(x^2\\)`, `${side1 * side2}x`],
+        0,
+        `The constant rectangle has dimensions \\(${side1}\\) by \\(${side2}\\), so its area is \\(${side1}\\cdot${side2}=${side1 * side2}\\).`
+      ));
+
+      let sqArea = rand(2, 9) * rand(2, 9);
+      qs.push(makeQuestion(
+        `A rectangle and a square have the same area. If the rectangle is 5 in by 7 in, what is the side length of the square?`,
+        ['\\(\\sqrt{35}\\) inches', '35 inches', '12 inches', '17.5 inches'],
+        0,
+        `The rectangle's area is \\(5\\cdot7=35\\) square inches. If the square side is s, then \\(s^2=35\\), so \\(s=\\sqrt{35}\\) inches.`
+      ));
+
+      questions = qs;
+      render();
+    }
+
+    function render() {
+      const root = $('quiz');
+      root.innerHTML = '';
+      questions.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        const options = q.choices.map((choice, j) =>
+          `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`
+        ).join('');
+        div.innerHTML = `
+          <div class="qhead">${i + 1}. ${q.prompt}</div>
+          <div class="choices">${options}</div>
+          <button type="button" id="check${i}" onclick="check(${i})">Check answer</button>
+          <div class="feedback" id="fb${i}" aria-live="polite"></div>`;
+        root.appendChild(div);
+      });
+      updateScore();
+      typeset();
+    }
+
+    function check(i) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (!selected) return;
+      const q = questions[i];
+      const correct = Number(selected.value) === q.correct;
+      results[i] = correct;
+      const feedback = $('fb' + i);
+      feedback.style.display = 'block';
+      feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+      feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.why}`;
+      document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+      $('check' + i).disabled = true;
+      updateScore();
+      typeset();
+    }
+
+    function updateScore() {
+      $('score').textContent = `Score: ${Object.values(results).filter(Boolean).length} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      [
+        'Find the area of a rectangle that has a length of 6 units and a width of 4 units.',
+        'Use area = length × width: \\(A=6\\cdot4=24\\). The area is \\(24\\) square units.'
+      ],
+      [
+        'A rectangle has a length of 5.5 units and a width of 2.3 units. What is its area?',
+        'Multiply the side lengths: \\(A=5.5\\cdot2.3=12.65\\). The area is \\(12.65\\) square units.'
+      ],
+      [
+        'Find the area of a rectangle that is \\(4\\frac{1}{2}\\) cm by \\(5\\frac{2}{3}\\) cm.',
+        'Convert to improper fractions: \\(4\\frac12=\\frac92\\) and \\(5\\frac23=\\frac{17}{3}\\). Then \\(A=\\frac92\\cdot\\frac{17}{3}=\\frac{153}{6}=\\frac{51}{2}=25\\frac12\\) square centimeters.'
+      ],
+      [
+        'A rectangle and square have the same area. If the rectangle is 5 in by 7 in, how long is a side of the square?',
+        'The rectangle has area \\(5\\cdot7=35\\) square inches. If s is the square side, \\(s^2=35\\), so \\(s=\\sqrt{35}\\) inches (approximately 5.92 inches).'
+      ],
+      [
+        'A small rectangular stage measures 7 yards by 4 yards. What is the area in square feet?',
+        'First find the area: \\(7\\cdot4=28\\) square yards. Since \\(1\\text{ yd}=3\\text{ ft}\\), then \\(1\\text{ yd}^2=9\\text{ ft}^2\\). Thus \\(28\\cdot9=252\\) square feet.'
+      ],
+      [
+        'What does it mean if the area of a shape is 17 square inches?',
+        'It means 17 unit squares, each measuring 1 inch by 1 inch, would cover the shape exactly with no gaps or overlaps.'
+      ],
+      [
+        'A rectangular garden is 8 ft by 12 ft. A sidewalk 1 ft wide is built around the garden. Find the area of the sidewalk.',
+        'The sidewalk adds 1 ft on every side, so the outside dimensions are \\(10\\) ft by \\(14\\) ft. Outer area: \\(10\\cdot14=140\\) sq ft. Garden area: \\(8\\cdot12=96\\) sq ft. Sidewalk area: \\(140-96=44\\) square feet.'
+      ],
+      [
+        'A rectangle has a length of 8 ft and an area of 20 square ft. What is its width?',
+        'Use \\(A=L\\cdot W\\). Then \\(20=8W\\), so \\(W=20\\div8=2.5\\) ft.'
+      ],
+      [
+        'A gardener needs a rectangular plot with an area of 12 square meters. List three possible pairs of length and width: one with whole numbers, one with a decimal, and one with fractions.',
+        'Many answers work. For example: whole numbers, 4 m by 3 m; decimals, 6 m by 2 m (or 4.8 m by 2.5 m); fractions, \\(6\\frac12\\) m by \\(\\frac{24}{13}\\) m. In each case, multiply the side lengths to check that the product is 12 square meters.'
+      ],
+      [
+        'A rectangle has side lengths \\(x+3\\) and \\(x+2\\). Use a rectangle model or FOIL to write its area as a polynomial.',
+        'The four partial areas are \\(x^2\\), \\(3x\\), \\(2x\\), and \\(6\\). Add them: \\(A=x^2+3x+2x+6=x^2+5x+6\\).'
+      ],
+      [
+        'Explain why the area of a rectangle is measured in square units.',
+        'Area counts how many unit squares cover a two-dimensional region. Multiplying a length by a width multiplies two linear units, such as feet × feet, giving square feet.'
+      ]
+    ];
+
+    function writtenRender() {
+      const root = $('written');
+      written.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `
+          <div class="qhead">${i + 1}. ${q[0]}</div>
+          <textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea>
+          <div><button class="secondary" type="button" onclick="toggleSolution(${i})" id="toggle${i}">Show model solution</button></div>
+          <div class="solution" id="sol${i}">${q[1]}</div>`;
+        root.appendChild(div);
+      });
+      typeset();
+    }
+
+    function toggleSolution(i) {
+      const solution = $('sol' + i);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      $('toggle' + i).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typeset();
+    }
+
+    function typeset() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    writtenRender();
+  </script>
+</body>
+</html>
