@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MATH 301 | Section 11.1: Units of Measurement</title>
+  <style>
+    :root {
+      --navy: #17324f;
+      --blue: #2465a1;
+      --pale: #eaf2fa;
+      --ink: #233344;
+      --muted: #627184;
+      --line: #dbe4ed;
+      --green: #e6f6eb;
+      --red: #fff0eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f5f8fb;
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    header {
+      background: linear-gradient(115deg, #17324f, #276ba3);
+      color: white;
+      padding: 44px 20px;
+    }
+
+    header .wrap, main { max-width: 980px; margin: auto; }
+    header h1 { margin: 6px 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    header p { margin: 0; color: #e0edf8; }
+    .eyebrow { font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+    main { padding: 28px 18px 65px; }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 22px 0;
+      box-shadow: 0 5px 18px #1838580b;
+    }
+
+    h2 { color: var(--navy); margin: 0 0 12px; }
+    h3 { margin: 8px 0; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .concept { background: #f2f7fc; border-left: 4px solid #4382ba; border-radius: 8px; padding: 14px; }
+    .concept strong { color: var(--navy); }
+
+    .diagram-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: center; }
+    .diagram-card { text-align: center; background: #f8fafc; border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .diagram-card svg { width: 100%; max-width: 190px; height: auto; }
+    .diagram-card p { margin: 5px 0 0; font-weight: 650; color: var(--navy); }
+
+    .question { border-top: 1px solid var(--line); padding: 20px 0; }
+    .question:first-child { border-top: 0; }
+    .qhead { font-weight: 650; margin-bottom: 10px; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; margin: 10px 0; }
+    .choices label { border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; cursor: pointer; }
+    .choices label:has(input:checked) { background: var(--pale); border-color: var(--blue); }
+
+    button, .button {
+      background: var(--blue);
+      color: white;
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    button:hover, .button:hover { background: #194e7e; }
+    button.secondary { background: #eaf2fa; color: var(--navy); }
+    button:disabled { opacity: .55; cursor: default; }
+    .feedback { margin-top: 10px; padding: 10px 13px; border-radius: 8px; background: #f3f7fc; display: none; }
+    .feedback.ok { background: var(--green); color: #19572d; }
+    .feedback.no { background: var(--red); color: #873d26; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .score { font-weight: 700; color: var(--navy); }
+    textarea { width: 100%; min-height: 90px; border: 1px solid #bdcbd8; border-radius: 8px; padding: 12px; font: inherit; resize: vertical; }
+    .solution { display: none; margin-top: 10px; padding: 12px 16px; background: #eef6fd; border-radius: 8px; }
+    .tag { display: inline-block; background: #e7f0f8; color: #245c88; border-radius: 99px; padding: 2px 10px; font-size: .8rem; font-weight: 700; }
+    footer { text-align: center; color: var(--muted); padding: 20px; }
+
+    @media (max-width: 650px) {
+      .diagram-row { grid-template-columns: 1fr; }
+      .panel { padding: 17px; }
+      .choices { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">MATH 301 · Measurement</div>
+      <h1>Section 11.1: Units of Measurement</h1>
+      <p>Interactive practice based on the Section 11.1 notes and homework.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Quick Reference</h2>
+      <p>Measurement describes the size of an object by comparing a quantity with a unit, which is a reference amount.</p>
+      <div class="grid">
+        <div class="concept"><strong>Measurement</strong><br>Comparing a quantity with a chosen unit to determine its numerical value.</div>
+        <div class="concept"><strong>Additivity</strong><br>When parts are combined, the measure of the whole is the sum of the measures of its non-overlapping parts.</div>
+        <div class="concept"><strong>U.S. Customary System</strong><br>A system of units familiar in the United States.</div>
+        <div class="concept"><strong>Metric System</strong><br>The system of measurement used by most of the world.</div>
+      </div>
+      <h3 style="margin-top:22px">Three dimensions of measurement</h3>
+      <div class="diagram-row">
+        <div class="diagram-card">
+          <svg viewBox="0 0 190 90" role="img" aria-label="A one-dimensional line segment">
+            <line x1="22" y1="48" x2="168" y2="48" stroke="#2465a1" stroke-width="5" stroke-linecap="round"/>
+            <path d="M22 38v20 M168 38v20" stroke="#17324f" stroke-width="2"/>
+            <text x="95" y="30" text-anchor="middle" font-size="13" fill="#17324f">length</text>
+          </svg>
+          <p>Length · 1D</p>
+          <span class="muted">Linear units</span>
+        </div>
+        <div class="diagram-card">
+          <svg viewBox="0 0 190 90" role="img" aria-label="A two-dimensional square">
+            <rect x="57" y="12" width="76" height="65" fill="#dceaf7" stroke="#2465a1" stroke-width="3"/>
+            <text x="95" y="50" text-anchor="middle" font-size="13" fill="#17324f">area</text>
+          </svg>
+          <p>Area · 2D</p>
+          <span class="muted">Square units</span>
+        </div>
+        <div class="diagram-card">
+          <svg viewBox="0 0 190 90" role="img" aria-label="A three-dimensional cube">
+            <path d="M55 28 L105 12 L150 30 L100 47 Z M55 28 V70 L100 87 V47 M100 47 L150 30 V70 L100 87" fill="#dceaf7" stroke="#2465a1" stroke-width="2.5"/>
+            <text x="101" y="62" text-anchor="middle" font-size="11" fill="#17324f">volume</text>
+          </svg>
+          <p>Volume · 3D</p>
+          <span class="muted">Cubic units</span>
+        </div>
+      </div>
+      <p class="muted" style="margin-bottom:0">Examples of units: length may be described in inches, feet, centimeters, or meters; area in square units; volume in cubic units. The appropriate unit depends on the object and quantity being described.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Part A · Automatically Graded Practice</h2>
+      <p>Choose an answer, then select <strong>Check answer</strong>. Select <strong>New questions</strong> to generate another set.</p>
+      <div class="controls">
+        <span id="score" class="score">Score: 0 / 0 checked</span>
+        <button class="secondary" type="button" onclick="newSet()">New questions</button>
+      </div>
+      <div id="quiz"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Part B · Written-Response Practice</h2>
+      <p class="muted">Write your reasoning, then reveal the model solution. The first exercises follow the types of objects listed in the Section 11.1 homework.</p>
+      <div id="written"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Check Your Understanding</h2>
+      <p>When selecting a unit, first identify what is being measured: length, area, volume, or mass. Then choose a unit that is appropriate for the scale of the object. Remember that a measurement is a numerical comparison with a unit, not just a number by itself.</p>
+      <p>For example, saying a desk is “120” does not fully describe its length. Saying it is “120 centimeters” identifies both the numerical value and the unit.</p>
+    </section>
+
+    <p><a class="button" href="index.html">MATH 301 Hub</a></p>
+  </main>
+
+  <footer>MATH 301 · Section 11.1 · Practice independently and check your reasoning.</footer>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    let questions = [];
+    let results = {};
+
+    const questionBank = [
+      {
+        prompt: 'Which description best defines a unit of measurement?',
+        choices: ['A reference amount used for comparison', 'A number without a label', 'A tool used only to measure length', 'The object being measured'],
+        correct: 0,
+        why: 'A unit is a reference amount. A measurement compares a quantity with a unit.'
+      },
+      {
+        prompt: 'Which quantity is one-dimensional?',
+        choices: ['Length', 'Area', 'Volume', 'Surface area'],
+        correct: 0,
+        why: 'Length is one-dimensional. Area is two-dimensional, while volume is three-dimensional.'
+      },
+      {
+        prompt: 'Which type of units is used to describe area?',
+        choices: ['Square units', 'Cubic units', 'Linear units only', 'Degrees'],
+        correct: 0,
+        why: 'Area is two-dimensional, so it is measured in square units.'
+      },
+      {
+        prompt: 'Which type of units is used to describe volume?',
+        choices: ['Cubic units', 'Square units', 'Linear units', 'Degrees'],
+        correct: 0,
+        why: 'Volume is three-dimensional, so it is measured in cubic units.'
+      },
+      {
+        prompt: 'Which is an appropriate U.S. customary unit for the length of a dorm room?',
+        choices: ['Feet', 'Gallons', 'Pounds', 'Square inches'],
+        correct: 0,
+        why: 'Feet are a customary unit of length and are appropriate for the dimensions of a room.'
+      },
+      {
+        prompt: 'Which is an appropriate metric unit for the length of a textbook?',
+        choices: ['Centimeters', 'Liters', 'Kilograms', 'Square centimeters'],
+        correct: 0,
+        why: 'Centimeters are a metric unit of length and are a practical scale for a textbook.'
+      },
+      {
+        prompt: 'Which is an appropriate U.S. customary unit for the volume of water in a bathtub?',
+        choices: ['Gallons', 'Feet', 'Pounds', 'Square feet'],
+        correct: 0,
+        why: 'Gallons measure liquid volume in the U.S. customary system.'
+      },
+      {
+        prompt: 'Which is an appropriate metric unit for the mass of a marshmallow?',
+        choices: ['Grams', 'Meters', 'Liters', 'Square meters'],
+        correct: 0,
+        why: 'Grams are a metric unit of mass and are suitable for a small object such as a marshmallow.'
+      },
+      {
+        prompt: 'Which quantity would most appropriately be measured in kilograms?',
+        choices: ['The mass of an adult', 'The length of a pencil', 'The area of a floor', 'The volume of a pool'],
+        correct: 0,
+        why: 'Kilograms are a metric unit of mass.'
+      },
+      {
+        prompt: 'A rectangle is 5 units long and 3 units wide. What is its area?',
+        choices: ['15 square units', '8 square units', '15 cubic units', '16 linear units'],
+        correct: 0,
+        why: 'Area is length times width: \(5\times3=15\) square units.'
+      },
+      {
+        prompt: 'A rectangular prism is 4 units long, 3 units wide, and 2 units high. What is its volume?',
+        choices: ['24 cubic units', '9 square units', '24 square units', '18 cubic units'],
+        correct: 0,
+        why: 'Volume is length times width times height: \(4\times3\times2=24\) cubic units.'
+      },
+      {
+        prompt: 'A tabletop is made of two non-overlapping rectangular pieces. One has area 8 square units and the other has area 6 square units. What is the total area?',
+        choices: ['14 square units', '48 square units', '2 square units', '14 cubic units'],
+        correct: 0,
+        why: 'By additivity, the area of the whole is the sum of the areas of the non-overlapping parts: \(8+6=14\) square units.'
+      }
+    ];
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function newSet() {
+      results = {};
+      questions = shuffle(questionBank).slice(0, 10);
+      renderQuestions();
+    }
+
+    function renderQuestions() {
+      const root = $('quiz');
+      root.innerHTML = '';
+
+      questions.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        const options = q.choices.map((choice, j) =>
+          `<label><input type="radio" name="q${i}" value="${j}"> ${choice}</label>`
+        ).join('');
+
+        div.innerHTML = `
+          <div class="qhead">${i + 1}. ${q.prompt}</div>
+          <div class="choices">${options}</div>
+          <button type="button" id="check${i}" onclick="checkAnswer(${i})">Check answer</button>
+          <div class="feedback" id="fb${i}" aria-live="polite"></div>
+        `;
+        root.appendChild(div);
+      });
+
+      updateScore();
+      typeset();
+    }
+
+    function checkAnswer(i) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (!selected) return;
+
+      const q = questions[i];
+      const correct = Number(selected.value) === q.correct;
+      results[i] = correct;
+
+      const feedback = $('fb' + i);
+      feedback.style.display = 'block';
+      feedback.className = 'feedback ' + (correct ? 'ok' : 'no');
+      feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.why}`;
+
+      document.querySelectorAll(`input[name="q${i}"]`).forEach(input => input.disabled = true);
+      $('check' + i).disabled = true;
+      updateScore();
+      typeset();
+    }
+
+    function updateScore() {
+      const correct = Object.values(results).filter(Boolean).length;
+      $('score').textContent = `Score: ${correct} / ${Object.keys(results).length} checked`;
+    }
+
+    const written = [
+      [
+        'For each item, state an appropriate unit in both the U.S. customary and metric systems: volume of water in a bathtub.',
+        'A suitable response is gallons (U.S. customary) and liters (metric). Both units describe liquid volume.'
+      ],
+      [
+        'For each item, state an appropriate unit in both systems: length of a dorm room.',
+        'A suitable response is feet (U.S. customary) and meters (metric). Both are units of length appropriate for a room.'
+      ],
+      [
+        'For each item, state an appropriate unit in both systems: mass or weight of a marshmallow.',
+        'A suitable response is ounces (U.S. customary) and grams (metric). These are practical units for a small object. In everyday U.S. usage, ounces are commonly used for an object’s weight.'
+      ],
+      [
+        'For each item, state an appropriate unit in both systems: length of a textbook.',
+        'A suitable response is inches (U.S. customary) and centimeters (metric). These are practical units for the length of a book.'
+      ],
+      [
+        'For each item, state an appropriate unit in both systems: mass or weight of an adult.',
+        'A suitable response is pounds (U.S. customary) and kilograms (metric). These units are commonly used to describe a person’s body weight or mass.'
+      ],
+      [
+        'Choose a suitable unit for the length and mass of a phone. Give one customary and one metric unit for each quantity.',
+        'Possible answers: length in inches and centimeters; mass in ounces and grams. Other reasonable units may also be appropriate if they fit the scale of the phone.'
+      ],
+      [
+        'Choose a suitable unit for the length and mass of a writing utensil. Give one customary and one metric unit for each quantity.',
+        'Possible answers: length in inches and centimeters; mass in ounces and grams. The chosen units should match the small size of the object.'
+      ],
+      [
+        'Choose a suitable unit for the length and mass of a student identification card. Give one customary and one metric unit for each quantity.',
+        'Possible answers: length in inches and centimeters; mass in ounces and grams. These units are appropriate for a small, lightweight card.'
+      ],
+      [
+        'Describe how you could find your height in meters. Identify the quantity, the unit, and the comparison you would make.',
+        'Height is a length, so it is one-dimensional. Measure your height using a meter stick or another measuring tool marked in meters, comparing your height with the meter unit. Record the numerical measurement with the unit m.'
+      ],
+      [
+        'Explain the difference between linear units, square units, and cubic units. Give one example of a quantity measured with each.',
+        'Linear units measure length (one dimension), square units measure area (two dimensions), and cubic units measure volume (three dimensions). For example: a room’s length in feet, a floor’s area in square feet, and a box’s volume in cubic feet.'
+      ],
+      [
+        'A shape is divided into two non-overlapping regions with areas 12 square units and 9 square units. Use additivity to find the total area and explain your reasoning.',
+        'The total area is \(12+9=21\) square units. Because the regions do not overlap and together form the whole shape, add their areas.'
+      ],
+      [
+        'A solid is built from two non-overlapping rectangular prisms. Their volumes are 18 cubic units and 7 cubic units. What is the total volume? Explain why.',
+        'The total volume is \(18+7=25\) cubic units. By additivity, the volume of the combined solid is the sum of the volumes of its non-overlapping parts.'
+      ]
+    ];
+
+    function renderWritten() {
+      const root = $('written');
+      written.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `
+          <div class="qhead">${i + 1}. ${item[0]}</div>
+          <textarea aria-label="Your response to written question ${i + 1}" placeholder="Write your reasoning here..."></textarea>
+          <div><button class="secondary" type="button" onclick="toggleSolution(${i})" id="toggle${i}">Show model solution</button></div>
+          <div class="solution" id="sol${i}">${item[1]}</div>
+        `;
+        root.appendChild(div);
+      });
+      typeset();
+    }
+
+    function toggleSolution(i) {
+      const solution = $('sol' + i);
+      const show = solution.style.display !== 'block';
+      solution.style.display = show ? 'block' : 'none';
+      $('toggle' + i).textContent = show ? 'Hide model solution' : 'Show model solution';
+      if (show) typeset();
+    }
+
+    function typeset() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    newSet();
+    renderWritten();
+  </script>
+</body>
+</html>
