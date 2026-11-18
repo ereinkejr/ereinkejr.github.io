@@ -1,36 +1,174 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#17365d">
-<title>Math 122 | Practice Exercises</title>
-<style>
-:root{--navy:#17365d;--blue:#27649a;--bg:#f5f7fb;--ink:#17243b;--muted:#5b6a7c;--line:#dce3ed}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
-header{background:linear-gradient(125deg,#17365d,#286391);color:white;padding:24px max(24px,calc((100vw - 1050px)/2))}
-nav{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-nav a{color:#fff;text-decoration:none;font-weight:600}
-nav a:hover{text-decoration:underline}
-.hero{max-width:1050px;margin:auto;padding:64px 24px 34px}
-.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.82rem;color:var(--blue);font-weight:800}
-h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.13;margin:12px 0}
-.hero p{max-width:700px;color:var(--muted);font-size:1.1rem}
-main{max-width:1050px;margin:auto;padding:0 24px 90px}
-.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;margin:16px 0 22px}
-h2{font-size:1.45rem;margin:0}
-.count{color:var(--muted);font-size:.9rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:0 7px 24px rgba(17,42,78,.05)}
-.tag{display:inline-block;color:#205889;background:#e9f2fc;border-radius:30px;padding:5px 12px;font-size:.8rem;font-weight:700}
-h3{font-size:1.3rem;margin:18px 0 8px}
-.card p{color:var(--muted);margin:0 0 26px}
-.button{display:inline-flex;align-items:center;justify-content:center;background:var(--navy);color:white;padding:12px 20px;border-radius:9px;text-decoration:none;font-weight:700;min-height:44px}
-.button:hover,.button:focus-visible{background:#27649a}
-footer{border-top:1px solid var(--line);padding:26px 24px;text-align:center;color:var(--muted);font-size:.9rem}
-footer a{color:var(--blue)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive practice exercises for MATH 122 - Intro to Statistics.">
+  <title>MATH 122 Practice Hub</title>
+  <style>
+    :root {
+      --navy: #12355b;
+      --navy-dark: #0b2540;
+      --blue: #1f5f99;
+      --background: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #5f6b7a;
+      --border: #d9e2ec;
+      --shadow: 0 8px 22px rgba(18, 53, 91, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+      color: white;
+      padding: 3rem 1.25rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+
+    header p {
+      margin: 0 auto;
+      max-width: 760px;
+      color: #e8f0f8;
+      font-size: 1.08rem;
+    }
+
+    main {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 2rem auto 3rem;
+    }
+
+    .intro {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 3px 12px rgba(18, 53, 91, 0.05);
+    }
+
+    .intro h2 { margin-top: 0; color: var(--navy); }
+    .intro p:last-child { margin-bottom: 0; }
+
+    .section-heading {
+      margin-bottom: 1rem;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      color: var(--navy);
+    }
+
+    .section-heading p {
+      margin: 0.25rem 0 0;
+      color: var(--muted);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      min-height: 235px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .lt-label {
+      display: inline-block;
+      width: fit-content;
+      padding: 0.25rem 0.65rem;
+      margin-bottom: 0.8rem;
+      border-radius: 999px;
+      background: #e8f1fb;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .card h3 {
+      margin: 0 0 0.6rem;
+      color: var(--navy);
+      font-size: 1.25rem;
+    }
+
+    .card p {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      flex-grow: 1;
+    }
+
+    .button {
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+      background: var(--navy);
+      color: white;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .button:hover, .button:focus {
+      background: var(--blue);
+      transform: translateY(-1px);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid #8ec5ff;
+      outline-offset: 3px;
+    }
+
+    .coming-soon {
+      background: #eef2f6;
+      color: #66717f;
+      cursor: default;
+    }
+
+    .coming-soon:hover { background: #eef2f6; transform: none; }
+
+    .home-link {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .home-link a { color: var(--navy); font-weight: 700; }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 2.25rem 1rem; }
+      main { width: min(100% - 1.25rem, 1100px); margin-top: 1.25rem; }
+      .card { min-height: 0; }
+    }
+  </style>
 </head>
 <body>
 
